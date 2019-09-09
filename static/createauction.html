@@ -1,0 +1,164 @@
+<HTML>
+<HEAD>
+	<link href='https://fonts.googleapis.com/css?family=Fira Sans' rel='stylesheet'>
+	<link rel="stylesheet" href="main.css">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+	<link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+	<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+</HEAD>
+
+<BODY>
+
+<div class="topmenu">
+	<ul>
+		<li><a href="#"><img src="images/AYN/logo2.png" > HOME</a></li>
+		<div class="dropdown">
+		<li><a href="#">SORT</a>
+			<div class="dropmenu">
+				<ul>
+					<li><a href="#">PRICE</a></li>
+					<li><a href="#">TRENDS</a></li>
+					<li><a href="#">DATE</a></li>
+					<li><a href="#">ON SALE</a></li>
+				</ul>
+			</div>
+		</li>
+		</div>
+			
+		<div class="searchli">
+		<li>
+			<a href="#">
+				<span>SEARCH</span>
+				<div class="searchbox" id="query">
+					<label><input type="text"  name="query" placeholder="for a product or user" ></label>
+				</div>
+			</a>
+		</li>
+		</div>
+
+		<li class="right"><a href="#" >MY ACCOUNT</a></li>
+
+	</ul>
+</div>
+<div class="innerbody">
+	<div class="spacer">
+		
+	</div>
+	<div class="auction">
+		<div class="col-left">
+			<div class="imgbox2">
+
+				<div class="imgprev">
+					<img id="fill" src="#" alt="Please insert at least one image" onerror="this.src='images/AYN/image-missing.png'"/>
+					<img id="fill2" src="images/AYN/alt.jpg" alt="" class="smallimg" />
+					<img id="fill3" src="images/AYN/alt.jpg" alt="" class="smallimg" />
+					<img id="fill4" src="images/AYN/alt.jpg" alt="" class="smallimg" />
+				</div>
+
+				<div class="bot">
+					<input type="file" id="selectedFile" style="display: none;" onchange="mainimg(this);"/>
+					<input type="button" class="button" value="Image 1" onclick="document.getElementById('selectedFile').click();" />
+
+					<br><br><br>
+
+					<input type="file" id="selectedFile2" style="display: none;" onchange="img2(this);"/>
+					<input type="button" class="button" value="Image 2" onclick="document.getElementById('selectedFile2').click();" />		
+
+					<br><br><br>
+
+					<input type="file" id="selectedFile3" style="display: none;" onchange="img3(this);"/>
+					<input type="button" class="button" value="Image 3" onclick="document.getElementById('selectedFile3').click();" />
+
+					<br><br><br>
+
+					<input type="file" id="selectedFile4" style="display: none;" onchange="img4(this);"/>
+					<input type="button" class="button" value="Image 4" onclick="document.getElementById('selectedFile4').click();" />		
+				</div>
+
+			</div>
+		</div><!--
+	---><div class="col-right">
+			<div class="textbox">
+				<div class="nameinp">
+				<label><input type="text"  name="query" placeholder="Product Name" ></label>
+				</div>
+				<div class="bidbox2">
+					<span class="bidspan"><label><input type="text"  name="query" placeholder="Starting Bid" ></label></span>
+					<span class="bidspan"><label><input type="text"  name="query" placeholder="Min. Increment" ></label></span>
+				</div>
+			</div>
+			<div class="descbox">
+				<label><textarea type="text"  name="query" placeholder="product description" maxlength="250" rows="8" ></textarea></label>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+<div class="footer">	
+	<span><a class="a1" href="#">SITEMAP</a></span>
+	<span><a class="a1" href="#">TERMS OF SERVICE</a></span>
+	<span><a class="a1" href="#">OUR TEAM</a></span>
+	<br>
+	<span>Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, <a class="a2" href="mailto:sdi1400041@di.uoa.gr">contact us</a> </span>
+</div>
+<script type="text/javascript">
+function mainimg(input) {
+	if (input.files && input.files[0]) {
+	    var reader = new FileReader();
+
+	    reader.onload = function (e) {
+	        $('#fill')
+	            .attr('src', e.target.result)
+
+	    };
+
+	    reader.readAsDataURL(input.files[0]);
+	}
+}
+function img2(input) {
+	if (input.files && input.files[0]) {
+	    var reader = new FileReader();
+
+	    reader.onload = function (e) {
+	        $('#fill2')
+	            .attr('src', e.target.result)
+
+	    };
+
+	    reader.readAsDataURL(input.files[0]);
+	}
+}
+function img3(input) {
+	if (input.files && input.files[0]) {
+	    var reader = new FileReader();
+
+	    reader.onload = function (e) {
+	        $('#fill3')
+	            .attr('src', e.target.result)
+
+	    };
+
+	    reader.readAsDataURL(input.files[0]);
+	}
+}
+function img4(input) {
+	if (input.files && input.files[0]) {
+	    var reader = new FileReader();
+
+	    reader.onload = function (e) {
+	        $('#fill4')
+	            .attr('src', e.target.result)
+
+	    };
+
+	    reader.readAsDataURL(input.files[0]);
+	}
+}
+</script>
+
+
+</BODY>
+</HTML>
