@@ -1,0 +1,41 @@
+extends ../layout/index
+
+block content
+  .innerbody
+    .spacer
+    .auction
+      .col-left
+        .login
+          h4 LOG IN
+          label
+            input(type='text' name='query' placeholder='Username')
+          label
+            input(type='text' name='query' placeholder='Password')
+          br
+          a(href='#') I forgot my password
+      //
+          -
+      .col-right
+        .signup
+          h4 REGISTER
+          label
+            input(type='text' name='query' placeholder='Email')
+          label
+            input(type='text' name='query' placeholder='Username')
+          label
+            input(type='text' name='query' placeholder='Password')
+          br
+          a(href='#') Terms of service
+  .footer
+    span
+      a.a1(href='#') SITEMAP
+    span
+      a.a1(href='#') TERMS OF SERVICE
+    span
+      a.a1(href='#') OUR TEAM
+    br
+    span
+      | Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, 
+      a.a2(href='mailto:sdi1400041@di.uoa.gr') contact us
+
+              
