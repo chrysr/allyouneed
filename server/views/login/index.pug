@@ -8,22 +8,28 @@ block content
         .login
           h4 LOG IN
           label
-            input(type='text' name='query' placeholder='Username')
+            input(type='text', name='query', placeholder='Email')
           label
-            input(type='text' name='query' placeholder='Password')
+            input(type='password', name='query', placeholder='Password')
+          br
+          button(onclick='') ⏎
           br
           a(href='#') I forgot my password
       //
-          -
+        -
       .col-right
         .signup
           h4 REGISTER
           label
-            input(type='text' name='query' placeholder='Email')
+            input.next(type='text', name='query', placeholder='First Name')
           label
-            input(type='text' name='query' placeholder='Username')
+            input.next(type='text', name='query', placeholder='Last Name')
           label
-            input(type='text' name='query' placeholder='Password')
+            input(type='text', name='query', placeholder='Email')
+          .topalign
+            label
+              input.nextmini(type='password', name='query', placeholder='Password')
+            button(onclick='') ⏎
           br
           a(href='#') Terms of service
   .footer
