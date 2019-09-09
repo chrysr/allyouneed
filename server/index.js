@@ -1,12 +1,52 @@
 const express = require("express");
 const createerror = require("http-errors");
-const app = express();
 const path = require("path");
 const bodyparser = require("body-parser");
 const configs = require("./config");
 const SpeakerService =require("./services/SpeakerService.js");
 const FeedbackService =require("./services/FeedbackService.js");
 const routes = require("./routes");
+/*NEW*/
+const isDev=process.env.NODE_ENV!=='production';
+const config=require('../config/config');
+const fs=require('fs');
+const mongoose=require('mongoose');
+const webpack=require('webpack');
+mongoose.connect(isDev?config.db_dev : config.db);
+mongoose.Promise=global.Promise;
+app.use(express.urlencoded({extended:true}));
+app.use(express.json());
+require('./routes')(app);
+if (isDev) {
+const compiler = webpack(webpackConfig);
+
+app.use(historyApiFallback({
+    verbose: false
+}));
+
+app.use(webpackDevMiddleware(compiler, {
+    publicPath: webpackConfig.output.publicPath,
+    contentBase: path.resolve(__dirname, '../client/public'),
+    stats: {
+    colors: true,
+    hash: false,
+    timings: true,
+    chunks: false,
+    chunkModules: false,
+    modules: false
+    }
+}));
+
+app.use(webpackHotMiddleware(compiler));
+app.use(express.static(path.resolve(__dirname, '../dist')));
+} else {
+app.use(express.static(path.resolve(__dirname, '../dist')));
+app.get('*', function (req, res) {
+    res.sendFile(path.resolve(__dirname, '../dist/index.html'));
+    res.end();
+});
+}
+/*END NEW*/
 
 const config=configs[app.get("env")];
 
