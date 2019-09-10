@@ -7,21 +7,18 @@ const loginroute = require("./login");
 
 module.exports = (param) =>{
 
-    const  {speakerService}  = param;
+    const  {productService}  = param;
 
     router.get("/",async (req,res,next) =>{
         try {
             const promises =[];
 
-            promises.push(speakerService.getlistshort());
-            promises.push(speakerService.getartwork());
-    
+            promises.push(productService.getlist());
             const results = await Promise.all(promises);
     
             return res.render("index",{
                 page:"Home",
-                speakerslist: results[0],
-                artwork: results[1],
+                productslist: results[0],
             });
         } catch (err) {
             return next(err);
