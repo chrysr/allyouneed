@@ -7,12 +7,15 @@ block content
       .col-left
         .login
           h4 LOG IN
-          label
-            input(type='text', name='query', placeholder='Email')
-          label
-            input(type='password', name='query', placeholder='Password')
-          br
-          button(onclick='') ⏎
+          form.login-form(action="/login",method="POST")
+            .form-group
+              label
+                input(type='text' placeholder='Email',name="email",required=true)
+            .form-group
+              label
+                input(type='password' placeholder='Password',name="pass",required=true)
+            br
+            button.btn.btn-default.pull-right(type='submit') ⏎
           br
           a(href='#') I forgot my password
       //
@@ -20,16 +23,21 @@ block content
       .col-right
         .signup
           h4 REGISTER
-          label
-            input.next(type='text', name='query', placeholder='First Name')
-          label
-            input.next(type='text', name='query', placeholder='Last Name')
-          label
-            input(type='text', name='query', placeholder='Email')
-          .topalign
-            label
-              input.nextmini(type='password', name='query', placeholder='Password')
-            button(onclick='') ⏎
+          form.signup-form(action="/login",method="POST")
+            .form-group
+              label
+                input.next(type='text', placeholder='First Name',name="fname",required=true)
+            .form-group
+              label
+                input.next(type='text', placeholder="Last Name",name="lname",required=true)
+            .form-group
+              label
+                input(type='text' placeholder='Email',name="signup-email",required=true)
+            .topalign
+              .form-group
+                label
+                  input.nextmini(type='password' placeholder='Password',name="signup-pass",required=true)
+                button.btn.btn-default.pull-right(type='submit') ⏎
           br
           a(href='#') Terms of service
   .footer

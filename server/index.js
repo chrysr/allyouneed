@@ -5,9 +5,10 @@ const bodyparser = require("body-parser");
 const configs = require("./config");
 const SpeakerService =require("./services/SpeakerService.js");
 const FeedbackService =require("./services/FeedbackService.js");
+const LoginService=require("./services/LoginService.js");
 const routes = require("./routes");
 const app=express();
-/*NEW*/
+/*NEW
 const webpackConfig=require('../webpack.config');
 const isDev=process.env.NODE_ENV!=='production';
 const confign=require('./config/config');
@@ -52,12 +53,23 @@ app.get('*', function (req, res) {
     res.end();
 });
 }
-/*END NEW*/
+END NEW*/
+/*NEW NEW*/
+/*const MongoClient = require('mongodb').MongoClient;
+
+const client=MongoClient.connect("mongodb://localhost:27017/login", { useNewUrlParser: true,useUnifiedTopology: true },function (err, db) {
+   
+     if(err) throw err;
+});*/
+
+
+/*END NEW NEW*/
 
 const config=configs[app.get("env")];
 
 const speakerService = new SpeakerService(config.data.speakers);
 const feedbackService = new FeedbackService(config.data.feedback);
+const loginService=new LoginService(config.data.login);
 
 app.set("view engine","pug");
 if (app.get("env")==="development"){
@@ -92,7 +104,7 @@ app.use(async(req,res,next)=>{
 });
 
 
-app.use("/",routes({speakerService,feedbackService,}));
+app.use("/",routes({speakerService,feedbackService,loginService}));
 
 app.use((req,res,next)=>{
     return next(createerror(404,"File not found"));
@@ -106,6 +118,7 @@ app.use((err,req,res,next)=>{
     res.status(status);
     return res.render("error");
 });
+console.log(process.cwd());
 
 app.listen(3000);
 
