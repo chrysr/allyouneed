@@ -8,7 +8,7 @@ const SpeakerService =require("./services/SpeakerService.js");
 const FeedbackService =require("./services/FeedbackService.js");
 const LoginService=require("./services/LoginService.js");
 const routes = require("./routes");
-const app=express();
+const ProductService=require('./services/ProductService');
 /*NEW
 const webpackConfig=require('../webpack.config');
 const isDev=process.env.NODE_ENV!=='production';
@@ -71,6 +71,7 @@ const config=configs[app.get("env")];
 const speakerService = new SpeakerService(config.data.speakers);
 const feedbackService = new FeedbackService(config.data.feedback);
 const loginService=new LoginService(config.data.login);
+const productService=new ProductService(config.data.login);
 
 app.set("view engine","pug");
 if (app.get("env")==="development"){
@@ -105,7 +106,7 @@ app.use(async(req,res,next)=>{
 });
 
 
-app.use("/",routes({speakerService,feedbackService,loginService}));
+app.use("/",routes({speakerService,feedbackService,loginService,productService,}));
 
 app.use((req,res,next)=>{
     return next(createerror(404,"File not found"));

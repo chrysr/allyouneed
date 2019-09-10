@@ -578,7 +578,7 @@ body {
 .login{
 	color: white;
 	background-color: #333333;
-	width: 50%;
+	width: 75%;
 	min-height: 50vh;
 	display: inline-block;
 	margin-bottom: 6vh;
@@ -607,7 +607,7 @@ body {
 .login input {
 	display: inline-block;
 	border: none;
- 	width: 50%;
+ 	width: 75%;
 	line-height: calc(1em + 1vw + 1vh);
 	background-color: #111111;
 	font-size: calc(0.2em + 0.9vw + 0.9vh);
@@ -631,20 +631,20 @@ body {
 	color: white;
 	display: inline-block;
 	background-color: #333333;
-	width: 50%;
+	width: 75%;
 	min-height: 50vh;
 	margin-bottom: 6vh;
 }
 .signup h4{
-	margin-top: 6vh;
-	margin-bottom: 6vh;
+	margin-top: 5vh;
+	margin-bottom: 5vh;
 	font-size: calc(0.6em + 0.7vw + 0.7vh);
 }
 
 .signup input {
 	display: inline-block;
 	border: none;
- 	width: 50%;
+ 	width: 75%;
 	line-height: calc(1em + 1vw + 1vh);
 	background-color: #111111;
 	font-size: calc(0.2em + 0.9vw + 0.9vh);
@@ -652,6 +652,33 @@ body {
 	margin-bottom: 4vh;
 	padding: 0 1%;
 	color: #ffffff;
+	height: 7vh;
+}
+
+.signup button {
+	background-color: #111111;
+	border: none;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 0;
+	/*padding-bottom: 2vh;
+	padding-top: 2vh;*/
+	height: 7vh;
+	margin-bottom: 4vh;
+	cursor: pointer;
+	width: 10%;
+}
+
+.next{
+ 	width: 37%!important;
+ 	margin: 0;
+}
+.nextmini{
+ 	width: 90%!important;
+ 	margin: 0;
 }
 
 .signup a {
@@ -1172,4 +1199,19 @@ button:focus {
 .select-items div:hover, .same-as-selected {
   width: 10vw;
   background-color: rgba(0, 0, 0, 0.4);
+}
+
+.topalign {
+  width: 75%;
+  display: inline-block;
+  margin-bottom: 1.2vh;
+}
+.topalign input{
+	padding: 0;
+	margin: 0;
+}
+.topalign button{
+	padding: 0;
+	margin: 0;
+	float: right;
 }
