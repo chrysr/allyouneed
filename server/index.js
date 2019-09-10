@@ -6,13 +6,19 @@ const configs = require("./config");
 const SpeakerService =require("./services/SpeakerService.js");
 const FeedbackService =require("./services/FeedbackService.js");
 const routes = require("./routes");
+const app=express();
 /*NEW*/
+const webpackConfig=require('../webpack.config');
 const isDev=process.env.NODE_ENV!=='production';
-const config=require('../config/config');
+const confign=require('./config/config');
 const fs=require('fs');
 const mongoose=require('mongoose');
 const webpack=require('webpack');
-mongoose.connect(isDev?config.db_dev : config.db);
+const historyApiFallback=require('connect-history-api-fallback');
+const webpackDevMiddleware=require('webpack-dev-middleware');
+const webpackHotMiddleware=require('webpack-hot-middleware');
+
+mongoose.connect(isDev?confign.db_dev : confign.db);
 mongoose.Promise=global.Promise;
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
