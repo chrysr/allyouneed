@@ -3,18 +3,19 @@ block content
   .innerbody
     .spacer
     each product in productslist
-      .auctionpreview
-        .headbox
-          .vertcenter
-            h3=product.name
-        .pricediv
-          .price
-            .fullcenter
-              h4=product.price
-        .auctionpreviewthumb
-          img(src=`${product.photo}`)
-        p
-          |#{product.description}
+      a(href=`/${product.shortname}`)
+        .auctionpreview
+          .headbox
+            .vertcenter
+              h3=product.name
+          .pricediv
+            .price
+              .fullcenter
+                h4=product.price.toFixed(2)
+          .auctionpreviewthumb
+            img(src=`images/${product.shortname}/${product.photo[0]}`)
+          p
+            |#{product.description}
 
   .footer
     span
