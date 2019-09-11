@@ -21,6 +21,7 @@ body {
 
 }
 .topmenu ul {
+	height: 100%;
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
@@ -128,7 +129,6 @@ body {
 	.searchbox {
 		display: inline-block;
 		position: relative;
-
 		background-color: #111111;
 		width: 0;
 		margin-left: -3.25vw;
@@ -143,6 +143,8 @@ body {
 		display: inline-block;
 		position: relative;
 		overflow: hidden;
+		margin-top: -0.9vh;
+		padding-top: 0.01em;
 	}
 }
 
@@ -163,6 +165,8 @@ body {
 @media (min-width: 800px) {
 	.searchbox input{
 		border: none;
+		margin: 0;
+		height: 3vh;
 		line-height: calc(1vh + 0.5vw + 0.5em );
 		margin-left: 1vw;
 		width: 0;
@@ -213,6 +217,7 @@ body {
 
 @media (min-width: 800px) {
 	.auctionpreview {
+		color: #000000;
 		border-bottom: 0.1em solid #333333 ;
 		margin-right: 1.5%;
 		margin-left: 1.5%;
@@ -229,6 +234,7 @@ body {
 
 @media (max-width: 799px) {
 	.auctionpreview {
+		color: #000000;
 		border-bottom: 0.1em solid #333333 ;
 		margin-left: 1.5%;
 		margin-right: 1.5%;
