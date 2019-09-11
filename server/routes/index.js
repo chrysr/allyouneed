@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const speakersroute = require("./speakers");
-const feedbackroute = require("./feedback");
+//const speakersroute = require("./speakers");
+//const feedbackroute = require("./feedback");
 const loginroute = require("./login");
 const myaccountroute=require("./myaccount");
 
@@ -71,8 +71,8 @@ module.exports = (param) =>{
         
     });
     
-    router.use("/speakers",speakersroute(param));
-    router.use("/feedback",feedbackroute(param));
+    //router.use("/speakers",speakersroute(param));
+    //router.use("/feedback",feedbackroute(param));
     router.use("/login",loginroute(param));
     router.use("/account",myaccountroute(param))
     return router;

@@ -4,18 +4,17 @@ const app = express();
 const path = require("path");
 const bodyparser = require("body-parser");
 const configs = require("./config");
-const SpeakerService =require("./services/SpeakerService.js");
-const FeedbackService =require("./services/FeedbackService.js");
+//const SpeakerService =require("./services/SpeakerService.js");
+//const FeedbackService =require("./services/FeedbackService.js");
 const ProductsService =require("./services/ProductService.js");
 const routes = require("./routes");
 
 const config=configs[app.get("env")];
 
-const speakerService = new SpeakerService(config.data.speakers);
-const feedbackService = new FeedbackService(config.data.feedback);
+//const speakerService = new SpeakerService(config.data.speakers);
+//const feedbackService = new FeedbackService(config.data.feedback);
 const productService = new ProductsService(config.data.products);
 const cookieParser = require('cookie-parser');
-
 
 app.set("view engine","pug");
 if (app.get("env")==="development"){
@@ -38,7 +37,7 @@ app.get("/favicon.ico",(req,res,next)=>{
 });
 
 
-app.use(async(req,res,next)=>{
+/*app.use(async(req,res,next)=>{
     try {
         const names = await speakerService.getnames();
         res.locals.speakernames = names;
@@ -47,11 +46,11 @@ app.use(async(req,res,next)=>{
     } catch(err) {
         return next(err);
     }
-});
+});*/
 app.use(cookieParser());
 
 
-app.use("/",routes({speakerService,feedbackService,productService,}));
+app.use("/",routes({productService,}));
 
 app.use((req,res,next)=>{
     return next(createerror(404,"File not found"));
