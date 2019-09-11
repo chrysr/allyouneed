@@ -25,4 +25,7 @@
             label
               input(type='text' name='query' placeholder='for a product or user')
     li.right
-      a(href='#') MY ACCOUNT
+      if loggedin
+        a(href='/account') MY ACCOUNT
+      else
+        a(href='/login') LOGIN

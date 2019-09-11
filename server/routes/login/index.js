@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt=require('bcrypt');
-console.log(process.cwd());
+const cookieParser = require('cookie-parser');
+
+//console.log(process.cwd());
 
 
 module.exports = (param) =>{
@@ -11,21 +13,31 @@ module.exports = (param) =>{
 
     router.get("/",async(req,res,next) =>{
         console.log("loginloaded");
+        //console.log(req.cookies);
+
         try {
             //const feedbacklist=await feedbackService.getlist();
-            console.log(process.cwd());
-            return res.render("login",{
-                page: "Login",
-                success:req.query.success,
-                //feedbacklist,
-                //success: req.query.success,
-            });
+            //console.log(process.cwd());
+            //console.log("GET LOGIN");
+            //console.log(req.cookies.loggedin);
+            if(!req.cookies["loggedin"])
+            {
+                return res.render("login",{
+                    page: "Login",
+                    success:req.query.success,
+                    loggedin:req.cookies.loggedin,
+
+                    //feedbacklist,
+                    //success: req.query.success,
+                });
+            }
         } 
         catch (err) {
             return err;
         }
         
     });
+    
     router.post("/",async(req,res,next) =>{
         console.log("LOGIN---------------------------------------");
         try {
@@ -75,13 +87,14 @@ module.exports = (param) =>{
                         {
                             console.log("DUPLICATE USER");
                         }
-                        console.log(docs);
+                        //console.log(docs);
                         var data=pass;
                         var hash=docs.map(a=>a.password).toString();
                         if(bcrypt.compareSync(data,hash))
                         {
-                            console.log("Login Success");
-                            return res.redirect('/login?success=true');
+                            console.log("Login Success ");
+                            res.cookie('loggedin',true);
+                            return res.redirect('/');
                         }
                         else
                         {

@@ -14,6 +14,8 @@ const config=configs[app.get("env")];
 const speakerService = new SpeakerService(config.data.speakers);
 const feedbackService = new FeedbackService(config.data.feedback);
 const productService = new ProductsService(config.data.products);
+const cookieParser = require('cookie-parser');
+
 
 app.set("view engine","pug");
 if (app.get("env")==="development"){
@@ -46,6 +48,7 @@ app.use(async(req,res,next)=>{
         return next(err);
     }
 });
+app.use(cookieParser());
 
 
 app.use("/",routes({speakerService,feedbackService,productService,}));
