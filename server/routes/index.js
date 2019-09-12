@@ -11,16 +11,16 @@ module.exports = (param) =>{
 
     router.get("/products",async (req,res,next) =>{
         try {
-            const promises =[];
-
-            promises.push(productService.getlist());
-            const results = await Promise.all(promises);
-    
-            return res.render("index",{
+            const db=req.app.locals.db;
+            db.collection('products').find().toArray().then((docs)=>{
+                console.log(docs);
+                return res.render("index",{
                 page:"Home",
-                productslist: results[0],
+                productslist: docs,
                 loggedin:req.cookies.loggedin,
-            });
+                });
+            })
+            
         } catch (err) {
             return next(err);
         }
@@ -30,43 +30,58 @@ module.exports = (param) =>{
         res.redirect('/products');
     });
 
-    router.get("/products/byprice",async (req,res,next) =>{
+    router.get("/products/byascprice",async (req,res,next) =>{
         try {
-            const promises =[];
+            const db=req.app.locals.db;
+            db.collection('products').find().sort( { price: 1 } ).toArray().then((docs)=>{
 
-            promises.push(productService.sortbyprice());
-            promises.push(productService.categorieslist());
-            const results = await Promise.all(promises);
-    
-            return res.render("index",{
-                page:"Home",
-                productslist: results[0],
-                loggedin:req.cookies.loggedin,
-            });
+                console.log(docs);
+                return res.render("index",{
+                    page:"Home",
+                    productslist: docs,
+                    loggedin:req.cookies.loggedin,
+                });
+            })   
+            
         } catch (err) {
             return next(err);
         }
 
     });
-    
+    router.get("/products/bydescprice",async (req,res,next) =>{
+        try {
+            const db=req.app.locals.db;
+            db.collection('products').find().sort( { price: -1 } ).toArray().then((docs)=>{
+
+                console.log(docs);
+                return res.render("index",{
+                    page:"Home",
+                    productslist: docs,
+                    loggedin:req.cookies.loggedin,
+                });
+            })   
+            
+        } catch (err) {
+            return next(err);
+        }
+
+    });
 
 
     router.get("/products/:shortname",async(req,res,next) =>{
         try {
-            const promises =[];
-
-            promises.push(productService.getproduct(req.params.shortname));
-    
-            const results = await Promise.all(promises);
-
-            if (!results[0]){
-                return next();
-            }
-            return res.render("auctions",{
-                page:req.params.name,
-                product:results[0],
-                loggedin:req.cookies.loggedin,
-            });
+            const db=req.app.locals.db;
+            db.collection('products').find({shortname:req.params.shortname}).toArray().then((docs)=>{
+                console.log("here");
+                console.log(docs[0].photo.length);
+                if(docs.length==0)
+                    return next();
+                return res.render("auctions",{
+                    page:req.params.name,
+                    product:docs[0],
+                    loggedin:req.cookies.loggedin,
+                });
+            })               
         } 
         catch (err) {
             return next(err);

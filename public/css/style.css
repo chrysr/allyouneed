@@ -1002,6 +1002,10 @@ body {
 	overflow: hidden;
 }
 
+.tab input {
+	padding: 0;
+}
+
 .tab a {
 	text-decoration: none;
 	color: #4d88ff;
@@ -1012,7 +1016,7 @@ body {
 	background-color: #111;
 	color: white;
 	font-size: calc(0.2em + 0.6vw + 0.6vh);
-	line-height: 10vh;
+	line-height: 6vh;
 	padding: 2vh 0;
 	overflow: scroll;
 }
@@ -1026,19 +1030,71 @@ body {
 .actv input 
 {
  	border: none;
- 	width: 10vw;
- 	height: 8vh;
-	line-height: calc(0.2em + 0.9vw + 0.9vh);
-	background-color: #888;
+ 	width: 20vw;
+	height: 5vh;
+	padding: 0;
+	line-height: calc(0.2em + 1vw + 1vh);
+	background-color: #111;
+	border-bottom: 1px solid #888;
 	display: inline-block;
 	font-size: calc(0.2em + 0.6vw + 0.6vh);
-	margin: 2vh 17vw;
-	padding: 0 1%;
+	margin: 0vh 7vw;
 	color: #ffffff;
+	text-align: center;
  }
 
+#target .custom-select {
+	width: 20vw;
+	margin: 0;
+}
+
+#target .select-items div,#target .select-selected {
+	width: 20vw;
+	height: 5vh;
+	line-height: 5vh;
+	color: #ffffff;
+	padding: 0;
+	border: none;
+	cursor: pointer;
+	user-select: none;
+  }
+  /*style items (options):*/
+#target .select-items {
+	position: absolute;
+	width: 2vw;
+	top: 100%;
+	left: 0;
+	right: 0;
+	z-index: 99;
+  }
+
+#target .select-selected {
+	width: 20vw;
+	background-color: #111;
+	border-bottom: 1px solid #888;
+  }
+  
+  /*hide the items when the select box is closed:*/
+.actv .select-hide {
+	width: 20vw;
+	display: none;
+  }
+ 
+#target .select-items div{
+	width: 20vw;
+	background-color: #111;
+	border-bottom: 1px solid #888;
+}
+
+.actv .select-items div:hover, .same-as-selected {
+	width: 20vw;
+	background-color: rgba(0, 0, 0, 0.4);
+  }
+
 .actv input[type=button] {
-	margin-top: 10vh;
+	margin-top: 2vh;
+	border: none;
+	background: #888;
 	cursor: pointer;
 }
 

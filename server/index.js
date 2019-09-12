@@ -65,6 +65,16 @@ app.use((err,req,res,next)=>{
     return res.render("error");
 });
 
-app.listen(3000);
+const mongo = require('mongodb');
+const MongoClient = mongo.MongoClient;
+const url = 'mongodb://localhost:27017';
+MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+    if(err) throw err;
+    app.locals.db=client.db('allyouneed');
+    app.listen(3000);
+
+});
+
+
 
 module.export=app;

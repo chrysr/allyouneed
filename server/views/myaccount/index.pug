@@ -34,20 +34,39 @@ block content
             li User type: #{details.type}
             li E-mail: #{details.email}
             li Address: #{details.address}
-            li Taxpayer-ID: #{details.taxpayerid}
+            li Taxpayer ID: #{details.taxpayerid}
             li Phone: #{details.phone}
             li Gender: #{details.gender}
-        .tab
-          input(type='text' name='query' placeholder='E-mail')
-          br
-          .custom-select
-            select#country
-              option(value='0') Country
-              option(value='Greece') Greece
-              option(value='Cyprus') Cyprus
-              option(value='Italy') Italy
-          br
-          input(type='button' value='Submit' name='Submit')
+        .tab#target
+          form.change-form(action="/account",method="POST")
+            .form-group
+              input(type='text' required=true name='fname' placholder="First Name" value=`${details.firstname}`)
+            .form-group
+              input(type='text' required=true name='lname' placholder="Last Name" value=`${details.lastname}`)
+            .form-group
+              input(type='text' required=true name='phone' placholder="Telephone" value=`${details.phone}`)
+            .form-group
+              input(type='text' required=true name='address' placholder="Address"  value=`${details.address}`)
+            .form-group
+              input(type='text' required=true name='taxid' placholder="Taxpayer ID" value=`${details.taxpayerid}`)
+            .form-group
+              input(type='text' required=true name='email' placholder="E-mail" value=`${details.email}`)
+            .custom-select
+              .form-group
+                select#gender(name ="gender" )
+                  option(disable selected value)=details.gender
+                  option(value='Male') Male
+                  option(value='Female') Female
+                  option(value='Other') Other
+            .form-group
+              input(type='text' name='oldpass' placeholder=`Old Password` required=true)
+            .form-group
+              input(type='text' name='pass' placeholder=`New Password (Optional)`)
+            br
+            .form-group
+              input(type='submit' name='submit') 
+            //button.btn.btn-default.pull-right(type='submit') Submit
+
         .tab
           ul
             li
@@ -82,7 +101,7 @@ block content
             li.men
               br
               | ACCOUNT INFO
-          a(href='#' onclick='tab(4)')
+          a(onclick='tab(4)')
             li.men
               br
               | CHANGE INFO
