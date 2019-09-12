@@ -5,16 +5,36 @@ const router = express.Router();
 module.exports = (param) =>{
 
     const {MyaccountService}=param;
-
+    
+        
     router.get("/",async(req,res,next) =>{
         try {
-            //console.log(req.cookies);
             if(req.cookies.loggedin)
             {
-                return res.render("myaccount",{
-                    page: "My Account",
-                    loggedin:req.cookies.loggedin,
+                const mongo = require('mongodb');
+                const MongoClient = mongo.MongoClient;
+                const url = 'mongodb://localhost:27017';
+                MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+                    if (err) throw err;
+                    const db = client.db("allyouneed");
+                    var _id=req.cookies._id;
+                    _id=_id.toString();
+                    db.collection('users').find(_id).toArray().then((docs)=>{
+                        console.log(docs[0]);
+                        return res.render("myaccount",{
+                            page: "My Account",
+                            loggedin:req.cookies.loggedin,
+                            details:docs[0],
+                            
+                        });
+                    }).catch((err)=>{
+                        console.log(err);
+                    }).finally(()=>{
+                        client.close();
+                    });
                 });
+            
+                
             }
             //else console.log("NOT LOGGED IN AND TRIED TO GO TO ACCOUNT");
         } 
@@ -31,6 +51,7 @@ module.exports = (param) =>{
             //console.log("LOGOUT");
             //console.log(res.cookie.loggedin);
             res.clearCookie("loggedin");
+            res.clearCookie("_id");
             //console.log(res.cookie.loggedin);
             return res.redirect("/");
         } 

@@ -41,32 +41,20 @@ module.exports = (param) =>{
     router.post("/",async(req,res,next) =>{
         console.log("LOGIN---------------------------------------");
         try {
-            var email,pass,signupemail,signuppass,fname,lname;
-            if (typeof req.body.email != 'undefined' && req.body.email) 
-            {    
-                email=req.body.email.trim();
-                email=email.toLowerCase();
-            }
-            else email=null;
-            if (typeof req.body.pass != 'undefined' && req.body.pass) 
-                pass=req.body.pass.trim();
-            else pass=null;
-            if (typeof req.body.signupemail != 'undefined' && req.body.signupemail) 
-            {    
-                signupemail=req.body.signupemail.trim();
-                signupemail=signupemail.toLowerCase();
-            }
-            else signupemail=null;
-            if (typeof req.body.signuppass != 'undefined' && req.body.signuppass) 
-                signuppass=req.body.signuppass.trim();
-            else signuppass=null;
-            if (typeof req.body.fname != 'undefined' && req.body.fname) 
-                fname=req.body.fname.trim();
-            else fname=null;
-            if (typeof req.body.lname != 'undefined' && req.body.lname) 
-                lname=req.body.lname.trim();
-            else lname=null;
-            console.log("mail: "+email+" pass: "+pass+"\nsignup-email: "+signupemail+" signup-pass:"+signuppass+" fname: "+fname+" lname: "+lname);
+            var email,pass,signupemail,signuppass,fname,lname,phone,address,taxid,gender,type;
+            email=(((req.body.email?req.body.email:null)?req.body.email.trim():null)?req.body.email.trim().toLowerCase():null);
+            pass=((req.body.pass?req.body.pass:null)?req.body.pass.trim():null);
+            signupemail=(((req.body.signupemail?req.body.signupemail:null)?req.body.signupemail.trim():null)?req.body.signupemail.trim().toLowerCase():null);
+            signuppass=((req.body.signuppass?req.body.signuppass:null)?req.body.signuppass.trim():null);
+            fname=((req.body.fname?req.body.fname:null)?req.body.fname.trim():null);
+            lname=((req.body.lname?req.body.lname:null)?req.body.lname.trim():null);
+            phone=((req.body.phone?req.body.phone:null)?req.body.phone.trim():null);
+            address=((req.body.address?req.body.address:null)?req.body.address.trim():null);
+            taxid=((req.body.taxid?req.body.taxid:null)?req.body.taxid.trim():null);
+            gender=((req.body.gender?req.body.gender:null)?req.body.gender.trim():null);
+            type=((req.body.type?req.body.type:null)?req.body.type.trim():null);
+
+            console.log("mail: "+email+" pass: "+pass+"\nsignup-email: "+signupemail+" signup-pass:"+signuppass+" fname: "+fname+" lname: "+lname+" telephone: "+phone+" address: "+address+" gender:"+gender+" taxid: "+taxid+" type: "+type);
             //console.log(User);
             const mongo = require('mongodb');
             const MongoClient = mongo.MongoClient;
@@ -74,8 +62,8 @@ module.exports = (param) =>{
             var success=0;
             MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
                 if (err) throw err;
-                const db = client.db("login");
-                if(email!=null&&pass!=null&&signupemail==null&&signuppass==null&&fname==null&&lname==null)
+                const db = client.db("allyouneed");
+                if(email!=null&&pass!=null&&signupemail==null&&signuppass==null&&fname==null&&lname==null&&phone==null&&address==null&&taxid==null&&gender==null&&type==null)
                 {
                     var re = /\S+@\S+\.\S+/;
                     if(!re.test(String(email)))
@@ -93,7 +81,12 @@ module.exports = (param) =>{
                         if(bcrypt.compareSync(data,hash))
                         {
                             console.log("Login Success ");
+                            var _id=docs.map(a=>a._id);
+                            console.log(typeof(_id));
+
+                            console.log("My id is: "+_id);
                             res.cookie('loggedin',true);
+                            res.cookie('_id',_id);
                             return res.redirect('/');
                         }
                         else
@@ -107,7 +100,7 @@ module.exports = (param) =>{
                         client.close();
                     })
                 }
-                else if(signupemail!=null&&signuppass!=null&&fname!=null&&lname!=null&&email==null&&pass==null)
+                else if(signupemail!=null&&signuppass!=null&&fname!=null&&lname!=null&&address!=null&&taxid!=null&&gender!=null&&phone!=null&&type!=null&&email==null&&pass==null)
                 {
                     db.collection('users').find({email:signupemail}).toArray().then((docs) => {
                         console.log(docs+ " "+docs.length);  
@@ -123,7 +116,13 @@ module.exports = (param) =>{
                             {
                                 return res.redirect('/login?signup=false/reason=invalidmail');
                             }
-                            var entry={email:signupemail,password:bcrypt.hashSync(signuppass,bcrypt.genSaltSync(8),null),firstname:fname,lastname:lname,isdeleted:false};
+                            re=/^\d+$/;
+                            if(!re.test(String(phone)))
+                            {
+                                return res.redirect('/login?signup=false/reason=invalidphone');
+                            }
+
+                            var entry={email:signupemail,password:bcrypt.hashSync(signuppass,bcrypt.genSaltSync(8),null),firstname:fname,lastname:lname,phone:phone,address:address,taxpayerid:taxid,gender:gender,type:type,isdeleted:false};
                             db.collection('users').insertOne(entry).then((docs)=>{
                                 console.log("Signup Success");
                                 //client.close();
