@@ -3,7 +3,7 @@ block content
   .innerbody
     .spacer
     each product in productslist
-      a(href=`/${product.shortname}`)
+      a(href=`/products/${product.shortname}`)
         .auctionpreview
           .headbox
             .vertcenter
@@ -13,7 +13,7 @@ block content
               .fullcenter
                 h4=product.price.toFixed(2)
           .auctionpreviewthumb
-            img(src=`images/${product.shortname}/${product.photo[0]}`)
+            img(src=`../images/${product.shortname}/${product.photo[0]}`)
           p
             |#{product.description}
 

@@ -8,10 +8,10 @@ block content
         .imgbox
           each img in product.photo
             .mySlides
-              img(src=`images/${product.shortname}/${img}`)
+              img(src=`../images/${product.shortname}/${img}`)
           each img, index in product.photo
             span.dot(onclick=`currentSlide(${index+1})`)
-              img(src=`images/${product.shortname}/${img}`)
+              img(src=`../images/${product.shortname}/${img}`)
       //
           -
       .col-right

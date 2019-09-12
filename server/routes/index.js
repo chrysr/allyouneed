@@ -9,7 +9,7 @@ module.exports = (param) =>{
 
     const  {productService}  = param;
 
-    router.get("/",async (req,res,next) =>{
+    router.get("/products",async (req,res,next) =>{
         try {
             const promises =[];
 
@@ -26,8 +26,11 @@ module.exports = (param) =>{
         }
 
     });
+    router.get("/",async (req,res,next) =>{
+        res.redirect('/products');
+    });
 
-    router.get("/byprice",async (req,res,next) =>{
+    router.get("/products/byprice",async (req,res,next) =>{
         try {
             const promises =[];
 
@@ -48,7 +51,7 @@ module.exports = (param) =>{
     
 
 
-    router.get("/:shortname",async(req,res,next) =>{
+    router.get("/products/:shortname",async(req,res,next) =>{
         try {
             const promises =[];
 
