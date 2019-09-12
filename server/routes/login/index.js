@@ -85,6 +85,8 @@ module.exports = (param) =>{
                             console.log(typeof(_id));
 
                             console.log("My id is: "+_id);
+                            res.clearCookie('loggedin');
+                            res.clearCookie('_id');
                             res.cookie('loggedin',true);
                             res.cookie('_id',_id);
                             return res.redirect('/');

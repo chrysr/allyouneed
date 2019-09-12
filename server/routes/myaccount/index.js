@@ -18,9 +18,12 @@ module.exports = (param) =>{
                     if (err) throw err;
                     const db = client.db("allyouneed");
                     var _id=req.cookies._id;
-                    _id=_id.toString();
-                    db.collection('users').find(_id).toArray().then((docs)=>{
-                        console.log(docs[0]);
+                    console.log(_id);
+                    //_id=_id.toString();
+                    console.log(_id);
+                    //var id = require('mongodb').ObjectID(doc._id);
+                    db.collection('users').find({"_id.$oid":require('mongodb').ObjectID(_id.toString())}).toArray().then((docs)=>{
+                        console.log(docs);
                         return res.render("myaccount",{
                             page: "My Account",
                             loggedin:req.cookies.loggedin,
