@@ -12,22 +12,22 @@ block content
             img#fill3.smallimg(src='images/AYN/alt.jpg', alt='')
             img#fill4.smallimg(src='images/AYN/alt.jpg', alt='')
           .bot
-            input#selectedFile(type='file', style='display: none;', onchange='mainimg(this);')
+            input#selectedFile(type='file', style='display: none;', onchange='loadFile(event)')
             input.button(type='button', value='Image 1', onclick="document.getElementById('selectedFile').click();")
             br
             br
             br
-            input#selectedFile2(type='file', style='display: none;', onchange='img2(this);')
+            input#selectedFile2(type='file', style='display: none;', onchange='loadFile2(event)')
             input.button(type='button', value='Image 2', onclick="document.getElementById('selectedFile2').click();")
             br
             br
             br
-            input#selectedFile3(type='file', style='display: none;', onchange='img3(this);')
+            input#selectedFile3(type='file', style='display: none;', onchange='loadFile3(event)')
             input.button(type='button', value='Image 3', onclick="document.getElementById('selectedFile3').click();")
             br
             br
             br
-            input#selectedFile4(type='file', style='display: none;', onchange='img4(this);')
+            input#selectedFile4(type='file', style='display: none;', onchange='loadFile4(event)')
             input.button(type='button', value='Image 4', onclick="document.getElementById('selectedFile4').click();")
       //
         -
@@ -110,17 +110,19 @@ block content
       | Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, 
       a.a2(href='mailto:sdi1400041@di.uoa.gr') contact us
   script(type='text/javascript').
-    $(document).ready(function(){
-      $("input").change(function(e){
-        for(var i=0;i<e.originalEvent.srcElement.files.length; i++){
-          var file=e.originalEvent.srcElement.files[i];
-          var img=document.createElement("img");
-          var reader=new FileReader();
-          reader.onloadend=function(){
-            $('#fill')
-              .attr('src',reader.result)
-          }
-          reader.readAsDataURL(file);
-        }
-      });
-    });
+    var loadFile=function(event){
+      var image=document.getElementById('fill');
+      image.src=URL.createObjectURL(event.target.files[0]);
+    }
+    var loadFile2=function(event){
+      var image=document.getElementById('fill2');
+      image.src=URL.createObjectURL(event.target.files[0]);
+    }
+    var loadFile3=function(event){
+      var image=document.getElementById('fill3');
+      image.src=URL.createObjectURL(event.target.files[0]);
+    }
+    var loadFile4=function(event){
+      var image=document.getElementById('fill4');
+      image.src=URL.createObjectURL(event.target.files[0]);
+    }
