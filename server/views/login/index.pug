@@ -55,10 +55,25 @@ block content
             .form-group
               label
                 input(type='text', placeholder='E-mail',name="signupemail",required=true)
+            .form-group
+              label
+                input#pass(type='password',placeholder='Password',name="signuppass",required=true)
             .topalign
               .form-group
                 label
-                  input.nextmini(type='password',placeholder='Password',name="signuppass",required=true)
+                  input.nextmini#passconf(type='password',placeholder='Password Confirmation',name="signuppassconf",required=true)
+                script.
+                  var password = document.getElementById("pass")
+                  , confirm_password = document.getElementById("passconf");
+                  function validatePassword(){
+                    if(password.value != confirm_password.value) {
+                      confirm_password.setCustomValidity("Passwords Don't Match");
+                    } else {
+                      confirm_password.setCustomValidity('');
+                    }
+                  }
+                  password.onchange = validatePassword;
+                  confirm_password.onkeyup = validatePassword;
                 button.btn.btn-default.pull-right(type='submit') ⏎
           br
           a(href='#') Terms of service
@@ -146,3 +161,4 @@ block content
     /*if the user clicks anywhere outside the select box,
     then close all select boxes:*/
     document.addEventListener("click", closeAllSelect);
+  
