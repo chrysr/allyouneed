@@ -41,11 +41,12 @@ module.exports = (param) =>{
     router.post("/",async(req,res,next) =>{
         console.log("LOGIN---------------------------------------");
         try {
-            var email,pass,signupemail,signuppass,fname,lname,phone,address,taxid,gender,type;
+            var email,pass,signupemail,signuppass,signuppassconf,fname,lname,phone,address,taxid,gender,type;
             email=(((req.body.email?req.body.email:null)?req.body.email.trim():null)?req.body.email.trim().toLowerCase():null);
             pass=((req.body.pass?req.body.pass:null)?req.body.pass.trim():null);
             signupemail=(((req.body.signupemail?req.body.signupemail:null)?req.body.signupemail.trim():null)?req.body.signupemail.trim().toLowerCase():null);
             signuppass=((req.body.signuppass?req.body.signuppass:null)?req.body.signuppass.trim():null);
+            signuppassconf=((req.body.signuppassconf?req.body.signuppassconf:null)?req.body.signuppassconf.trim():null);
             fname=((req.body.fname?req.body.fname:null)?req.body.fname.trim():null);
             lname=((req.body.lname?req.body.lname:null)?req.body.lname.trim():null);
             phone=((req.body.phone?req.body.phone:null)?req.body.phone.trim():null);
@@ -57,7 +58,7 @@ module.exports = (param) =>{
             console.log("mail: "+email+" pass: "+pass+"\nsignup-email: "+signupemail+" signup-pass:"+signuppass+" fname: "+fname+" lname: "+lname+" telephone: "+phone+" address: "+address+" gender:"+gender+" taxid: "+taxid+" type: "+type);
             //console.log(User);
             const db=req.app.locals.db;
-            if(email!=null&&pass!=null&&signupemail==null&&signuppass==null&&fname==null&&lname==null&&phone==null&&address==null&&taxid==null&&gender==null&&type==null)
+            if(email!=null&&pass!=null&&signupemail==null&&signuppass==null&&signuppassconf==null&&fname==null&&lname==null&&phone==null&&address==null&&taxid==null&&gender==null&&type==null)
             {
                 var re = /\S+@\S+\.\S+/;
                 if(!re.test(String(email)))
@@ -96,8 +97,12 @@ module.exports = (param) =>{
                     //client.close();
                 })
             }
-            else if(signupemail!=null&&signuppass!=null&&fname!=null&&lname!=null&&address!=null&&taxid!=null&&gender!=null&&phone!=null&&type!=null&&email==null&&pass==null)
+            else if(signupemail!=null&&signuppass!=null&&signuppassconf!=null&&fname!=null&&lname!=null&&address!=null&&taxid!=null&&gender!=null&&phone!=null&&type!=null&&email==null&&pass==null)
             {
+                if(signuppass!=signuppassconf)
+                {
+                    return res.redirect('/login?signup=false/reason=passwordsdonomatch');
+                }
                 db.collection('users').find({email:signupemail}).toArray().then((docs) => {
                     console.log(docs+ " "+docs.length);  
                     if(docs.length==1) 

@@ -45,13 +45,13 @@ block content
                 input.next(type='text',placeholder="Currently",name="currently",required=true)
             .form-group
               label
-                input.next(type="text",placeholder="Buy_Price",name="buy_price",required=true)
+                input.next(type="text",placeholder="Buy Price",name="buyprice",required=true)
             .form-group
               label
-                input.next(type="text",placeholder="First_Bid",name="first_bid",required=true)
+                input.next(type="text",placeholder="Starting Bid",name="startingbid",required=true)
             .form-group
               label
-                input.next(type="text",placeholder="Number_of_Bids",name="number_of_bids",required=true)
+                input.next(type="text",placeholder="Number of Bids",name="bidnum",required=true)
             .form-group
               label
                 input.next(type="text",placeholder="Bids",name="bids",required=true)
@@ -109,3 +109,18 @@ block content
     span
       | Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, 
       a.a2(href='mailto:sdi1400041@di.uoa.gr') contact us
+  script(type='text/javascript').
+    $(document).ready(function(){
+      $("input").change(function(e){
+        for(var i=0;i<e.originalEvent.srcElement.files.length; i++){
+          var file=e.originalEvent.srcElement.files[i];
+          var img=document.createElement("img");
+          var reader=new FileReader();
+          reader.onloadend=function(){
+            $('#fill')
+              .attr('src',reader.result)
+          }
+          reader.readAsDataURL(file);
+        }
+      });
+    });
