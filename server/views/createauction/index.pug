@@ -32,10 +32,62 @@ block content
       //
         -
       .col-right
+        .information
+          form.insert-item-form(action="/createauction",method="POST")
+            .form-group
+              label
+                input.next(type='text', placeholder='Name',name="name",required=true)
+            .form-group
+              label
+                input.next(type='text', placeholder="Category",name="category",required=true) 
+            .form-group
+              label
+                input.next(type='text',placeholder="Currently",name="currently",required=true)
+            .form-group
+              label
+                input.next(type="text",placeholder="Buy_Price",name="buy_price",required=true)
+            .form-group
+              label
+                input.next(type="text",placeholder="First_Bid",name="first_bid",required=true)
+            .form-group
+              label
+                input.next(type="text",placeholder="Number_of_Bids",name="number_of_bids",required=true)
+            .form-group
+              label
+                input.next(type="text",placeholder="Bids",name="bids",required=true)
+            .form-group
+              label
+                input.next(type="text",placeholder="Bid",name="bid",required=true)  
+            br
+            br
+            .form-group
+              label
+                input.next(type="text",placeholder="Bidder",name="bidder",required=true)  
+            .form-group
+              label
+                input.next(type="text",placeholder="Time",name="time",required=true)  
+            .form-group
+              label
+                input.next(type="text",placeholder="Amount",name="amount",required=true)  
+            .form-group
+              label
+                input.next(type="text",placeholder="Location",name="location",required=true)   
+            .form-group
+              label
+                input.next(type="text",placeholder="Country",name="country",required=true)  
+            .form-group
+              label
+                input.next(type="text",placeholder="Started",name="started",required=true)  
+            .form-group
+              label
+                input.next(type="text",placeholder="Ends",name="ends",required=true)  
+            .form-group
+              label
+                input.next(type="text",placeholder="Seller",name="seller",required=true) 
+            .topalign
+              .form-group
+                button.btn.btn-default.pull-right(type='submit') ⏎ 
         .textbox
-          .nameinp
-            label
-              input(type='text', name='query', placeholder='Product Name')
           .bidbox2
             span.bidspan
               label
@@ -57,4 +109,3 @@ block content
     span
       | Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, 
       a.a2(href='mailto:sdi1400041@di.uoa.gr') contact us
-  
