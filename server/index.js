@@ -64,6 +64,9 @@ app.use((err,req,res,next)=>{
     res.status(status);
     return res.render("error");
 });
+var multer = require('multer');
+//var upload = multer({ dest: './uploads' });
+app.use(multer({dest:'./uploads/'}).array('multiInputFileName'));
 
 const mongo = require('mongodb');
 const MongoClient = mongo.MongoClient;
