@@ -3,18 +3,13 @@ const router = express.Router();
 const bcrypt=require('bcrypt');
 const cookieParser = require('cookie-parser');
 
-//console.log(process.cwd());
-
-
 module.exports = (param) =>{
 
-    //const {feedbackService}=param;
     const {LoginService}=param;
 
     router.get("/",async(req,res,next) =>{
         console.log("loginloaded");
         //console.log(req.cookies);
-
         try {
             //const feedbacklist=await feedbackService.getlist();
             //console.log(process.cwd());
@@ -26,20 +21,19 @@ module.exports = (param) =>{
                     page: "Login",
                     success:req.query.success,
                     loggedin:req.cookies.loggedin,
-
-                    //feedbacklist,
-                    //success: req.query.success,
                 });
             }
-        } 
+            else{
+              return res.redirect('/account');
+            }
+        }
         catch (err) {
             return err;
         }
-        
     });
-    
+
     router.post("/",async(req,res,next) =>{
-        console.log("LOGIN---------------------------------------");
+        console.log("LOGIN-----------");
         try {
             var email,pass,signupemail,signuppass,fname,lname,phone,address,taxid,gender,type;
             email=(((req.body.email?req.body.email:null)?req.body.email.trim():null)?req.body.email.trim().toLowerCase():null);
@@ -106,8 +100,8 @@ module.exports = (param) =>{
             else if(signupemail!=null&&signuppass!=null&&fname!=null&&lname!=null&&address!=null&&taxid!=null&&gender!=null&&phone!=null&&type!=null&&email==null&&pass==null)
             {
                 db.collection('users').find({email:signupemail}).toArray().then((docs) => {
-                    console.log(docs+ " "+docs.length);  
-                    if(docs.length==1) 
+                    console.log(docs+ " "+docs.length);
+                    if(docs.length==1)
                     {
                         console.log("Signup Fail");
                         return res.redirect('/login?signup=false/reason=userexists');
@@ -135,15 +129,15 @@ module.exports = (param) =>{
                             console.log(err);
                         }).finally(()=>{
                             //client.close();
-                        })                        
+                        })
                     }
-                }).catch((err) => {          
+                }).catch((err) => {
                     console.log(err);
-                }).finally(() => {      
+                }).finally(() => {
                     //client.close();
                 });
             };
-        } 
+        }
         catch (err) {
             return next(err);
         }
