@@ -1,0 +1,131 @@
+link(href='https://fonts.googleapis.com/css?family=Fira Sans', rel='stylesheet')
+link(rel='stylesheet', href='main.css')
+meta(name='viewport', content='width=device-width,initial-scale=1.0')
+link.jsbin(href='http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css', rel='stylesheet', type='text/css')
+script.jsbin(src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+script.jsbin(src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js')
+.topmenu
+ul
+  li
+    a(href='#')
+      img(src='images/AYN/logo2.png')
+      |  HOME
+  .dropdown
+    li
+      a(href='#') SORT
+      .dropmenu
+        ul
+          li
+            a(href='#') PRICE
+          li
+            a(href='#') TRENDS
+          li
+            a(href='#') DATE
+          li
+            a(href='#') ON SALE
+  .searchli
+    li
+      a(href='#')
+        span SEARCH
+        #query.searchbox
+          label
+            input(type='text', name='query', placeholder='for a product or user')
+  li.right
+    a(href='#') MY ACCOUNT
+.innerbody
+.spacer
+.auction
+  .col-left
+    .imgbox2
+      .imgprev
+        img#fill(src='#', alt='Please insert at least one image', onerror="this.src='images/AYN/image-missing.png'")
+        img#fill2.smallimg(src='images/AYN/alt.jpg', alt='')
+        img#fill3.smallimg(src='images/AYN/alt.jpg', alt='')
+        img#fill4.smallimg(src='images/AYN/alt.jpg', alt='')
+      .bot
+        input#selectedFile(type='file', style='display: none;', onchange='mainimg(this);')
+        input.button(type='button', value='Image 1', onclick="document.getElementById('selectedFile').click();")
+        br
+        br
+        br
+        input#selectedFile2(type='file', style='display: none;', onchange='img2(this);')
+        input.button(type='button', value='Image 2', onclick="document.getElementById('selectedFile2').click();")
+        br
+        br
+        br
+        input#selectedFile3(type='file', style='display: none;', onchange='img3(this);')
+        input.button(type='button', value='Image 3', onclick="document.getElementById('selectedFile3').click();")
+        br
+        br
+        br
+        input#selectedFile4(type='file', style='display: none;', onchange='img4(this);')
+        input.button(type='button', value='Image 4', onclick="document.getElementById('selectedFile4').click();")
+  //
+    -
+  .col-right
+    .textbox
+      .nameinp
+        label
+          input(type='text', name='query', placeholder='Product Name')
+      .bidbox2
+        span.bidspan
+          label
+            input(type='text', name='query', placeholder='Starting Bid')
+        span.bidspan
+          label
+            input(type='text', name='query', placeholder='Min. Increment')
+    .descbox
+      label
+        textarea(type='text', name='query', placeholder='product description', maxlength='250', rows='8')
+.footer
+span
+  a.a1(href='#') SITEMAP
+span
+  a.a1(href='#') TERMS OF SERVICE
+span
+  a.a1(href='#') OUR TEAM
+br
+span
+  | Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, 
+  a.a2(href='mailto:sdi1400041@di.uoa.gr') contact us
+script(type='text/javascript').
+function mainimg(input) {
+if (input.files && input.files[0]) {
+var reader = new FileReader();
+reader.onload = function (e) {
+$('#fill')
+.attr('src', e.target.result)
+};
+reader.readAsDataURL(input.files[0]);
+}
+}
+function img2(input) {
+if (input.files && input.files[0]) {
+var reader = new FileReader();
+reader.onload = function (e) {
+$('#fill2')
+.attr('src', e.target.result)
+};
+reader.readAsDataURL(input.files[0]);
+}
+}
+function img3(input) {
+if (input.files && input.files[0]) {
+var reader = new FileReader();
+reader.onload = function (e) {
+$('#fill3')
+.attr('src', e.target.result)
+};
+reader.readAsDataURL(input.files[0]);
+}
+}
+function img4(input) {
+if (input.files && input.files[0]) {
+var reader = new FileReader();
+reader.onload = function (e) {
+$('#fill4')
+.attr('src', e.target.result)
+};
+reader.readAsDataURL(input.files[0]);
+}
+}
