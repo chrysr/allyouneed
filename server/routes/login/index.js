@@ -63,9 +63,15 @@ module.exports = (param) =>{
                     {
                         console.log("DUPLICATE USER");
                     }
+                    else if(docs.length==0)
+                    {
+                        console.log("mailnotindb")
+                        return res.redirect('/login?success=false/reason=userdoesnotexist');
+                    }
                     //console.log(docs);
                     var data=pass;
                     var hash=docs.map(a=>a.password).toString();
+                    console.log(hash+" "+data);
                     if(bcrypt.compareSync(data,hash))
                     {
                         if(docs[0].isaccepted==true)
