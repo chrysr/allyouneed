@@ -89,6 +89,40 @@ module.exports = (param) =>{
         }
         
     });
+    router.get("/account/accept/:who",async(req,res,next) =>{
+        try {
+            const db=req.app.locals.db;
+            db.collection('users').find({_id:require('mongodb').ObjectID(req.cookies._id.toString())}).toArray().then((docs)=>{
+                if(docs[0].type=='admin')
+                {
+                    db.collection('users').updateOne({email:req.params.who},{$set: {isaccepted:true}}).then((docs)=>{
+                        return res.redirect('/account');                
+                    });
+                }
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+        
+    });
+    router.get("/account/reject/:who",async(req,res,next) =>{
+        try {
+            const db=req.app.locals.db;
+            db.collection('users').find({_id:require('mongodb').ObjectID(req.cookies._id.toString())}).toArray().then((docs)=>{
+                if(docs[0].type=='admin')
+                {
+                    db.collection('users').deleteOne({email:req.params.who}).then((docs)=>{
+                        return res.redirect('/account');                
+                    });
+                }     
+            });       
+        } 
+        catch (err) {
+            return next(err);
+        }
+        
+    });
 
     
     //router.use("/speakers",speakersroute(param));
