@@ -4,6 +4,7 @@ const router = express.Router();
 //const feedbackroute = require("./feedback");
 const loginroute = require("./login");
 const myaccountroute=require("./myaccount");
+const createauction=require("./createauction");
 
 module.exports = (param) =>{
 
@@ -92,6 +93,7 @@ module.exports = (param) =>{
     //router.use("/speakers",speakersroute(param));
     //router.use("/feedback",feedbackroute(param));
     router.use("/login",loginroute(param));
-    router.use("/account",myaccountroute(param))
+    router.use("/account",myaccountroute(param));
+    router.use('/createauction',createauction(param));
     return router;
 };
