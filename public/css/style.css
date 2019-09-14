@@ -1026,6 +1026,9 @@ body {
 	margin: 0;
 	padding: 0;
 }
+.actv li{
+	border-bottom: solid 1px
+}
 
 .actv input 
 {
@@ -1126,6 +1129,76 @@ body {
 .logout input[type=submit]:hover {
 	background-color: #333;
 }
+.inbox li {
+	position:relative;
+	display: inline-block;
+    background-color:#888;
+    width:60% ;
+    margin-bottom: 10vh;
+    padding: 1vh 2vw;
+    text-align: left;
+}
+
+.inbox li:after {
+	content:'';
+    position: absolute;
+    top: 100%;
+    left: 0%;
+    margin-left: 0;
+    width: 0;
+    height: 0;
+    border-top: solid 5vh #888;
+    border-right: solid 4vh transparent;
+}
+
+.inbox h5 {
+	font-size: calc(0.1em + 0.7vw + 0.7vh);
+	padding: 0.2vh 0;
+	margin: 0;
+	color: #111;
+}
+
+.inbox p {
+	font-size: calc(0.1em + 0.6vw + 0.6vh);
+	line-height: 3vh;
+	margin: 0;
+}
+
+.outbox li {
+	position:relative;
+	display: inline-block;
+    background-color:#4d88ff;
+    width:60% ;
+    margin-bottom: 10vh;
+    padding: 1vh 2vw;
+    text-align: left;
+}
+
+.outbox li:after {
+	content:'';
+    position: absolute;
+    top: 100%;
+    right: 0%;
+    margin-left: 0;
+    width: 0;
+    height: 0;
+    border-top: solid 5vh #4d88ff;
+    border-left: solid 4vh transparent;
+}
+
+.outbox h5 {
+	font-size: calc(0.1em + 0.7vw + 0.7vh);
+	padding: 0.2vh 0;
+	margin: 0;
+	color: #111;
+}
+
+.outbox p {
+	font-size: calc(0.1em + 0.6vw + 0.6vh);
+	line-height: 3vh;
+	margin: 0;
+}
+
 
 
 /*------------------------------------------MISCELANIOUS------------------------------------------*/

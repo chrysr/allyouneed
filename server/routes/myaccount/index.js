@@ -18,17 +18,40 @@ module.exports = (param) =>{
                 console.log(_id);
                 db.collection('users').find({"_id":require('mongodb').ObjectID(_id.toString())}).toArray().then((docs)=>{
                     //console.log(docs);
-                    return res.render("myaccount",{
-                        page: "My Account",
-                        loggedin:req.cookies.loggedin,
-                        details:docs[0],
-                        
-                    });
-                }).catch((err)=>{
-                    console.log(err);
-                }).finally(()=>{
-
-                });
+                    db.collection('messages').find({sender:docs[0].email.toString()}).toArray().then((sent)=>{
+                        //console.log(sent);
+                        db.collection('messages').find({receiver:docs[0].email.toString()}).toArray().then((received)=>{
+                            //console.log(received);
+                            if(docs[0].type=='admin')
+                            {
+                                db.collection('users').find().sort({isaccepted:1}).toArray().then((all)=>{
+                                    //console.log(all);
+                                    return res.render("myaccount",{
+                                        page: "My Account",
+                                        loggedin:req.cookies.loggedin,
+                                        details:docs[0],
+                                        all:all,
+                                        sent:sent,
+                                        received:received,                                        
+                                    });
+                                })
+                            }
+                            else
+                            {
+                                console.log(sent);
+                                console.log(received);
+                                return res.render("myaccount",{
+                                    page: "My Account",
+                                    loggedin:req.cookies.loggedin,
+                                    details:docs[0],
+                                    sent:sent,
+                                    received:received,                                    
+                                });
+                            }
+                        })
+                        })
+                    })
+                            
 
             
                 
@@ -146,6 +169,7 @@ module.exports = (param) =>{
         }
         
     });
+    
 
     return router;
 };

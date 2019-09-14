@@ -6,27 +6,26 @@ block content
     .acc
       .cont
         .tab
-          ul
-            li MVMT Chrono - 135.00
-            li MVMT AERO - 105.00
-            li IKEA ALEFJALL - 249.00
-            li Hundred Mill Club // PewDiePie - 35.67
-            li 90 Mill Club // PewDiePie - 49.99
-            li Philips Hue White &amp; Colour B22 - 52.17
-            li Apple AirPods 1st Gen - 90.52
-            li GoPro HERO 5 - 98.66
-            li GoPro HERO 5 Accessory Kit - 49.60
+          ul.inbox           
+            if received.length==0
+              |You haven't received any messages yet! 
+            each message in received
+              li
+                h5=message.sender
+                p=message.content
         .tab
-          ul
-            li Apple AirPods 1st Gen - 90.52
-            li GoPro HERO 5 - 98.66
-            li GoPro HERO 5 Accessory Kit - 49.60
-            li MVMT Chrono - 135.00
-            li MVMT AERO - 105.00
-            li Philips Hue White &amp; Colour B22 - 52.17
-            li Amazing Fantasy 15 Signed - 271.55
-            li Watchmen 1st ED Signed Dave Gibbons - 117.67
-            li Nike Air Mag BTTF - 1464.00 
+          ul.outbox
+            if sent.length==0
+                |You haven't sent any messages yet!
+            each message in sent
+              li
+                h5=message.receiver
+                p=message.content
+        .tab
+          .message
+            input(type='text', name='query', placeholder='Recepient')
+            textarea(type='text', name='query', placeholder='Your message here ...', rows='8')
+            input(type='button', value='Submit', name='Submit')
         .tab
           ul
             li First Name: #{details.firstname}
@@ -66,25 +65,22 @@ block content
             .form-group
               input(type='submit' name='submit') 
             //button.btn.btn-default.pull-right(type='submit') Submit
+        if(details.type=='admin')
+          .tab
+            ul
+              each user in all
+                if(user.type=='admin')
+                  - continue
+                if(user.isaccepted==false)
+                  li
+                    | #{user.firstname} #{user.lastname} #{user.gender} #{user.email} #{user.phone} #{user.address} #{user.type} #{user.taxpayerid}
+                    a(href=`/account/accept/${user.email}`) &#xFF0B;
+                    a(href=`/account/reject/${user.email}`) &#xFF0D;
+                else
+                  li 
+                    | #{user.firstname} #{user.lastname} #{user.gender} #{user.email} #{user.phone} #{user.address} #{user.type} #{user.taxpayerid}
 
-        .tab
-          ul
-            li
-              | John Doe - johndoe@gmail.com 
-              a(href='#') &#xFF0B;
-              a(href='#') &#xFF0D;
-            li
-              | Poppy Harlow - poppyharlow@outlook.com 
-              a(href='#') &#xFF0B;
-              a(href='#') &#xFF0D;
-            li
-              | Billy Butcher - theboys@gmail.com 
-              a(href='#') &#xFF0B;
-              a(href='#') &#xFF0D;
-            li
-              | Miltos Yerolemou - milyer@hotmail.gr 
-              a(href='#') &#xFF0B;
-              a(href='#') &#xFF0D;
+            
       //
             -
       .tabs
@@ -92,23 +88,28 @@ block content
           a(href='#' onclick='tab(1)')
             li.men
               br
-              | PURCHASE HISTORY
+              | INBOX
           a(href='#' onclick='tab(2)')
             li.men
               br
-              | SALE HISTORY
+              | OUTBOX
           a(href='#' onclick='tab(3)')
             li.men
               br
+              | MESSAGE
+          a(href='#' onclick='tab(4)')
+            li.men
+              br
               | ACCOUNT INFO
-          a(onclick='tab(4)')
+          a(onclick='tab(5)')
             li.men
               br
               | CHANGE INFO
-          a(href='#' onclick='tab(5)')
-            li.men
-              br
-              | MEMBER REQUESTS
+          if(details.type=='admin')
+            a(href='#' onclick='tab(6)')
+              li.men
+                br
+                | MEMBER REQUESTS
     .logout
         form.logout-form(action="/account",method="POST")
           input(type='submit' value='LOG OUT' name='LOG OUT')

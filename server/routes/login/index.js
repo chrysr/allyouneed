@@ -64,21 +64,34 @@ module.exports = (param) =>{
                     {
                         console.log("DUPLICATE USER");
                     }
+                    else if(docs.length==0)
+                    {
+                        console.log("mailnotindb")
+                        return res.redirect('/login?success=false/reason=userdoesnotexist');
+                    }
                     //console.log(docs);
                     var data=pass;
                     var hash=docs.map(a=>a.password).toString();
+                    console.log(hash+" "+data);
                     if(bcrypt.compareSync(data,hash))
                     {
-                        console.log("Login Success ");
-                        var _id=docs.map(a=>a._id);
-                        //console.log(typeof(_id));
+                        if(docs[0].isaccepted==true)
+                        {
+                            console.log("Login Success ");
+                            var _id=docs.map(a=>a._id);
+                            //console.log(typeof(_id));
 
-                        //console.log("My id is: "+_id);
-                        res.clearCookie('loggedin');
-                        res.clearCookie('_id');
-                        res.cookie('loggedin',true);
-                        res.cookie('_id',_id);
-                        return res.redirect('/');
+                            //console.log("My id is: "+_id);
+                            res.clearCookie('loggedin');
+                            res.clearCookie('_id');
+                            res.cookie('loggedin',true);
+                            res.cookie('_id',_id);
+                            return res.redirect('/');
+                        }
+                        else
+                        {
+                            return res.redirect('/login?success=false?reason=accountnotactivated');
+                        }
                     }
                     else
                     {
@@ -113,7 +126,7 @@ module.exports = (param) =>{
                             return res.redirect('/login?signup=false/reason=invalidphone');
                         }
 
-                        var entry={email:signupemail,password:bcrypt.hashSync(signuppass,bcrypt.genSaltSync(8),null),firstname:fname,lastname:lname,phone:phone,address:address,taxpayerid:taxid,gender:gender,type:type,isdeleted:false};
+                        var entry={email:signupemail,password:bcrypt.hashSync(signuppass,bcrypt.genSaltSync(8),null),firstname:fname,lastname:lname,phone:phone,address:address,taxpayerid:taxid,gender:gender,type:type,isaccepted:false};
                         db.collection('users').insertOne(entry).then((docs)=>{
                             console.log("Signup Success");
                             //client.close();
