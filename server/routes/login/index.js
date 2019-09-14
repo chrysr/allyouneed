@@ -22,6 +22,7 @@ module.exports = (param) =>{
                     success:req.query.success,
                     loggedin:req.cookies.loggedin,
                 });
+                
             }
             else{
               return res.redirect('/account');
