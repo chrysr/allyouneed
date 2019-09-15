@@ -49,6 +49,7 @@ module.exports = (param) =>{
     router.post("/",async(req,res,next) =>{
         console.log("came here");
         try {
+            var count=0;
             const db=req.app.locals.db;
             var name,category,currently,buy_price,starting_bid,bid_num,bids;
             var bid,bidder,time,amount,location,country,started,ends,seller,product_descr;
@@ -70,19 +71,37 @@ module.exports = (param) =>{
             seller=((req.body.seller?req.body.seller:null)?req.body.seller.trim():null);
             product_descr=((req.body.product_descr?req.body.product_descr:null)?req.body.product_descr.trim():null);
             console.log("here1");
-            for(i=2, flag=0;flag==0;i++)
-            {
-              console.log("here2");
-
+            db.collection('products').count(function(err, count) { //net
+              console.dir(err);
+              console.dir(count);
+              if( count == 0) {
+                console.log("No Found Records.");
+              }
+              else {
+                console.log("Found Records : " + count);
+              }
+            });
+            console.log("here0");
+            if(count==0){
+              console.log("here0.1");
+              shortname=name+makeid(2);
+            }
+            else{
+              console.log("here1");
+              for(i=2,flag=0;flag==0;i++)
+              {
+                console.log("here2");
+                console.log(flag);
                 shortname=name+makeid(i);
                 db.collection('products').find({shortname:shortname}).toArray().then((docs)=>{
-                    if(docs.length==0)
-                        flag=1;
+                  if(docs.length==0){
+                    console.log("here3");
+                    flag=1;
+                  }
                 });
+              }
             }
-            console.log("here3");
-
-            entry={description:description,name:name,date:new Date(),shortname:shortname,price:startingbid}
+            entry={description:product_descr,name:name,date:new Date(),shortname:shortname,price:starting_bid}
             db.collection('products').insertOne(entry).then((docs)=>{
                 console.log("product inserted successfully");
                 res.redirect('/createauction?success=true');
