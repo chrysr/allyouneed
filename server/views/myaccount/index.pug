@@ -11,7 +11,10 @@ block content
               |You haven't received any messages yet! 
             each message in received
               li
-                h5=message.sender
+                if message.seen==true
+                  h5=`${message.sender} at ${message.date} `
+                else 
+                  h5=`${message.sender} at ${message.date} `
                 p=message.content
         .tab
           ul.outbox
@@ -19,13 +22,21 @@ block content
                 |You haven't sent any messages yet!
             each message in sent
               li
-                h5=message.receiver
+                if message.seen==true
+                  h5=`${message.receiver} at ${message.date}  ✔`
+                else 
+                  h5=`${message.receiver} at ${message.date}  ○`
+
                 p=message.content
         .tab
           .message
-            input(type='text', name='query', placeholder='Recepient')
-            textarea(type='text', name='query', placeholder='Your message here ...', rows='8')
-            input(type='button', value='Submit', name='Submit')
+            form.message-form(action='/account',method="POST")
+              .form-group
+                input(type='text', name='recepient', placeholder='Recepient')
+              .form-group
+                textarea(type='text', name='message', placeholder='Your message here ...', rows='8')
+              .form-group
+                input(type='submit', value='Submit', name='Submit')
         .tab
           ul
             li First Name: #{details.firstname}
@@ -96,7 +107,7 @@ block content
           a(href='#' onclick='tab(3)')
             li.men
               br
-              | MESSAGE
+              | NEW MESSAGE
           a(href='#' onclick='tab(4)')
             li.men
               br
