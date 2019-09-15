@@ -45,13 +45,13 @@ block content
                 input.next(type='text',placeholder="Currently",name="currently",required=true)
             .form-group
               label
-                input.next(type="text",placeholder="Buy Price",name="buyprice",required=true)
+                input.next(type="text",placeholder="Buy Price",name="buy_price",required=true)
             .form-group
               label
-                input.next(type="text",placeholder="Starting Bid",name="startingbid",required=true)
+                input.next(type="text",placeholder="Starting Bid",name="starting_bid",required=true)
             .form-group
               label
-                input.next(type="text",placeholder="Number of Bids",name="bidnum",required=true)
+                input.next(type="text",placeholder="Number of Bids",name="bid_num",required=true)
             .form-group
               label
                 input.next(type="text",placeholder="Bids",name="bids",required=true)
@@ -88,16 +88,9 @@ block content
               .form-group
                 button.btn.btn-default.pull-right(type='submit') ⏎ 
         .textbox
-          .bidbox2
-            span.bidspan
-              label
-                input(type='text', name='query', placeholder='Starting Bid')
-            span.bidspan
-              label
-                input(type='text', name='query', placeholder='Min. Increment')
         .descbox
           label
-            textarea(type='text', name='query', placeholder='product description', maxlength='250', rows='8')
+            textarea(type='text', name='query', placeholder='product_descr', maxlength='250', rows='8')
   .footer
     span
       a.a1(href='#') SITEMAP
