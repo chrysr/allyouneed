@@ -90,7 +90,6 @@ module.exports = (param) =>{
               console.log("here1");
               for(i=2,flag=0;flag==0;i++)
               {
-                console.log("here2");
                 console.log(flag);
                 shortname=name+makeid(i);
                 db.collection('products').find({shortname:shortname}).toArray().then((docs)=>{
@@ -101,7 +100,11 @@ module.exports = (param) =>{
                 });
               }
             }
-            entry={description:product_descr,name:name,date:new Date(),shortname:shortname,price:starting_bid}
+            entry={shortname:shortname,name:name,category:category,currently:currently,
+              buy_price:buy_price,starting_bid:starting_bid,bid_num:bid_num,bids:bids,
+              bid:bid,bidder:bidder,time:time,amount:amount,location:location,
+              country:country,started:started,ends:ends,seller:seller,product_descr:product_descr,
+              date:new Date()}
             db.collection('products').insertOne(entry).then((docs)=>{
                 console.log("product inserted successfully");
                 res.redirect('/createauction?success=true');
