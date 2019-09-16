@@ -39,6 +39,7 @@ module.exports = (param) =>{
                     //success: req.query.success,
                 });
             }
+            else return res.redirect("/login");
         }
         catch (err) {
             return err;
@@ -70,35 +71,15 @@ module.exports = (param) =>{
             ends=((req.body.ends?req.body.ends:null)?req.body.ends.trim():null);
             seller=((req.body.seller?req.body.seller:null)?req.body.seller.trim():null);
             product_descr=((req.body.product_descr?req.body.product_descr:null)?req.body.product_descr.trim():null);
-            console.log("here1");
-            db.collection('products').count(function(err, count) { //net
-              console.dir(err);
-              console.dir(count);
-              if( count == 0) {
-                console.log("No Found Records.");
-              }
-              else {
-                console.log("Found Records : " + count);
-              }
-            });
-            console.log("here0");
-            if(count==0){
-              console.log("here0.1");
-              shortname=name+makeid(2);
-            }
-            else{
-              console.log("here1");
-              for(i=2,flag=0;flag==0;i++)
-              {
-                console.log(flag);
-                shortname=name+makeid(i);
-                db.collection('products').find({shortname:shortname}).toArray().then((docs)=>{
-                  if(docs.length==0){
-                    console.log("here3");
-                    flag=1;
-                  }
-                });
-              }
+            for(var i=2,flag=0;flag==0;i++)
+            {
+              console.log(flag);
+              shortname=name+makeid(i);
+              await db.collection('products').find({shortname:shortname}).toArray().then((docs)=>{
+                if(docs.length==0){
+                  flag=1;
+                }
+              });
             }
             entry={shortname:shortname,name:name,category:category,currently:currently,
               buy_price:buy_price,starting_bid:starting_bid,bid_num:bid_num,bids:bids,
@@ -113,8 +94,6 @@ module.exports = (param) =>{
         catch (err) {
             return next(err);
         }
-        console.log("here4");
-
     });
 
     return router;

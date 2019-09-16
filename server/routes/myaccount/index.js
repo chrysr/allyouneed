@@ -20,9 +20,9 @@ module.exports = (param) =>{
                     //console.log(docs);
                     if(docs.length==0)
                         return res.redirect('/account?getfailed/reason=invalidcookie');
-                    db.collection('messages').find({sender:docs[0].email.toString()}).toArray().then((sent)=>{
+                    db.collection('messages').find({sender:docs[0].email.toString()}).sort({date:-1}).toArray().then((sent)=>{
                         //console.log(sent);
-                        db.collection('messages').find({receiver:docs[0].email.toString()}).toArray().then((received)=>{
+                        db.collection('messages').find({receiver:docs[0].email.toString()}).sort({date:-1}).toArray().then((received)=>{
                             //console.log(received);
                             db.collection('messages').updateMany({receiver:docs[0].email.toString()},{$set:{seen:true}});
                             if(docs[0].type=='admin')

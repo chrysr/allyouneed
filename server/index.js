@@ -9,7 +9,8 @@ const configs = require("./config");
 const ProductsService =require("./services/ProductService.js");
 const routes = require("./routes");
 const bcrypt=require('bcrypt');
-
+const https = require('https');
+const fs = require('fs');
 const config=configs[app.get("env")];
 
 //const speakerService = new SpeakerService(config.data.speakers);
@@ -71,10 +72,21 @@ app.use(multer({dest:'./uploads/'}).array('multiInputFileName'));
 
 const mongo = require('mongodb');
 const MongoClient = mongo.MongoClient;
-const url = 'mongodb://localhost:27017';
+const url = 'mongodb://localhost:27017/allyouneed';
+var args=process.argv;
+var ssl=0;
+for (var i=0;i<args.length;i++)
+{
+    if(args[i]=='-ssl')
+        ssl=1;
+}
 MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
     if(err) throw err;
     app.locals.db=client.db('allyouneed');
+    app.locals.db.createCollection('users');
+    app.locals.db.createCollection('categories');
+    app.locals.db.createCollection('messages');
+    app.locals.db.createCollection('products');
     app.locals.db.collection('users').find({email:"admin@allyouneed.com"}).toArray().then((docs)=>{
         if(docs.length==0)
         {
@@ -84,10 +96,24 @@ MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
             })
         }
     })
-
-    app.listen(3000);
+    if(ssl)
+    {
+        console.log("Application Running at --> https://localhost:3000");
+        https.createServer({
+            key: fs.readFileSync('./server/config/key.pem'),
+            cert: fs.readFileSync('./server/config/cert.pem'),
+            passphrase: 'pass'
+        },app).listen(3000);
+    }
+    else
+    { 
+        console.log("Application Running at --> http://localhost:3000");
+        app.listen(3000);
+    }
 
 });
+
+
 
 
 
