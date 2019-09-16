@@ -48,6 +48,11 @@ block content
             li Taxpayer ID: #{details.taxpayerid}
             li Phone: #{details.phone}
             li Gender: #{details.gender}
+            if details.type=="Seller"
+              li Rating(as a seller): #{details.rating.srating}
+              li Rating(as a bidder): #{details.rating.brating}
+            else if details.type=="Bidder"
+              li Rating: #{details.rating.brating}
         .tab#target
           form.change-form(action="/account",method="POST")
             .form-group
