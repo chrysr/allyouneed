@@ -73,7 +73,7 @@ module.exports = (param) =>{
         const d=req.app.locals.db;
 
         try {
-            var email,pass,fname,lname,phone,address,taxid,gender,oldpass,recepient,message;
+            var email,pass,fname,lname,phone,address,taxid,gender,oldpass,recepient,message,country;
             email=(((req.body.email?req.body.email:null)?req.body.email.trim():null)?req.body.email.trim().toLowerCase():null);
             pass=((req.body.pass?req.body.pass:null)?req.body.pass.trim():null);
             fname=((req.body.fname?req.body.fname:null)?req.body.fname.trim():null);
@@ -85,13 +85,14 @@ module.exports = (param) =>{
             oldpass=((req.body.oldpass?req.body.oldpass:null)?req.body.oldpass.trim():null);
             recepient=((req.body.recepient?req.body.recepient:null)?req.body.recepient.trim():null);
             message=((req.body.message?req.body.message:null)?req.body.message.trim():null);
+            country=((req.body.country?req.body.country:null)?req.body.country.trim():null);
 
             //console.log("LOGOUT");
             //console.log(res.cookie.loggedin);
             const db=req.app.locals.db;
             console.log("mail: "+email+" pass: "+pass+" old pass: "+oldpass+" fname: "+fname+" lname: "+lname+" telephone: "+phone+" address: "+address+" gender:"+gender+" taxid: "+taxid);
 
-            if(recepient==null&&message==null&&oldpass!=null&&email!=null&&fname!=null&&lname!=null&&phone!=null&&address!=null&&taxid!=null)
+            if(country!=null&&recepient==null&&message==null&&oldpass!=null&&email!=null&&fname!=null&&lname!=null&&phone!=null&&address!=null&&taxid!=null)
             {
                 var re = /\S+@\S+\.\S+/;
                 if(!re.test(String(email)))
@@ -139,7 +140,7 @@ module.exports = (param) =>{
                 }
                 if(pass==null)
                 {
-                    var entry={email:email,password:hash,firstname:fname,lastname:lname,phone:phone,address:address,taxpayerid:taxid,gender:gender};
+                    var entry={email:email,password:hash,firstname:fname,lastname:lname,phone:phone,address:address,taxpayerid:taxid,gender:gender,country:country};
                     db.collection('users').updateOne({"_id":require('mongodb').ObjectID(_id.toString())},{$set: entry}).then((docs)=>{
                         console.log("Update one Success wnull");
                         return res.redirect('/account?changedetailsnopass=success');
@@ -162,7 +163,7 @@ module.exports = (param) =>{
                     })      
                 }
             }
-            else if(recepient!=null&&message!=null&&oldpass==null&&email==null&&fname==null&&lname==null&&phone==null&&address==null&&taxid==null)
+            else if(country==null&&recepient!=null&&message!=null&&oldpass==null&&email==null&&fname==null&&lname==null&&phone==null&&address==null&&taxid==null)
             {
                 console.log("/account for message");
                 var re = /\S+@\S+\.\S+/;
@@ -192,7 +193,7 @@ module.exports = (param) =>{
                     
                 })
             }
-            else if(recepient==null&&message==null&&oldpass==null&&email==null&&fname==null&&lname==null&&phone==null&&address==null&&taxid==null)
+            else if(country==null&&recepient==null&&message==null&&oldpass==null&&email==null&&fname==null&&lname==null&&phone==null&&address==null&&taxid==null)
             {
                 res.clearCookie("loggedin");
                 res.clearCookie("_id");

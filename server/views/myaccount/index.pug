@@ -44,6 +44,7 @@ block content
             li User type: #{details.type}
             li E-mail: #{details.email}
             li Address: #{details.address}
+            li Country: #{details.country}
             li Taxpayer ID: #{details.taxpayerid}
             li Phone: #{details.phone}
             li Gender: #{details.gender}
@@ -57,6 +58,13 @@ block content
               input(type='text' required=true name='phone' placholder="Telephone" value=`${details.phone}`)
             .form-group
               input(type='text' required=true name='address' placholder="Address"  value=`${details.address}`)
+            .custom-select
+              .form-group
+                select#gender(name="country")
+                  option(disable selected value)=details.country
+                  option(value='Greece') Greece
+                  option(value='Cyprus') Cyprus
+                  option(value='Other') Other
             .form-group
               input(type='text' required=true name='taxid' placholder="Taxpayer ID" value=`${details.taxpayerid}`)
             .form-group

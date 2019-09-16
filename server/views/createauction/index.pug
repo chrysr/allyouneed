@@ -4,93 +4,46 @@ block content
   .innerbody
     .spacer
     .auction
-      .col-left
-        .imgbox2
-          .imgprev
-            img#fill(src='#', alt='Please insert at least one image', onerror="this.src='images/AYN/image-missing.png'")
-            img#fill2.smallimg(src='images/AYN/alt.jpg', alt='')
-            img#fill3.smallimg(src='images/AYN/alt.jpg', alt='')
-            img#fill4.smallimg(src='images/AYN/alt.jpg', alt='')
-          .bot
-            input#selectedFile(type='file', style='display: none;', onchange='loadFile(event)')
-            input.button(type='button', value='Image 1', onclick="document.getElementById('selectedFile').click();")
+      form(action='/createauction', enctype='multipart/form-data', method='post')
+        .col-left
+          .imgbox2
+            .imgprev
+              img#fill(src='#', alt='Please insert at least one image', onerror="this.src='images/AYN/image-missing.png'")
+              img#fill2.smallimg(src='images/AYN/alt.jpg', alt='')
+              img#fill3.smallimg(src='images/AYN/alt.jpg', alt='')
+              img#fill4.smallimg(src='images/AYN/alt.jpg', alt='')
+            .bot
+                input#selectedFile(type='file', name='photo',style='display: none;',multiple=true, onchange='loadFile(event)',required=true)
+                input.button(type='button', value='Image 1', onclick="document.getElementById('selectedFile').click();")
+
+                //   
+        .col-right
+          input.next(type='text', placeholder='Name',name="name",required=true)
+          input.next(type='text', placeholder="Category",name="category",required=true) 
+          //
+            input.next(type='text',placeholder="Currently",name="currently",required=true)
+            input.next(type="text",placeholder="Buy Price",name="buy_price",required=true)
+            input.next(type="text",placeholder="Starting Bid",name="starting_bid",required=true)
+            input.next(type="text",placeholder="Number of Bids",name="bid_num",required=true)
+            input.next(type="text",placeholder="Bids",name="bids",required=true)
+            input.next(type="text",placeholder="Bid",name="bid",required=true)  
             br
-            br
-            br
-            input#selectedFile2(type='file', style='display: none;', onchange='loadFile2(event)')
-            input.button(type='button', value='Image 2', onclick="document.getElementById('selectedFile2').click();")
-            br
-            br
-            br
-            input#selectedFile3(type='file', style='display: none;', onchange='loadFile3(event)')
-            input.button(type='button', value='Image 3', onclick="document.getElementById('selectedFile3').click();")
-            br
-            br
-            br
-            input#selectedFile4(type='file', style='display: none;', onchange='loadFile4(event)')
-            input.button(type='button', value='Image 4', onclick="document.getElementById('selectedFile4').click();")
-      //
-        -
-      .col-right
-        .information
-          form.insert-item-form(action="/createauction",method="POST")
+            input.next(type="text",placeholder="Bidder",name="bidder",required=true)  
+            input.next(type="text",placeholder="Time",name="time",required=true)  
+            input.next(type="text",placeholder="Amount",name="amount",required=true)  
+            input.next(type="text",placeholder="Location",name="location",required=true)   
+            input.next(type="text",placeholder="Country",name="country",required=true)  
+            input.next(type="text",placeholder="Started",name="started",required=true)  
+            input.next(type="text",placeholder="Ends",name="ends",required=true)  
+            input.next(type="text",placeholder="Seller",name="seller",required=true) 
+          .topalign
+            .textbox
+              .descbox
+                textarea(type='text', name='description', placeholder='Product Description', maxlength='250', rows='8')
+        input(type='submit', value='Upload') 
+        //
             .form-group
-              label
-                input.next(type='text', placeholder='Name',name="name",required=true)
-            .form-group
-              label
-                input.next(type='text', placeholder="Category",name="category",required=true) 
-            .form-group
-              label
-                input.next(type='text',placeholder="Currently",name="currently",required=true)
-            .form-group
-              label
-                input.next(type="text",placeholder="Buy Price",name="buy_price",required=true)
-            .form-group
-              label
-                input.next(type="text",placeholder="Starting Bid",name="starting_bid",required=true)
-            .form-group
-              label
-                input.next(type="text",placeholder="Number of Bids",name="bid_num",required=true)
-            .form-group
-              label
-                input.next(type="text",placeholder="Bids",name="bids",required=true)
-            .form-group
-              label
-                input.next(type="text",placeholder="Bid",name="bid",required=true)  
-            br
-            br
-            .form-group
-              label
-                input.next(type="text",placeholder="Bidder",name="bidder",required=true)  
-            .form-group
-              label
-                input.next(type="text",placeholder="Time",name="time",required=true)  
-            .form-group
-              label
-                input.next(type="text",placeholder="Amount",name="amount",required=true)  
-            .form-group
-              label
-                input.next(type="text",placeholder="Location",name="location",required=true)   
-            .form-group
-              label
-                input.next(type="text",placeholder="Country",name="country",required=true)  
-            .form-group
-              label
-                input.next(type="text",placeholder="Started",name="started",required=true)  
-            .form-group
-              label
-                input.next(type="text",placeholder="Ends",name="ends",required=true)  
-            .form-group
-              label
-                input.next(type="text",placeholder="Seller",name="seller",required=true) 
-            .topalign
-              .textbox
-                .descbox
-                  label
-                    textarea(type='text', name='product_descr', placeholder='Product Description', maxlength='250', rows='8')
-              .form-group
-                button.btn.btn-default.pull-right(type='submit') ⏎ 
+              button.btn.btn-default.pull-right(type='submit') ⏎ 
         
   .footer
     span
@@ -106,7 +59,7 @@ block content
   script(type='text/javascript').
     var loadFile=function(event){
       var image=document.getElementById('fill');
-      image.src=URL.createObjectURL(event.target.files[0]);
+      image.src=URL.createObjectURL(event.target.files);
     }
     var loadFile2=function(event){
       var image=document.getElementById('fill2');
