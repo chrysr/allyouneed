@@ -16,32 +16,55 @@ block content
                 input#selectedFile(type='file', name='photo',style='display: none;',multiple=true, onchange='loadFile(event)',required=true)
                 input.button(type='button', value='Image 1', onclick="document.getElementById('selectedFile').click();")
   
-                  
         .col-right
-          input.next(type='text', placeholder='Name',name="name",required=true)
+          .dates-wrapper.group
+            .field.clearfix.date-range-start.date-wrapper
+              .label
+                label(for='datepicker-start') Start:
+              .input
+                input#datepicker-start.input-text(type='date', name='experience-start', placeholder='dd/mm/yyyy')
+            .field.clearfix.date-range-start.date-wrapper
+              .label
+                label(for='datepicker-end') End:
+              .input
+                input#datepicker-end.input-text(type='date', name='experience-end', placeholder='dd/mm/yyyy')
+          br
+          input.next(type='text', placeholder='Name',name="name",required=true,onsubmit='return false')
           input.next(type='text', placeholder="Category",name="category",required=true) 
-          input.next(type='text',placeholder="Currently",name="currently",required=true)
           input.next(type="text",placeholder="Buy Price",name="buy_price",required=true)
           input.next(type="text",placeholder="Starting Bid",name="starting_bid",required=true)
-          input.next(type="text",placeholder="Number of Bids",name="bid_num",required=true)
-          input.next(type="text",placeholder="Bids",name="bids",required=true)
+          input.next(type="text",placeholder="Number of Bids",name="bids_num",required=true)
           input.next(type="text",placeholder="Bid",name="bid",required=true)  
           br
-          br
-          input.next(type="text",placeholder="Bidder",name="bidder",required=true)  
-          input.next(type="text",placeholder="Time",name="time",required=true)  
-          input.next(type="text",placeholder="Amount",name="amount",required=true)  
           input.next(type="text",placeholder="Location",name="location",required=true)   
           input.next(type="text",placeholder="Country",name="country",required=true)  
           input.next(type="text",placeholder="Started",name="started",required=true)  
           input.next(type="text",placeholder="Ends",name="ends",required=true)  
-          input.next(type="text",placeholder="Seller",name="seller",required=true) 
+          br
           .descbox
             label
               textarea(type='text', name='query', placeholder='product_descr', maxlength='250', rows='8')
-      
         input(type="submit",value="Upload")
-          
+  script.
+    if ( $('html').hasClass('no-touch') ) {
+      var $input, $btn;
+      $( ".date-wrapper" ).each(function( index ) {
+        $input = $(this).find('input');
+        $btn = $(this).find('.calendar-btn');
+        $input.attr('type', 'text');
+        var pickerStart = new Pikaday({
+          field: $input[0],
+          trigger: $btn[0],
+          container: $(this)[0],
+          format: 'DD/MM/YYYY',
+          firstDay: 1
+        });
+        $btn.show();
+      });
+    } else {
+      $('.date-wrapper input').attr('type', 'date');
+      $('.calendar-btn').hide();
+    }
             
   .footer
     span
