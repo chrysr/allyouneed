@@ -73,30 +73,25 @@ module.exports = (param) =>{
     var upload = multer({storage: storage});
     router.post("/",upload.array('photo',5),async(req,res,next) =>{
         try {
-          var count=0;
           const db=req.app.locals.db;
-          var shortname,name,category,currently,buy_price,starting_bid,bids_num,bids;
+          var shortname,name,category,buy_price,starting_bid,bids_num,bids;
           var location,country,started,ends,seller,description;
           //name: Auction name given by the user
           name=((req.body.name?req.body.name:null)?req.body.name.trim():null);
           //category: Category of the item.It could belong to multiple categories
           category=((req.body.category?req.body.category:null)?req.body.category.trim():null);
-          //currently: The current best deal in dollars. It's always equal to higher bid or with First_Bid if no bids have been submitted.
-          currently=0;
+
           //buy_price: Price that if a buyer give, wins the item.seller may choose not to have such a price, so in this case the item is not included within the auction.
           buy_price=((req.body.buyprice?req.body.buyprice:null)?req.body.buyprice.trim():null);
           //starting_bid: Minimum bid (first bid) when the auction will start
           starting_bid=((req.body.startingbid?req.body.startingbid:null)?req.body.startingbid.trim():null);
           //bids_num: Number of bids
           bids_num=((req.body.bidnum?req.body.bidnum:null)?req.body.bidnum.trim():null);
-<<<<<<< HEAD
-=======
           //bidder: Information about the bidder: UserID,Rating,Location,Country
-          bidder=((req.body.bids?req.body.bids:null)?req.body.bids.trim():null);
-          //kai na gemizei afth sto database ---> bids
->>>>>>> 31c51369a83c02f8f972fff86f27077c1e4dceb7
 
           /* AFTA EDW NA MPOUN EKEI POU THA KANEI BID O USER
+          //currently: The current best deal in dollars. It's always equal to higher bid or with First_Bid if no bids have been submitted.
+          currently=0;
           //bidder: Information about the bidder: UserID,Rating,Location,Country   tha pigenei ston array of the bidders
           bidder=((req.body.bids?req.body.bids:null)?req.body.bids.trim():null);
           //time: Concerns the time of submission bid. Must be after starting time and before end time
@@ -128,7 +123,7 @@ module.exports = (param) =>{
           }
           //HANDLE FILES
           for(var i=0;i<req.files.length;i++)
-          {bid
+          {
             if(i==0)
             {
               await fs.mkdirSync('./public/images/'+shortname,function(){
@@ -140,10 +135,9 @@ module.exports = (param) =>{
           }
           //END HANDLE FILES
 
-          entry={shortname:shortname,name:name,category:category,currently:currently,
-            buy_price:buy_price,starting_bid:starting_bid,bid_num:bid_num,bids:bids,location:location,
-            country:country,started:started,ends:ends,seller:seller,description:description,
-            date:new Date()}
+          entry={shortname:shortname,name:name,category:category,buy_price:buy_price,starting_bid:starting_bid,
+            bids_num:bids_num,bids:bids,location:location,country:country,started:started,ends:ends,seller:seller,
+            description:description,date:new Date()}
           db.collection('products').insertOne(entry).then((docs)=>{
               console.log("product inserted successfully");
               res.redirect('/createauction?success=true');
