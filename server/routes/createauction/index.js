@@ -89,7 +89,7 @@ module.exports = (param) =>{
           starting_bid=((req.body.startingbid?req.body.startingbid:null)?req.body.startingbid.trim():null);
           //bids_num: Number of bids
           bids_num=((req.body.bidnum?req.body.bidnum:null)?req.body.bidnum.trim():null);
-          //bidder: Information about the bidder: UserID,Ratting,Location,Country
+          //bidder: Information about the bidder: UserID,Rating,Location,Country
           bidder=((req.body.bids?req.body.bids:null)?req.body.bids.trim():null);
           //kai na gemizei afth sto database ---> bids
 
