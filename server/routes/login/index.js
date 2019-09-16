@@ -22,7 +22,7 @@ module.exports = (param) =>{
                     success:req.query.success,
                     loggedin:req.cookies.loggedin,
                 });
-                
+
             }
             else{
               return res.redirect('/account');
@@ -36,7 +36,7 @@ module.exports = (param) =>{
     router.post("/",async(req,res,next) =>{
         console.log("LOGIN-----------");
         try {
-            var email,pass,signupemail,signuppass,fname,lname,phone,address,taxid,gender,type;
+            var email,pass,signupemail,signuppass,fname,lname,phone,address,taxid,gender,type,country;
             email=(((req.body.email?req.body.email:null)?req.body.email.trim():null)?req.body.email.trim().toLowerCase():null);
             pass=((req.body.pass?req.body.pass:null)?req.body.pass.trim():null);
             signupemail=(((req.body.signupemail?req.body.signupemail:null)?req.body.signupemail.trim():null)?req.body.signupemail.trim().toLowerCase():null);
@@ -48,11 +48,13 @@ module.exports = (param) =>{
             taxid=((req.body.taxid?req.body.taxid:null)?req.body.taxid.trim():null);
             gender=((req.body.gender?req.body.gender:null)?req.body.gender.trim():null);
             type=((req.body.type?req.body.type:null)?req.body.type.trim():null);
+            country=((req.body.country?req.body.country:null)?req.body.country.trim():null);
 
             console.log("mail: "+email+" pass: "+pass+"\nsignup-email: "+signupemail+" signup-pass:"+signuppass+" fname: "+fname+" lname: "+lname+" telephone: "+phone+" address: "+address+" gender:"+gender+" taxid: "+taxid+" type: "+type);
             //console.log(User);
+            console.log("country: "+country);
             const db=req.app.locals.db;
-            if(email!=null&&pass!=null&&signupemail==null&&signuppass==null&&fname==null&&lname==null&&phone==null&&address==null&&taxid==null&&gender==null&&type==null)
+            if(email!=null&&pass!=null&&signupemail==null&&signuppass==null&&fname==null&&lname==null&&phone==null&&address==null&&taxid==null&&gender==null&&type==null&&country==null) //login
             {
                 var re = /\S+@\S+\.\S+/;
                 if(!re.test(String(email)))
@@ -104,7 +106,7 @@ module.exports = (param) =>{
                     //client.close();
                 })
             }
-            else if(signupemail!=null&&signuppass!=null&&fname!=null&&lname!=null&&address!=null&&taxid!=null&&gender!=null&&phone!=null&&type!=null&&email==null&&pass==null)
+            else if(signupemail!=null&&signuppass!=null&&fname!=null&&lname!=null&&address!=null&&taxid!=null&&gender!=null&&phone!=null&&type!=null&&country!=null&&email==null&&pass==null)
             {
                 db.collection('users').find({email:signupemail}).toArray().then((docs) => {
                     console.log(docs+ " "+docs.length);
@@ -126,7 +128,7 @@ module.exports = (param) =>{
                             return res.redirect('/login?signup=false/reason=invalidphone');
                         }
 
-                        var entry={email:signupemail,password:bcrypt.hashSync(signuppass,bcrypt.genSaltSync(8),null),firstname:fname,lastname:lname,phone:phone,address:address,taxpayerid:taxid,gender:gender,type:type,isaccepted:false};
+                        var entry={email:signupemail,password:bcrypt.hashSync(signuppass,bcrypt.genSaltSync(8),null),firstname:fname,lastname:lname,phone:phone,address:address,taxpayerid:taxid,gender:gender,type:type,country:country,isaccepted:false};
                         db.collection('users').insertOne(entry).then((docs)=>{
                             console.log("Signup Success");
                             //client.close();
