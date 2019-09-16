@@ -75,29 +75,43 @@ module.exports = (param) =>{
         try {
           var count=0;
           const db=req.app.locals.db;
-          var name,category,currently,buy_price,starting_bid,bid_num,bids;
+          var shortname,name,category,currently,buy_price,starting_bid,bids_num,bids;
           var bid,bidder,time,amount,location,country,started,ends,seller,description;
+          //name: Auction name given by the user
           name=((req.body.name?req.body.name:null)?req.body.name.trim():null);
+          //category: Category of the item.It could belong to multiple categories
           category=((req.body.category?req.body.category:null)?req.body.category.trim():null);
-          currently=((req.body.currently?req.body.currently:null)?req.body.currently.trim():null);
+          //currently: The current best deal in dollars. It's always equal to higher bid or with First_Bid if no bids have been submitted.
+          currently=0;
+          //buy_price: Price that if a buyer give, wins the item.seller may choose not to have such a price, so in this case the item is not included within the auction.
           buy_price=((req.body.buyprice?req.body.buyprice:null)?req.body.buyprice.trim():null);
+          //starting_bid: Minimum bid (first bid) when the auction will start
           starting_bid=((req.body.startingbid?req.body.startingbid:null)?req.body.startingbid.trim():null);
-          bid_num=((req.body.bidnum?req.body.bidnum:null)?req.body.bidnum.trim():null);
-          bids=((req.body.bids?req.body.bids:null)?req.body.bids.trim():null);
-          bid=((req.body.bid?req.body.bid:null)?req.body.bid.trim():null);
-          bidder=((req.body.bidder?req.body.bidder:null)?req.body.bidder.trim():null);
+          //bids_num: Number of bids
+          bids_num=((req.body.bidnum?req.body.bidnum:null)?req.body.bidnum.trim():null);
+          //bidder: Information about the bidder: UserID,Ratting,Location,Country
+          bidder=((req.body.bids?req.body.bids:null)?req.body.bids.trim():null);
+          //kai na gemizei afth sto database ---> bids
+
+          //time: Concerns the time of submission bid. Must be after starting time and before end time
           time=((req.body.time?req.body.time:null)?req.body.time.trim():null);
+          //amount: The amount of the offer
           amount=((req.body.amount?req.body.amount:null)?req.body.amount.trim():null);
+          //location: Geographical information of the object
           location=((req.body.location?req.body.location:null)?req.body.location.trim():null);
+          //country: Country of the item
           country=((req.body.country?req.body.country:null)?req.body.country.trim():null);
+          //started: Start time of the auction
           started=((req.body.started?req.body.started:null)?req.body.started.trim():null);
+          //ends: Auction expiry
           ends=((req.body.ends?req.body.ends:null)?req.body.ends.trim():null);
+          //seller: seller's UserID,seller's Rating.A user has a different rating as a seller and as a bidder.
           seller=((req.body.seller?req.body.seller:null)?req.body.seller.trim():null);
+          //product_DescFull description of the object
           description=((req.body.description?req.body.description:null)?req.body.description.trim():null);
           for(var i=2,flag=0;flag==0;i++)
           {
-            console.log(flag);
-            shortname=name+makeid(i);
+            shortname=name+makeid(i); //unique id for the item
             await db.collection('products').find({shortname:shortname}).toArray().then((docs)=>{
               if(docs.length==0){
                 flag=1;
