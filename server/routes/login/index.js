@@ -52,7 +52,7 @@ module.exports = (param) =>{
 
             console.log("mail: "+email+" pass: "+pass+"\nsignup-email: "+signupemail+" signup-pass:"+signuppass+" fname: "+fname+" lname: "+lname+" telephone: "+phone+" address: "+address+" gender:"+gender+" taxid: "+taxid+" type: "+type);
             //console.log(User);
-            console.log("country: "+country);
+            console.log("country: "+ country);
             const db=req.app.locals.db;
             if(email!=null&&pass!=null&&signupemail==null&&signuppass==null&&fname==null&&lname==null&&phone==null&&address==null&&taxid==null&&gender==null&&type==null&&country==null) //login
             {

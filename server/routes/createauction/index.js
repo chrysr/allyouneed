@@ -59,7 +59,7 @@ module.exports = (param) =>{
     //var upload = multer({ dest: './uploads' });
     //const upload = multer({
     //    dest: './uploads/' // this saves your file into a directory called "uploads"
-    //}); 
+    //});
    // var upload = multer({ storage: storage })
     //const upload = multer({dest: 'uploads/'});
     var storage = multer.diskStorage({
@@ -76,7 +76,7 @@ module.exports = (param) =>{
           var count=0;
           const db=req.app.locals.db;
           var shortname,name,category,currently,buy_price,starting_bid,bids_num,bids;
-          var bid,bidder,time,amount,location,country,started,ends,seller,description;
+          var location,country,started,ends,seller,description;
           //name: Auction name given by the user
           name=((req.body.name?req.body.name:null)?req.body.name.trim():null);
           //category: Category of the item.It could belong to multiple categories
@@ -89,14 +89,16 @@ module.exports = (param) =>{
           starting_bid=((req.body.startingbid?req.body.startingbid:null)?req.body.startingbid.trim():null);
           //bids_num: Number of bids
           bids_num=((req.body.bidnum?req.body.bidnum:null)?req.body.bidnum.trim():null);
-          //bidder: Information about the bidder: UserID,Ratting,Location,Country
-          bidder=((req.body.bids?req.body.bids:null)?req.body.bids.trim():null);
-          //kai na gemizei afth sto database ---> bids
 
+          /* AFTA EDW NA MPOUN EKEI POU THA KANEI BID O USER
+          //bidder: Information about the bidder: UserID,Rating,Location,Country   tha pigenei ston array of the bidders
+          bidder=((req.body.bids?req.body.bids:null)?req.body.bids.trim():null);
           //time: Concerns the time of submission bid. Must be after starting time and before end time
           time=((req.body.time?req.body.time:null)?req.body.time.trim():null);
           //amount: The amount of the offer
           amount=((req.body.amount?req.body.amount:null)?req.body.amount.trim():null);
+          */
+
           //location: Geographical information of the object
           location=((req.body.location?req.body.location:null)?req.body.location.trim():null);
           //country: Country of the item
@@ -120,7 +122,7 @@ module.exports = (param) =>{
           }
           //HANDLE FILES
           for(var i=0;i<req.files.length;i++)
-          {
+          {bid
             if(i==0)
             {
               await fs.mkdirSync('./public/images/'+shortname,function(){
@@ -131,10 +133,9 @@ module.exports = (param) =>{
 
           }
           //END HANDLE FILES
-          
+
           entry={shortname:shortname,name:name,category:category,currently:currently,
-            buy_price:buy_price,starting_bid:starting_bid,bid_num:bid_num,bids:bids,
-            bid:bid,bidder:bidder,time:time,amount:amount,location:location,
+            buy_price:buy_price,starting_bid:starting_bid,bid_num:bid_num,bids:bids,location:location,
             country:country,started:started,ends:ends,seller:seller,description:description,
             date:new Date()}
           db.collection('products').insertOne(entry).then((docs)=>{
