@@ -73,33 +73,38 @@ module.exports = (param) =>{
     var upload = multer({storage: storage});
     router.post("/",upload.array('photo',5),async(req,res,next) =>{
         try {
-          var count=0;
           const db=req.app.locals.db;
-          var shortname,name,category,currently,buy_price,starting_bid,bids_num,bids;
+          var shortname,name,category,buy_price,starting_bid,bids_num;
           var location,country,started,ends,seller,description;
           //name: Auction name given by the user
           name=((req.body.name?req.body.name:null)?req.body.name.trim():null);
           //category: Category of the item.It could belong to multiple categories
           category=((req.body.category?req.body.category:null)?req.body.category.trim():null);
-          //currently: The current best deal in dollars. It's always equal to higher bid or with First_Bid if no bids have been submitted.
-          currently=0;
+
           //buy_price: Price that if a buyer give, wins the item.seller may choose not to have such a price, so in this case the item is not included within the auction.
           buy_price=((req.body.buyprice?req.body.buyprice:null)?req.body.buyprice.trim():null);
           //starting_bid: Minimum bid (first bid) when the auction will start
           starting_bid=((req.body.startingbid?req.body.startingbid:null)?req.body.startingbid.trim():null);
           //bids_num: Number of bids
           bids_num=((req.body.bidnum?req.body.bidnum:null)?req.body.bidnum.trim():null);
+<<<<<<< HEAD
           //bidder: Information about the bidder: UserID,Rating,Location,Country
           bidder=((req.body.bids?req.body.bids:null)?req.body.bids.trim():null);
           //kai na gemizei afth sto database ---> bids
+=======
+>>>>>>> 2ed6a6029f6e48a26fcbf9c174f53dab88dd4fe5
 
           /* AFTA EDW NA MPOUN EKEI POU THA KANEI BID O USER
+          //currently: The current best deal in dollars. It's always equal to higher bid or with First_Bid if no bids have been submitted.
+          currently=0;
           //bidder: Information about the bidder: UserID,Rating,Location,Country   tha pigenei ston array of the bidders
-          bidder=((req.body.bids?req.body.bids:null)?req.body.bids.trim():null);
+          bidder=((req.body.ALLAGHHHH?req.body.bids:null)?req.body.bids.trim():null);
           //time: Concerns the time of submission bid. Must be after starting time and before end time
           time=((req.body.time?req.body.time:null)?req.body.time.trim():null);
           //amount: The amount of the offer
           amount=((req.body.amount?req.body.amount:null)?req.body.amount.trim():null);
+          //seller: seller's UserID,seller's Rating.A user has a different rating as a seller and as a bidder.
+          seller=((req.body.seller?req.body.seller:null)?req.body.seller.trim():null);
           */
 
           //location: Geographical information of the object
@@ -110,10 +115,38 @@ module.exports = (param) =>{
           started=((req.body.started?req.body.started:null)?req.body.started.trim():null);
           //ends: Auction expiry
           ends=((req.body.ends?req.body.ends:null)?req.body.ends.trim():null);
-          //seller: seller's UserID,seller's Rating.A user has a different rating as a seller and as a bidder.
-          seller=((req.body.seller?req.body.seller:null)?req.body.seller.trim():null);
           //product_DescFull description of the object
           description=((req.body.description?req.body.description:null)?req.body.description.trim():null);
+          var re =/^[a-zA-Z]([._-]?[a-zA-Z0-9]+)*$/; //CHECK THAT
+          if(!re.test(String(name))){
+              return res.redirect('/createauction?success=false/reason=invalidname');
+          }
+          re=/^\d+$/;
+          if(!re.test(String(buy_price))){
+              return res.redirect('/createauction?success=false/reason=invalidbuy_price');
+          }
+          if(!re.test(String(starting_bid))){
+              return res.redirect('/createauction?success=false/reason=invalidstarting_bid');
+          }
+          if(!re.test(String(bids_num))){
+              return res.redirect('/createauction?success=false/reason=invalidbids_num');
+          }
+          //category--->  PREPEI NA ELEGXOUME OTI EDOSE ESTW ENA
+          if(!re.test(String(location))){ /*CHECK TI THA KANOUME ME AFTO*/
+              return res.redirect('/createauction?success=false/reason=invalidlocation');
+          }
+          re=/^\d+$/;
+          if(!re.test(String(country))){
+              return res.redirect('/createauction?success=false/reason=invalidcountry');
+          }
+          //re=hmerominia????;
+          if(!re.test(String(started))){
+              return res.redirect('/createauction?success=false/reason=invalidstarted');
+          }
+          if(!re.test(String(ends))){
+              return res.redirect('/createauction?success=false/reason=invalidends');
+          }
+
           for(var i=2,flag=0;flag==0;i++)
           {
             shortname=name+makeid(i); //unique id for the item
@@ -125,7 +158,7 @@ module.exports = (param) =>{
           }
           //HANDLE FILES
           for(var i=0;i<req.files.length;i++)
-          {bid
+          {
             if(i==0)
             {
               await fs.mkdirSync('./public/images/'+shortname,function(){
@@ -137,10 +170,9 @@ module.exports = (param) =>{
           }
           //END HANDLE FILES
 
-          entry={shortname:shortname,name:name,category:category,currently:currently,
-            buy_price:buy_price,starting_bid:starting_bid,bid_num:bid_num,bids:bids,location:location,
-            country:country,started:started,ends:ends,seller:seller,description:description,
-            date:new Date()}
+          entry={shortname:shortname,name:name,category:category,buy_price:buy_price,starting_bid:starting_bid,
+            bids_num:bids_num,location:location,country:country,started:started,ends:ends,seller:seller,
+            description:description,date:new Date()}
           db.collection('products').insertOne(entry).then((docs)=>{
               console.log("product inserted successfully");
               res.redirect('/createauction?success=true');
