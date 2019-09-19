@@ -87,12 +87,6 @@ module.exports = (param) =>{
           starting_bid=((req.body.startingbid?req.body.startingbid:null)?req.body.startingbid.trim():null);
           //bids_num: Number of bids
           bids_num=((req.body.bidnum?req.body.bidnum:null)?req.body.bidnum.trim():null);
-<<<<<<< HEAD
-          //bidder: Information about the bidder: UserID,Rating,Location,Country
-          bidder=((req.body.bids?req.body.bids:null)?req.body.bids.trim():null);
-          //kai na gemizei afth sto database ---> bids
-=======
->>>>>>> 2ed6a6029f6e48a26fcbf9c174f53dab88dd4fe5
 
           /* AFTA EDW NA MPOUN EKEI POU THA KANEI BID O USER
           //currently: The current best deal in dollars. It's always equal to higher bid or with First_Bid if no bids have been submitted.
