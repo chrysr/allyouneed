@@ -22,12 +22,12 @@ block content
               .label
                 label(for='datepicker-start') Start:
               .input
-                input#datepicker-start.input-text(type='date', name='experience-start', placeholder='dd/mm/yyyy')
+                input#datepicker-start.input-text(type='date', name='started', placeholder='dd/mm/yyyy')
             .field.clearfix.date-range-start.date-wrapper
               .label
                 label(for='datepicker-end') End:
               .input
-                input#datepicker-end.input-text(type='date', name='experience-end', placeholder='dd/mm/yyyy')
+                input#datepicker-end.input-text(type='date', name='ends', placeholder='dd/mm/yyyy')
           br
           input.next(type='text', placeholder='Name',name="name",required=true,onsubmit='return false')
           input.next(type='text', placeholder="Category",name="category",required=true) 
@@ -38,14 +38,27 @@ block content
           br
           input.next(type="text",placeholder="Location",name="location",required=true)   
           input.next(type="text",placeholder="Country",name="country",required=true)  
-          input.next(type="text",placeholder="Started",name="started",required=true)  
-          input.next(type="text",placeholder="Ends",name="ends",required=true)  
           br
           .descbox
             label
               textarea(type='text', name='query', placeholder='product_descr', maxlength='250', rows='8')
         input(type="submit",value="Upload")
-  script.
+          
+
+            
+  .footer
+    span
+      a.a1(href='#') SITEMAP
+    span
+      a.a1(href='#') TERMS OF SERVICE
+    span
+      a.a1(href='#') OUR TEAM
+    br
+    span
+      | Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, 
+      a.a2(href='mailto:sdi1400041@di.uoa.gr') contact us
+
+  script(type='text/javascript').
     if ( $('html').hasClass('no-touch') ) {
       var $input, $btn;
       $( ".date-wrapper" ).each(function( index ) {
@@ -65,18 +78,7 @@ block content
       $('.date-wrapper input').attr('type', 'date');
       $('.calendar-btn').hide();
     }
-            
-  .footer
-    span
-      a.a1(href='#') SITEMAP
-    span
-      a.a1(href='#') TERMS OF SERVICE
-    span
-      a.a1(href='#') OUR TEAM
-    br
-    span
-      | Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, 
-      a.a2(href='mailto:sdi1400041@di.uoa.gr') contact us
+
   script(type='text/javascript').
     var loadFile=function(event){
       var image=document.getElementById('fill');

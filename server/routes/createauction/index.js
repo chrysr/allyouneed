@@ -82,11 +82,11 @@ module.exports = (param) =>{
           category=((req.body.category?req.body.category:null)?req.body.category.trim():null);
 
           //buy_price: Price that if a buyer give, wins the item.seller may choose not to have such a price, so in this case the item is not included within the auction.
-          buy_price=((req.body.buyprice?req.body.buyprice:null)?req.body.buyprice.trim():null);
+          buy_price=((req.body.buy_price?req.body.buy_price:null)?req.body.buy_price.trim():null);
           //starting_bid: Minimum bid (first bid) when the auction will start
-          starting_bid=((req.body.startingbid?req.body.startingbid:null)?req.body.startingbid.trim():null);
+          starting_bid=((req.body.starting_bid?req.body.starting_bid:null)?req.body.starting_bid.trim():null);
           //bids_num: Number of bids
-          bids_num=((req.body.bidnum?req.body.bidnum:null)?req.body.bidnum.trim():null);
+          bids_num=((req.body.bids_num?req.body.bids_num:null)?req.body.bids_num.trim():null);
 
           /* AFTA EDW NA MPOUN EKEI POU THA KANEI BID O USER
           //currently: The current best deal in dollars. It's always equal to higher bid or with First_Bid if no bids have been submitted.
@@ -111,7 +111,13 @@ module.exports = (param) =>{
           ends=((req.body.ends?req.body.ends:null)?req.body.ends.trim():null);
           //product_DescFull description of the object
           description=((req.body.description?req.body.description:null)?req.body.description.trim():null);
-          var re =/^[a-zA-Z]([._-]?[a-zA-Z0-9]+)*$/; //CHECK THAT
+
+          console.log("started: "+started);
+          console.log("ended: "+ends);
+
+
+          var re =/^[a-zA-Z]([._-]?[a-zA-Z0-9]+)*$/; //start with letter/s. end not a special character.
+          //just letter or number.dot or dash or underline,must be separated by letters or numbers
           if(!re.test(String(name))){
               return res.redirect('/createauction?success=false/reason=invalidname');
           }
@@ -126,14 +132,15 @@ module.exports = (param) =>{
               return res.redirect('/createauction?success=false/reason=invalidbids_num');
           }
           //category--->  PREPEI NA ELEGXOUME OTI EDOSE ESTW ENA
+          re =/^[a-zA-Z0-9]$/;
           if(!re.test(String(location))){ /*CHECK TI THA KANOUME ME AFTO*/
               return res.redirect('/createauction?success=false/reason=invalidlocation');
           }
-          re=/^\d+$/;
           if(!re.test(String(country))){
               return res.redirect('/createauction?success=false/reason=invalidcountry');
           }
           //re=hmerominia????;
+          
           if(!re.test(String(started))){
               return res.redirect('/createauction?success=false/reason=invalidstarted');
           }
