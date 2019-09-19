@@ -89,12 +89,9 @@ module.exports = (param) =>{
           starting_bid=((req.body.startingbid?req.body.startingbid:null)?req.body.startingbid.trim():null);
           //bids_num: Number of bids
           bids_num=((req.body.bidnum?req.body.bidnum:null)?req.body.bidnum.trim():null);
-<<<<<<< HEAD
-=======
           //bidder: Information about the bidder: UserID,Rating,Location,Country
           bidder=((req.body.bids?req.body.bids:null)?req.body.bids.trim():null);
           //kai na gemizei afth sto database ---> bids
->>>>>>> 31c51369a83c02f8f972fff86f27077c1e4dceb7
 
           /* AFTA EDW NA MPOUN EKEI POU THA KANEI BID O USER
           //bidder: Information about the bidder: UserID,Rating,Location,Country   tha pigenei ston array of the bidders

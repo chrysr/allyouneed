@@ -1,4 +1,4 @@
-extends ../layout/index
+extends ../layout/index.pug
 
 block content
   .innerbody
@@ -15,7 +15,7 @@ block content
             .bot
                 input#selectedFile(type='file', name='photo',style='display: none;',multiple=true, onchange='loadFile(event)',required=true)
                 input.button(type='button', value='Image 1', onclick="document.getElementById('selectedFile').click();")
-  
+
                 //   
         .col-right
           input.next(type='text', placeholder='Name',name="name",required=true)
@@ -28,38 +28,23 @@ block content
             input.next(type="text",placeholder="Bids",name="bids",required=true)
             input.next(type="text",placeholder="Bid",name="bid",required=true)  
             br
-            br
+            input.next(type="text",placeholder="Bidder",name="bidder",required=true)  
+            input.next(type="text",placeholder="Time",name="time",required=true)  
+            input.next(type="text",placeholder="Amount",name="amount",required=true)  
+            input.next(type="text",placeholder="Location",name="location",required=true)   
+            input.next(type="text",placeholder="Country",name="country",required=true)  
+            input.next(type="text",placeholder="Started",name="started",required=true)  
+            input.next(type="text",placeholder="Ends",name="ends",required=true)  
+            input.next(type="text",placeholder="Seller",name="seller",required=true) 
+          .topalign
+            .textbox
+              .descbox
+                textarea(type='text', name='description', placeholder='Product Description', maxlength='250', rows='8')
+        input(type='submit', value='Upload') 
+        //
             .form-group
-              label
-                input.next(type="text",placeholder="Bidder",name="bidder",required=true)  
-            .form-group
-              label
-                input.next(type="text",placeholder="Time",name="time",required=true)  
-            .form-group
-              label
-                input.next(type="text",placeholder="Amount",name="amount",required=true)  
-            .form-group
-              label
-                input.next(type="text",placeholder="Location",name="location",required=true)   
-            .form-group
-              label
-                input.next(type="text",placeholder="Country",name="country",required=true)  
-            .form-group
-              label
-                input.next(type="text",placeholder="Started",name="started",required=true)  
-            .form-group
-              label
-                input.next(type="text",placeholder="Ends",name="ends",required=true)  
-            .form-group
-              label
-                input.next(type="text",placeholder="Seller",name="seller",required=true) 
-            .topalign
-              .form-group
-                button.btn.btn-default.pull-right(type='submit') ⏎ 
-        .textbox
-        .descbox
-          label
-            textarea(type='text', name='query', placeholder='product_descr', maxlength='250', rows='8')
+              button.btn.btn-default.pull-right(type='submit') ⏎ 
+        
   .footer
     span
       a.a1(href='#') SITEMAP
@@ -74,7 +59,7 @@ block content
   script(type='text/javascript').
     var loadFile=function(event){
       var image=document.getElementById('fill');
-      image.src=URL.createObjectURL(event.target.files[0]);
+      image.src=URL.createObjectURL(event.target.files);
     }
     var loadFile2=function(event){
       var image=document.getElementById('fill2');

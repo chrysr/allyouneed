@@ -2,20 +2,27 @@ extends layout/index.pug
 block content
   .innerbody
     .spacer
-    each product in productslist
-      a(href=`/products/${product.shortname}`)
-        .auctionpreview
+    if productslist.length==0
+      .auctionpreview
           .headbox
             .vertcenter
-              h3=product.name
-          .pricediv
-            .price
-              .fullcenter
-                h4=product.price.toFixed(2)
-          .auctionpreviewthumb
-            img(src=`../images/${product.shortname}/${product.photo[0]}`)
-          p
-            |#{product.description}
+              h3="No products to show"
+    else
+      each product in productslist
+        a(href=`/products/${product.shortname}`)
+          .auctionpreview
+            .headbox
+              .vertcenter
+                h3=product.name
+            .pricediv
+              .price
+                .fullcenter
+                  h4=product.price.toFixed(2)
+            .auctionpreviewthumb
+              img(src=`../images/${product.shortname}/${product.photo[0]}`)
+            p
+              |#{product.description}
+    
 
   .footer
     span

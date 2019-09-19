@@ -1198,7 +1198,64 @@ body {
 	line-height: 3vh;
 	margin: 0;
 }
+/*------------------------------------------CATEGORY------------------------------------------*/
 
+.category {
+	width: 100%;
+	display: inline-flex;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	height: calc(41vh + 3.6em);
+	white-space: nowrap;
+	padding-bottom: 1vh;
+	margin: 2vh 0;
+}
+.category::-webkit-scrollbar {
+  width: 0.4em;
+}
+
+/* Track */
+.category::-webkit-scrollbar-track {
+  background: #ddd; 
+}
+ 
+/* Handle */
+.category::-webkit-scrollbar-thumb {
+  background: #2d68df; 
+}
+
+/* Handle on hover */
+.category::-webkit-scrollbar-thumb:hover {
+  background: #4d88ff; 
+}
+.catname{
+	font-size: calc(0.4em + 2vw + 2vh);
+	line-height: 5vw;
+	writing-mode: vertical-rl;
+	transform: rotate(180deg);
+	width: 5vw;
+	padding: 0;
+	margin: 0;
+	display: inline;
+	background-color: #333;
+	color: #fff;
+}
+
+h2 {
+	text-align: left;
+	line-height: 3vh;
+	margin: 1vh 0;
+	margin-top: 4vh;
+	margin-left: 25vh;
+	border-bottom: : 1px solid #111 ;
+	padding: 0;
+	display: block;
+	width: 100%;
+}
+
+.category div {
+	flex: 0 0 auto;
+}
 
 
 /*------------------------------------------MISCELANIOUS------------------------------------------*/
