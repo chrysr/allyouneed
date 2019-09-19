@@ -14,7 +14,7 @@
             li
               a(href='/products/bydescprice') HIGHEST PRICE 
             li
-              a(href='#') CATEGORY
+              a(href='/products/bycategory') CATEGORY
             li
               a(href='#') DATE
     .searchli
@@ -23,7 +23,9 @@
           span SEARCH
           #query.searchbox
             label
-              input(type='text' name='query' placeholder='for a product or user')
+              form(action='/products/search', method='post')
+                input(type='text' name='search' placeholder='for a product or user' required=true)
+                input(type='submit' value="GO")
     li.right
       if loggedin
         a(href='/account') MY ACCOUNT

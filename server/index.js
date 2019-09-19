@@ -1,3 +1,116 @@
+const fs = require('fs');
+
+function datafordb()
+{
+    data=fs.readFileSync('./server/config/db.csv').toString();
+    arr=data.split('\n');
+    newarr=[]
+    for(i=0;i<arr.length;i++)
+    {
+        t=arr[i].split(',');
+        for(j=0;j<t.length;j++)
+            t[j]=t[j].replace(/"/g,'');
+        newarr.push(t);
+    }
+    arr=[];
+    for(i=0;i<newarr.length;i++)
+    {
+        tmp=[];
+        var found=0;
+        for(j=0;j<newarr[i].length;j++){
+            if(newarr[i][j]!=''&&newarr[i][j]!='+'&&newarr[i][j]!='-')
+            {
+                tmp.push(newarr[i][j]); 
+                break;
+            }
+            else tmp.push('');
+            
+        }
+        arr.push(tmp);
+    }
+    ok=0;
+    const sleep=require('sleep');
+    class Stack { 
+        constructor() 
+        { 
+            this.items = []; 
+        } 
+        push(element) 
+        { 
+            this.items.push(element); 
+        } 
+        pop() 
+        { 
+            if (this.items.length == 0) 
+                return "Underflow"; 
+            return this.items.pop(); 
+        } 
+        peek() 
+        { 
+            
+            return this.items[this.items.length - 1]; 
+        } 
+        printStack() 
+        { 
+            var str = ""; 
+            for (var i = 0; i < this.items.length; i++) 
+                str += this.items[i] + " "; 
+            return str; 
+        } 
+        isEmpty() 
+        { 
+            return this.items.length == 0; 
+        } 
+    } 
+    var stack=new Stack();
+    parent='allcats';
+    allcats=[];
+    cats={};
+    cats[parent]=[];
+    
+    for(i=0;i<arr.length;i++)
+    {
+        if(arr[i]=='')
+            continue;
+        if(!ok)
+        {
+            if(arr[i].length==2)
+                ok=1;
+            else continue;
+        }
+        //console.log(parent+" "+arr[i][arr[i].length-1]);
+        allcats.push(parent+"->"+arr[i][arr[i].length-1]);
+        cats[parent].push(arr[i][arr[i].length-1]);
+        if(arr[i+1].length>arr[i].length)
+        {
+            stack.push(parent);
+            parent+="->"+arr[i][arr[i].length-1];
+            cats[parent]=[];
+        }
+        else if(arr[i+1].length<arr[i].length||arr[i+1]=='')
+        {
+            j=arr[i].length-arr[i+1].length;
+            while(j)
+            {
+                parent=stack.pop();
+                j--;
+            }
+        }
+       
+    }
+    //console.log(cats);
+    //console.log(allcats);
+    allcatsmodified=[];
+    for(i=0;i<allcats.length;i++)
+        allcatsmodified.push({"name":allcats[i]});
+    catsmodified=[];
+    catsmodified.push({"name":"allcats",subcategories:cats["allcats"]});
+    for(i=0;i<allcats.length;i++)
+    {
+        catsmodified.push({"name":allcats[i],"subcategories":cats[allcats[i]]});
+    }
+    return catsmodified;
+}
 const express = require("express");
 const createerror = require("http-errors");
 const app = express();
@@ -10,11 +123,7 @@ const ProductsService =require("./services/ProductService.js");
 const routes = require("./routes");
 const bcrypt=require('bcrypt');
 const https = require('https');
-const fs = require('fs');
 const config=configs[app.get("env")];
-
-//const speakerService = new SpeakerService(config.data.speakers);
-//const feedbackService = new FeedbackService(config.data.feedback);
 const productService = new ProductsService(config.data.products);
 const cookieParser = require('cookie-parser');
 
@@ -39,16 +148,7 @@ app.get("/favicon.ico",(req,res,next)=>{
 });
 
 
-/*app.use(async(req,res,next)=>{
-    try {
-        const names = await speakerService.getnames();
-        res.locals.speakernames = names;
-        //console.log(names);
-        return next();
-    } catch(err) {
-        return next(err);
-    }
-});*/
+
 app.use(cookieParser());
 
 
@@ -79,11 +179,18 @@ for (var i=0;i<args.length;i++)
     if(args[i]=='-ssl')
         ssl=1;
 }
+
+
 MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
     if(err) throw err;
     app.locals.db=client.db('allyouneed');
     app.locals.db.createCollection('users');
     app.locals.db.createCollection('categories');
+    app.locals.db.collection('categories').find().toArray().then((docs)=>{
+        if(docs.length==0)
+            app.locals.db.collection('categories').insertMany(datafordb());
+        
+    })
     app.locals.db.createCollection('messages');
     app.locals.db.createCollection('products');
     app.locals.db.collection('users').find({email:"admin@allyouneed.com"}).toArray().then((docs)=>{
