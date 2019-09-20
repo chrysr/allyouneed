@@ -85,7 +85,18 @@ module.exports = (param) =>{
         try {
           const db=req.app.locals.db;
           var shortname,name,category,buy_price,starting_bid,bids_num;
-          var location,country,started,ends,seller,description;
+          var location,country,started,ends,description;
+          var seller={};
+          var smins,shour,emins,ehour;
+          smins=((req.body.smins?req.body.smins:null)?req.body.smins.trim():null);
+          shour=((req.body.shour?req.body.shour:null)?req.body.shour.trim():null);
+          emins=((req.body.emins?req.body.emins:null)?req.body.emins.trim():null);
+          ehour=((req.body.ehour?req.body.ehour:null)?req.body.ehour.trim():null);
+          var _id=req.cookies._id;
+          await db.collection('users').find({"_id":require('mongodb').ObjectID(_id.toString())}).toArray().then((docs)=>{
+            seller['email']=docs[0].email;
+            seller['srating']=docs[0].rating.srating;
+          })
           //name: Auction name given by the user
           name=((req.body.name?req.body.name:null)?req.body.name.trim():null);
           //category: Category of the item.It could belong to multiple categories
@@ -97,7 +108,7 @@ module.exports = (param) =>{
           //starting_bid: Minimum bid (first bid) when the auction will start
           starting_bid=((req.body.starting_bid?req.body.starting_bid:null)?req.body.starting_bid.trim():null);
           //bids_num: Number of bids
-          bids_num=((req.body.bids_num?req.body.bids_num:null)?req.body.bids_num.trim():null);
+          //bids_num=((req.body.bids_num?req.body.bids_num:null)?req.body.bids_num.trim():null);
 
           /* AFTA EDW NA MPOUN EKEI POU THA KANEI BID O USER
           //currently: The current best deal in dollars. It's always equal to higher bid or with First_Bid if no bids have been submitted.
@@ -122,11 +133,24 @@ module.exports = (param) =>{
           ends=((req.body.ends?req.body.ends:null)?req.body.ends.trim():null);
           //product_DescFull description of the object
           description=((req.body.description?req.body.description:null)?req.body.description.trim():null);
-
+          console.log(name+" "+category+" "+buy_price+" "+starting_bid);
           console.log("started: "+started);
           console.log("ended: "+ends);
-
+          
           console.log("createauction category "+category);
+          console.log("create auction "+shour+" "+smins+" "+ehour+" "+emins);
+          var parts=started.split('-');
+          startfull=new Date(parts[0],parts[1]-1,parts[2],shour.toString(),smins.toString());
+          parts=ends.split('-');
+          endfull=new Date(parts[0],parts[1]-1,parts[2],ehour.toString(),emins.toString());
+          console.log(startfull+" "+endfull);
+          now =new Date();
+          if(endfull<=startfull&&startfull>now)
+          {
+            console.log("ends before starts or equal");
+            res.redirect('/createauction?success=false/reason=endsbeforestarts');
+          }
+
           var re =/^[a-zA-Z]([._-]?[a-zA-Z0-9]+)*$/; //start with letter/s. end not a special character.
           //just letter or number.dot or dash or underline,must be separated by letters or numbers
           if(!re.test(String(name))){
@@ -139,25 +163,20 @@ module.exports = (param) =>{
           if(!re.test(String(starting_bid))){
               return res.redirect('/createauction?success=false/reason=invalidstarting_bid');
           }
-          if(!re.test(String(bids_num))){
-              return res.redirect('/createauction?success=false/reason=invalidbids_num');
-          }
           //category--->  PREPEI NA ELEGXOUME OTI EDOSE ESTW ENA
-          re =/^[a-zA-Z0-9]$/;
-          if(!re.test(String(location))){ /*CHECK TI THA KANOUME ME AFTO*/
+          /*re =/^[a-zA-Z0-9]$/;
+          if(!re.test(String(location))){ /*CHECK TI THA KANOUME ME AFTO
               return res.redirect('/createauction?success=false/reason=invalidlocation');
           }
           if(!re.test(String(country))){
               return res.redirect('/createauction?success=false/reason=invalidcountry');
+          }*/
+          if(buy_price>=starting_bid)
+          {
+            return res.redirect('/createauction?success=false/reason=buylessthanstarting');
           }
-          //re=hmerominia????;
           
-          if(!re.test(String(started))){
-              return res.redirect('/createauction?success=false/reason=invalidstarted');
-          }
-          if(!re.test(String(ends))){
-              return res.redirect('/createauction?success=false/reason=invalidends');
-          }
+          
 
           for(var i=2,flag=0;flag==0;i++)
           {
@@ -169,6 +188,7 @@ module.exports = (param) =>{
             });
           }
           //HANDLE FILES
+          photos=[];
           for(var i=0;i<req.files.length;i++)
           {
             if(i==0)
@@ -178,13 +198,14 @@ module.exports = (param) =>{
             }
             await fs.rename(req.files[i].path,'./public/images/'+shortname+"/"+shortname+"_"+(i+1)+".jpg",function(){
             })
+            photos[i]=shortname+'_'+(i+1).toString()+'.jpg';
 
           }
           //END HANDLE FILES
 
-          entry={shortname:shortname,name:name,category:category,buy_price:buy_price,starting_bid:starting_bid,
-            bids_num:bids_num,location:location,country:country,started:started,ends:ends,seller:seller,
-            description:description,date:new Date()}
+          entry={shortname:shortname,name:name,category:category,price:parseFloat(buy_price),starting_bid:starting_bid,
+            bids_num:0,location:location,country:country,seller:seller,
+            description:description,startdate:startfull,enddate:endfull,photo:photos}
           db.collection('products').insertOne(entry).then((docs)=>{
               console.log("product inserted successfully");
               res.redirect('/createauction?success=true');
