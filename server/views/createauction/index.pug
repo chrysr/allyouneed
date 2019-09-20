@@ -16,68 +16,18 @@ block content
                 input#selectedFile(type='file', name='photo',style='display: none;',multiple=true, onchange='loadFile(event)',required=true)
                 input.button(type='button', value='Image 1', onclick="document.getElementById('selectedFile').click();")
   
-        .col-right
-          select(form='createauctionform' name='shour')
-            option(disable selected value) Start Hour
-            - for(var i = 0; i < 24; i++) {
-              if i<10
-                option(value=`${i}`) 0#{i}
-              else
-                option(value=`${i}`) #{i}
-
-            - }
-          select(form='createauctionform' name='smins')
-            option(disable selected value) Start Minutes
-            - for(var i = 0; i < 60; i++) {
-              if i<10
-                option(value=`${i}`) 0#{i}
-              else
-                option(value=`${i}`) #{i}
-            - }
-          select(form='createauctionform' name='ehour')
-            option(disable selected value) End Hour
-            - for(var i = 0; i < 24; i++) {
-              if i<10
-                option(value=`${i}`) 0#{i}
-              else
-                option(value=`${i}`) #{i}
-
-            - }
-          select(form='createauctionform' name='emins')
-            option(disable selected value) End Minutes
-            - for(var i = 0; i < 60; i++) {
-              if i<10
-                option(value=`${i}`) 0#{i}
-              else
-                option(value=`${i}`) #{i}
-            - }
-
-          input(type="date")
-          input(type="time")
-          input(type="search")
-          input(type='datetime-local')
-
-
-          //.dates-wrapper.group
-            .field.clearfix.date-range-start.date-wrapper
-              .label
-                label(for='datepicker-start') Start:
-              .input
-                input#datepicker-start.input-text(type='date', name='started', placeholder='dd/mm/yyyy')
-            .field.clearfix.date-range-start.date-wrapper
-              .label
-                label(for='datepicker-end') End:
-              .input
-                input#datepicker-end.input-text(type='date', name='ends', placeholder='dd/mm/yyyy')
+          input(type='datetime-local', name='start_date', required=true) 
+          input(type='datetime-local', name='end_date', required=true) 
+        
           br
           input.next(type='text', placeholder='Name',name="name",required=true,onsubmit='return false')
-          select(form="createauctionform" name='category')
-            option(disable selected value required=true) Category
+          select(form="createauctionform" name='category', required=true, multiple) 
+            option(disable selected value) Category
             each cat in categories
               option(value=`${cat.name}`) #{cat.name}
 
-          input.next(type="text",placeholder="Buy Price",name="buy_price",required=true)
-          input.next(type="text",placeholder="Starting Bid",name="starting_bid",required=true)
+          input.next(type="number",placeholder="Buy Price",name="buy_price",required=true)
+          input.next(type="number",placeholder="Starting Bid",name="starting_bid",required=true)
           br
           input.next(type="text",placeholder="Location",name="location",required=true)   
           input.next(type="text",placeholder="Country",name="country",required=true)  
