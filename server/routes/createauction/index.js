@@ -151,8 +151,7 @@ module.exports = (param) =>{
             res.redirect('/createauction?success=false/reason=endsbeforestarts');
           }
 
-          var re =/^[a-zA-Z]([._-]?[a-zA-Z0-9]+)*$/; //start with letter/s. end not a special character.
-          //just letter or number.dot or dash or underline,must be separated by letters or numbers
+          var re=/^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$/;
           if(!re.test(String(name))){
               return res.redirect('/createauction?success=false/reason=invalidname');
           }
@@ -171,7 +170,9 @@ module.exports = (param) =>{
           if(!re.test(String(country))){
               return res.redirect('/createauction?success=false/reason=invalidcountry');
           }*/
-          if(buy_price>=starting_bid)
+          console.log("buy price: "+buy_price);
+          console.log("starting bid: "+starting_bid);
+          if(buy_price<=starting_bid)
           {
             return res.redirect('/createauction?success=false/reason=buylessthanstarting');
           }
