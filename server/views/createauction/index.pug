@@ -52,9 +52,13 @@ block content
                 option(value=`${i}`) #{i}
             - }
 
+          input(type="date")
+          input(type="time")
+          input(type="search")
+          input(type='datetime-local')
 
 
-          .dates-wrapper.group
+          //.dates-wrapper.group
             .field.clearfix.date-range-start.date-wrapper
               .label
                 label(for='datepicker-start') Start:

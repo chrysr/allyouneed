@@ -155,7 +155,8 @@ module.exports = (param) =>{
           if(!re.test(String(name))){
               return res.redirect('/createauction?success=false/reason=invalidname');
           }
-          re=/^\d+$/;
+          re=/^(?=.)[+]?([0-9]*)(\.[0-9]+))?)$/;
+          //re=/^(\d+(\.\d+)?$/;
           if(!re.test(String(buy_price))){
               return res.redirect('/createauction?success=false/reason=invalidbuy_price');
           }
@@ -172,7 +173,7 @@ module.exports = (param) =>{
           }*/
           console.log("buy price: "+buy_price);
           console.log("starting bid: "+starting_bid);
-          if(buy_price<=starting_bid)
+          if(parseFloat(buy_price)<parseFloat(starting_bid))
           {
             return res.redirect('/createauction?success=false/reason=buylessthanstarting');
           }

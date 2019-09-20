@@ -10,7 +10,7 @@ block content
                 .category
                     .anchor
                         .placer
-                            form( action='/products/bycategory', method='post')
+                            form(action='/products/bycategory', method='post')
                                 input(class='catname' type='submit',value=`${c}`,name="choice")
                                 input(type='hidden',value=`${history}`,name="history")    
                     if products[c].length==0
@@ -19,19 +19,18 @@ block content
                         
                     else
                         each p in products[c]   
-                            a(href=`${p.shortname}`)                         
-                                .auctionpreview
-                                    .headbox
-                                        .vertcenter
-                                            h3=`${p.name}`
-                                    .pricediv
-                                        .price
-                                            .fullcenter
-                                                h4=`${p.price.toFixed(2)}`
-                                    .auctionpreviewthumb
-                                        img(src=`../images/${p.shortname}/${p.shortname}_1.jpg`)
-                                    p
-                                        | #{p.description}
+                            .auctionpreview(style={cursor: 'pointer'} onclick=`location.href='${p.shortname}';`)
+                                .headbox
+                                    .vertcenter
+                                        h3=`${p.name}`
+                                .pricediv
+                                    .price
+                                        .fullcenter
+                                            h4=`${p.price.toFixed(2)}`
+                                .auctionpreviewthumb
+                                    img(src=`../images/${p.shortname}/${p.shortname}_1.jpg`)
+                                p
+                                    | #{p.description}
 
         //.category
             .catname Clothing

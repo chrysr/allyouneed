@@ -287,6 +287,7 @@ module.exports = (param) =>{
         try {
             const db=req.app.locals.db;
             console.log("/products/shortname post "+req.body.shortname);     
+            
         } 
         catch (err) {
             return next(err);
