@@ -8,15 +8,14 @@ block content
         else
             each c in categories            
                 .category
-                    .catname #{c}
-                        form(action='/products/bycategory', method='post')
-                            input(type='hidden',value=`${history}`,name="history")
-                            input(type='submit',value=`${c}`,name="choice")
+                    .anchor
+                        .placer
+                            form( action='/products/bycategory', method='post')
+                                input(class='catname' type='submit',value=`${c}`,name="choice")
+                                input(type='hidden',value=`${history}`,name="history")    
                     if products[c].length==0
-                            .auctionpreview
-                                .headbox
-                                    .vertcenter
-                                        h3="NO ITEMS"
+                            .noitems
+                                h3="No Items - Yet !"
                         
                     else
                         each p in products[c]   
@@ -24,11 +23,11 @@ block content
                                 .auctionpreview
                                     .headbox
                                         .vertcenter
-                                        h3=`${p.name}`
+                                            h3=`${p.name}`
                                     .pricediv
                                         .price
-                                        .fullcenter
-                                            h4=`${p.price}`
+                                            .fullcenter
+                                                h4=`${p.price.toFixed(2)}`
                                     .auctionpreviewthumb
                                         img(src=`../images/${p.shortname}/${p.shortname}_1.jpg`)
                                     p
@@ -122,3 +121,12 @@ block content
         span
             | Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, 
             a.a2(href='mailto:sdi1400041@di.uoa.gr') contact us
+
+    script.
+        const cnames = document.querySelectorAll(".catname");
+        cnames.forEach((cname) => {
+            var anchor = document.querySelector(".anchor");
+            cname.style.width = getComputedStyle(anchor).height;
+        });
+        
+        

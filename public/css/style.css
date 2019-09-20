@@ -1209,6 +1209,7 @@ body {
 	white-space: nowrap;
 	padding-bottom: 1vh;
 	margin: 2vh 0;
+	position: relative;
 }
 .category::-webkit-scrollbar {
   width: 0.4em;
@@ -1228,33 +1229,84 @@ body {
 .category::-webkit-scrollbar-thumb:hover {
   background: #4d88ff; 
 }
-.catname{
-	font-size: calc(0.4em + 2vw + 2vh);
-	line-height: 5vw;
-	writing-mode: vertical-rl;
-	transform: rotate(180deg);
+
+.category form {
+	
+	height: 0;
 	width: 5vw;
 	padding: 0;
 	margin: 0;
-	display: inline;
+	display: block;
+	align-items: center;
+	text-align: center;
+	position: relative;
+}
+.anchor{
+	position: relative;
+	width: 5vw;
+	height: calc(41vh + 3.6em);
+	overflow: hidden;
+}
+.placer{
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 5vw;
+}
+.catname{
+	cursor: pointer;
+	transform: rotate(270deg);
+	transform-origin: top left;
+	height: 5vw;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	-webkit-rtl-ordering: visual;
+	writing-mode: vertical-rl!important;
+	box-sizing: content-box;  
 	background-color: #333;
 	color: #fff;
+	font-size: calc(0.4em + 1vw + 1vh);
+	text-align: center;
+	line-height: 1vh;
+	border:none;
 }
 
-h2 {
-	text-align: left;
-	line-height: 3vh;
-	margin: 1vh 0;
-	margin-top: 4vh;
-	margin-left: 25vh;
-	border-bottom: : 1px solid #111 ;
-	padding: 0;
-	display: block;
-	width: 100%;
+@keyframes whitetoblue {
+	from {color:#fff;}
+	to {color:#2d68df;}
+  }
+
+.catname:hover{
+	animation-name: whitetoblue;
+	animation-duration: 0.2s;
+	color:#2d68df;
 }
+
+
 
 .category div {
 	flex: 0 0 auto;
+}
+
+.noitems{
+	width: 30.333%;
+	margin-left: -3vw;
+	padding-top: 4vh;
+}
+
+.noitems h3 {
+	color: #ffa800;
+	background: #111;
+	text-align: center;
+	margin: 0;
+	font-size: calc(0.4em + 1vw + 1vh);
+	height: 20%;
+	line-height: 9vh;
+	width: 80%;
+	margin: 0 10%;
+	transform: rotate(315deg);
+	transform-origin: bottom right;
 }
 
 
