@@ -24,7 +24,10 @@ block content
             span.bidspan
               | Your bid &nbsp;&nbsp;
               label
-                input(type='text' name='query' placeholder='$')
+                form(class='bidform' action=`/products/${shortname}` method='post' )
+                  input(class='bidplacetxt' type='text' name='bid' placeholder='$')
+                  input(type='hidden' name='shortname' value=`${product.shortname}`)
+                  input(class='bidplace' type='submit' name='submit' value='⏎')
         .descbox
           p
             |#{product.description}

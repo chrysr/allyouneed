@@ -26,8 +26,8 @@
           #query.searchbox
             label
               form(action='/products/search', method='post')
-                input(type='text' name='search' placeholder='for a product or user' required=true)
-                input(type='submit' value="GO")
+                input(type='text' name='search' placeholder='for a product or user (⏎)' required=true)
+                //input(type='submit' value="GO")
     li.right
       if loggedin
         a(href='/account') MY ACCOUNT

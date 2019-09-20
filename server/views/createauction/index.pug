@@ -4,7 +4,7 @@ block content
   .innerbody
     .spacer
     .auction
-      form(action='/createauction', enctype='multipart/form-data', method='post')
+      form(action='/createauction', enctype='multipart/form-data', method='post' id="createauctionform")
         .col-left
           .imgbox2
             .imgprev
@@ -30,7 +30,12 @@ block content
                 input#datepicker-end.input-text(type='date', name='ends', placeholder='dd/mm/yyyy')
           br
           input.next(type='text', placeholder='Name',name="name",required=true,onsubmit='return false')
-          input.next(type='text', placeholder="Category",name="category",required=true) 
+          select(form="createauctionform" name='category')
+            option(disable selected value required=true) Category
+            each cat in categories
+              option(value=`${cat.name}`) #{cat.name}
+
+          //input.next(type='text', placeholder="Category",name="category",required=true) 
           input.next(type="text",placeholder="Buy Price",name="buy_price",required=true)
           input.next(type="text",placeholder="Starting Bid",name="starting_bid",required=true)
           input.next(type="text",placeholder="Number of Bids",name="bids_num",required=true)

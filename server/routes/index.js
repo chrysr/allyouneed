@@ -242,6 +242,16 @@ module.exports = (param) =>{
         }
         
     });
+    router.post("/products/:shortname",async(req,res,next) =>{
+        try {
+            const db=req.app.locals.db;
+            console.log("/products/shortname post "+req.body.shortname);     
+        } 
+        catch (err) {
+            return next(err);
+        }
+        
+    });
     router.get("/account/accept/:who",async(req,res,next) =>{
         try {
             const db=req.app.locals.db;

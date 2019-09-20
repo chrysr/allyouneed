@@ -30,13 +30,11 @@ block content
                 p=message.content
         .tab
           .message
-            form.message-form(action='/account',method="POST")
-              .form-group
+            form(action='/account',method="POST")
                 input(type='text', name='recepient', placeholder='Recepient' required=true)
-              .form-group
-                textarea(type='text', name='message', placeholder='Your message here ...', rows='8' required=true)
-              .form-group
                 input(type='submit', value='➤', name='Submit')
+                textarea(type='text', name='message', placeholder='Your message here ...', rows='8' required=true)
+              
         .tab
           ul
             li First Name: #{details.firstname}

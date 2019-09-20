@@ -118,7 +118,7 @@ body {
 
 @keyframes drop {
 	from {height: 0px;}
-	to {height: 24vh ;}
+	to {height: 30vh ;}
 }
 
 .dropdown:hover li a{
@@ -579,6 +579,23 @@ body {
 	color: #4d88ff;
 }
 
+.bidplace {
+	width:calc( 1.5vw + 1.5vh)!important;
+	height: 3vh!important;
+	line-height: 1vh!important;
+	padding:0!important;
+	margin:0!important;
+}
+.bidplacetxt{
+	height: 3vh!important;
+	line-height: 1vh!important;
+	padding:0!important;
+	margin:0!important;
+}
+.bidform{
+	height: 3vh!important;
+
+}
 /*------------------------------------------LANDING------------------------------------------*/
 
 .login{
@@ -1198,6 +1215,39 @@ body {
 	line-height: 3vh;
 	margin: 0;
 }
+
+.message form {
+	height: 100%;
+}
+
+.message textarea{
+	color: white;
+	font-family: 'Fira Sans';
+	background: #111;
+	resize: none;
+	width: 80%;
+	height: 40vh;
+	border: none;
+	border-left: solid 1px #888;
+}
+
+.message input {
+	display: inline-block;
+	margin: 0 ;
+	width: 70%;
+	border: none;
+	border-left: solid 1px #888;
+}
+
+.message input[type="submit"]{
+	cursor: pointer;
+	display: inline-block;
+	margin-left: 2%;
+	width: 8%;
+	border: none;
+	border-left: solid 1px #888;
+}
+
 /*------------------------------------------CATEGORY------------------------------------------*/
 
 .category {

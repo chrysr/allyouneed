@@ -20,7 +20,7 @@ module.exports = (param) =>{
         return result;
     }
     router.get("/",async(req,res,next) =>{
-        console.log("loginloaded");
+        console.log("createauctionloaded");
         //console.log(req.cookies);
 
         try {
@@ -28,13 +28,23 @@ module.exports = (param) =>{
             //console.log(process.cwd());
             //console.log("GET LOGIN");
             //console.log(req.cookies.loggedin);
+            categories=[];
+            const db=req.app.locals.db;
+            await db.collection('categories').find().toArray().then((docs)=>{
+              categories=docs;
+            })
+            for(i=0;i<categories.length;i++)
+            {
+              categories[i].name=categories[i].name.replace("allcats->",'');
+            }
+            categories=categories.slice(1);
             if(req.cookies["loggedin"])
             {
                 return res.render("createauction",{
-                    page: "Crate Auction",
+                    page: "Create Auction",
                     success:req.query.success,
                     loggedin:req.cookies.loggedin,
-
+                    categories:categories,
                     //feedbacklist,
                     //success: req.query.success,
                 });
@@ -80,7 +90,8 @@ module.exports = (param) =>{
           name=((req.body.name?req.body.name:null)?req.body.name.trim():null);
           //category: Category of the item.It could belong to multiple categories
           category=((req.body.category?req.body.category:null)?req.body.category.trim():null);
-
+          if(category!=null)
+            category="allcats->"+category;
           //buy_price: Price that if a buyer give, wins the item.seller may choose not to have such a price, so in this case the item is not included within the auction.
           buy_price=((req.body.buy_price?req.body.buy_price:null)?req.body.buy_price.trim():null);
           //starting_bid: Minimum bid (first bid) when the auction will start
@@ -115,7 +126,7 @@ module.exports = (param) =>{
           console.log("started: "+started);
           console.log("ended: "+ends);
 
-
+          console.log("createauction category "+category);
           var re =/^[a-zA-Z]([._-]?[a-zA-Z0-9]+)*$/; //start with letter/s. end not a special character.
           //just letter or number.dot or dash or underline,must be separated by letters or numbers
           if(!re.test(String(name))){
