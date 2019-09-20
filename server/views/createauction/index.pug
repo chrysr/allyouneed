@@ -4,7 +4,7 @@ block content
   .innerbody
     .spacer
     .auction
-      form(action='/createauction', enctype='multipart/form-data', method='post')
+      form(action='/createauction', enctype='multipart/form-data', method='post' id="createauctionform")
         .col-left
           .imgbox2
             .imgprev
@@ -17,35 +17,87 @@ block content
                 input.button(type='button', value='Image 1', onclick="document.getElementById('selectedFile').click();")
   
         .col-right
+          select(form='createauctionform' name='shour')
+            option(disable selected value) Start Hour
+            - for(var i = 0; i < 24; i++) {
+              if i<10
+                option(value=`${i}`) 0#{i}
+              else
+                option(value=`${i}`) #{i}
+
+            - }
+          select(form='createauctionform' name='smins')
+            option(disable selected value) Start Minutes
+            - for(var i = 0; i < 60; i++) {
+              if i<10
+                option(value=`${i}`) 0#{i}
+              else
+                option(value=`${i}`) #{i}
+            - }
+          select(form='createauctionform' name='ehour')
+            option(disable selected value) End Hour
+            - for(var i = 0; i < 24; i++) {
+              if i<10
+                option(value=`${i}`) 0#{i}
+              else
+                option(value=`${i}`) #{i}
+
+            - }
+          select(form='createauctionform' name='emins')
+            option(disable selected value) End Minutes
+            - for(var i = 0; i < 60; i++) {
+              if i<10
+                option(value=`${i}`) 0#{i}
+              else
+                option(value=`${i}`) #{i}
+            - }
+
+
+
           .dates-wrapper.group
             .field.clearfix.date-range-start.date-wrapper
               .label
                 label(for='datepicker-start') Start:
               .input
-                input#datepicker-start.input-text(type='date', name='experience-start', placeholder='dd/mm/yyyy')
+                input#datepicker-start.input-text(type='date', name='started', placeholder='dd/mm/yyyy')
             .field.clearfix.date-range-start.date-wrapper
               .label
                 label(for='datepicker-end') End:
               .input
-                input#datepicker-end.input-text(type='date', name='experience-end', placeholder='dd/mm/yyyy')
+                input#datepicker-end.input-text(type='date', name='ends', placeholder='dd/mm/yyyy')
           br
           input.next(type='text', placeholder='Name',name="name",required=true,onsubmit='return false')
-          input.next(type='text', placeholder="Category",name="category",required=true) 
+          select(form="createauctionform" name='category')
+            option(disable selected value required=true) Category
+            each cat in categories
+              option(value=`${cat.name}`) #{cat.name}
+
           input.next(type="text",placeholder="Buy Price",name="buy_price",required=true)
           input.next(type="text",placeholder="Starting Bid",name="starting_bid",required=true)
-          input.next(type="text",placeholder="Number of Bids",name="bids_num",required=true)
-          input.next(type="text",placeholder="Bid",name="bid",required=true)  
           br
           input.next(type="text",placeholder="Location",name="location",required=true)   
           input.next(type="text",placeholder="Country",name="country",required=true)  
-          input.next(type="text",placeholder="Started",name="started",required=true)  
-          input.next(type="text",placeholder="Ends",name="ends",required=true)  
           br
           .descbox
             label
-              textarea(type='text', name='query', placeholder='product_descr', maxlength='250', rows='8')
-        input(type="submit",value="Upload")
-  script.
+              textarea(type='text', name='description', placeholder='product_descr', maxlength='250', rows='8')
+        input(type="submit",value="Submit")
+          
+
+            
+  .footer
+    span
+      a.a1(href='#') SITEMAP
+    span
+      a.a1(href='#') TERMS OF SERVICE
+    span
+      a.a1(href='#') OUR TEAM
+    br
+    span
+      | Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, 
+      a.a2(href='mailto:sdi1400041@di.uoa.gr') contact us
+
+  script(type='text/javascript').
     if ( $('html').hasClass('no-touch') ) {
       var $input, $btn;
       $( ".date-wrapper" ).each(function( index ) {
@@ -65,18 +117,7 @@ block content
       $('.date-wrapper input').attr('type', 'date');
       $('.calendar-btn').hide();
     }
-            
-  .footer
-    span
-      a.a1(href='#') SITEMAP
-    span
-      a.a1(href='#') TERMS OF SERVICE
-    span
-      a.a1(href='#') OUR TEAM
-    br
-    span
-      | Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, 
-      a.a2(href='mailto:sdi1400041@di.uoa.gr') contact us
+
   script(type='text/javascript').
     var loadFile=function(event){
       var image=document.getElementById('fill');
