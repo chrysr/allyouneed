@@ -69,6 +69,47 @@ module.exports = (param) =>{
         }
 
     });
+
+    router.get("/products/endingsoonest",async (req,res,next) =>{ ////////////////////////////
+        try {
+            const db=req.app.locals.db;
+            db.collection('products').find().sort( { ends: -1 } ).toArray().then((docs)=>{
+
+                console.log(docs);
+                return res.render("index",{
+                    page:"Home",
+                    productslist: docs,
+                    loggedin:req.cookies.loggedin,
+                });
+            })   
+            
+        } catch (err) {
+            return next(err);
+        }
+
+    });
+
+    router.get("/products/endinglatest",async (req,res,next) =>{ ////////////////////////////
+        try {
+            const db=req.app.locals.db;
+            db.collection('products').find().sort( { ends: 1 } ).toArray().then((docs)=>{
+
+                console.log(docs);
+                return res.render("index",{
+                    page:"Home",
+                    productslist: docs,
+                    loggedin:req.cookies.loggedin,
+                });
+            })   
+            
+        } catch (err) {
+            return next(err);
+        }
+
+    });
+
+
+
     router.get("/products/bycategory",async (req,res,next) =>{
         try {
             console.log("bycatget");
