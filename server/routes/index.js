@@ -73,7 +73,7 @@ module.exports = (param) =>{
     router.get("/products/endingsoonest",async (req,res,next) =>{ ////////////////////////////
         try {
             const db=req.app.locals.db;
-            db.collection('products').find().sort( { end_date: 1 } ).toArray().then((docs)=>{
+            db.collection('products').find().sort( { enddate: 1 } ).toArray().then((docs)=>{
 
                 console.log(docs);
                 return res.render("index",{
@@ -92,7 +92,7 @@ module.exports = (param) =>{
     router.get("/products/endinglatest",async (req,res,next) =>{ ////////////////////////////
         try {
             const db=req.app.locals.db;
-            db.collection('products').find().sort( { end_date: -1 } ).toArray().then((docs)=>{
+            db.collection('products').find().sort( { enddate: -1 } ).toArray().then((docs)=>{
 
                 console.log(docs);
                 return res.render("index",{
@@ -286,8 +286,43 @@ module.exports = (param) =>{
     router.post("/products/:shortname",async(req,res,next) =>{
         try {
             const db=req.app.locals.db;
-            console.log("/products/shortname post "+req.body.shortname);     
-            
+            shortname=((req.body.shortname?req.body.shortname:null)?req.body.shortname.trim():null);
+            amount=((req.body.amount?req.body.amount:null)?req.body.amount.trim():null);
+
+            console.log("/products/shortname post "+shortname+" "+amount);
+            _id=req.cookies._id;
+            var person;
+            var item;
+
+            await db.collection('users').find({"_id":require('mongodb').ObjectID(_id.toString())}).toArray().then((docs)=>{
+                person=docs[0];
+            });
+            await db.collection('products').find({shortname:shortname}).toArray().then((docs)=>{
+                item=docs[0];
+            });
+            bids=item.bids;
+            console.log(item);
+            if(bids.length==0&&parseFloat(amount)<item.starting_bid)
+                return res.redirect('/products/'+shortname+'?bidplace=false/reason=bidnothigherthanfirst');
+            if(bids.length>0&&(bids[bids.length-1].amount>=parseFloat(amount)))
+                return res.redirect('/products/'+shortname+'?bidplace=false/reason=bidnothighenough');
+                
+            bid={};
+            bid['amount']=parseFloat(amount);
+            bid['bidder']=person.email;
+            date=new Date();
+            bid['time']=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+            console.log(bid);    
+            bids.push(bid);
+            if(parseFloat(amount)>=item.price)
+            {
+                //buynow
+                //finalize auction etc
+            }
+
+            db.collection('products').updateOne({shortname:shortname},{$set: {bids:bids}}).then((docs)=>{
+                console.log("okay to db");
+            });      
         } 
         catch (err) {
             return next(err);

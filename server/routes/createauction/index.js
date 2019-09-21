@@ -187,6 +187,7 @@ module.exports = (param) =>{
           photos=[];
           for(var i=0;i<req.files.length;i++)
           {
+            console.log(req.files[i]);
             if(i==0)
             {
               await fs.mkdirSync('./public/images/'+shortname,function(){

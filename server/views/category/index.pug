@@ -26,7 +26,10 @@ block content
                                 .pricediv
                                     .price
                                         .fullcenter
-                                            h4=`${p.price.toFixed(2)}`
+                                            if p.bids.length==0
+                                                h4=p.starting_bid.toFixed(2)
+                                            else
+                                                h4=p.bids[p.bids.length-1].amount.toFixed(2)
                                 .auctionpreviewthumb
                                     img(src=`../images/${p.shortname}/${p.shortname}_1.jpg`)
                                 p

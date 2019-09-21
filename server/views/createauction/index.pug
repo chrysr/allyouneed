@@ -26,8 +26,8 @@ block content
             each cat in categories
               option(value=`${cat.name}`) #{cat.name}
 
-          input.next(type="number",placeholder="Buy Price",name="buy_price",required=true)
-          input.next(type="number",placeholder="Starting Bid",name="starting_bid",required=true)
+          input.next(type="number",placeholder="Buy Price",name="buy_price",required=true step="0.01")
+          input.next(type="number",placeholder="Starting Bid",name="starting_bid",required=true step="0.01")
           br
           input.next(type="text",placeholder="Location",name="location",required=true)   
           input.next(type="text",placeholder="Country",name="country",required=true)  
