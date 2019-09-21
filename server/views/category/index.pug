@@ -19,8 +19,8 @@ block content
                         
                     else
                         each p in products[c]   
-                            a(href=`${p.shortname}`)                         
-                                .auctionpreview
+                      
+                                .auctionpreview(style={cursor: 'pointer'} onclick=`location.href='${p.shortname}';`)
                                     .headbox
                                         .vertcenter
                                             h3=`${p.name}`

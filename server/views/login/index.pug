@@ -23,42 +23,35 @@ block content
       .col-right
         .signup
           h4 REGISTER
-          form.signup-form(action="/login",method="POST")
-            .form-group
-              label
-                input.next(type='text', placeholder='First Name',name="fname",required=true)
-            .form-group
-              label
-                input.next(type='text', placeholder="Last Name",name="lname",required=true)
-            .form-group
-              label
-                input(type='text',placeholder="Telephone",name="phone",required=true)
-            .form-group
-              label
-                input(type="text",placeholder="Address",name="address",required=true)
-            .form-group
-              label
-                input(type="text",placeholder="Taxpayer ID",name="taxid",required=true)
-            .form-group
-              .custom-select
-                select#country(name='country')
-                  option(disable selected value) Country
-                  option(value='Greece') Greece
-                  option(value='Cyprus') Cyprus
-                  option(value='Other') Other
-            .form-group
-              .custom-select
-                select#country(name ="gender", required=true)
-                  option(disable selected value) Gender
-                  option(value='Male') Male
-                  option(value='Female') Female
-                  option(value='Other') Other
-            .form-group
-              .custom-select
-                select#country(name ="type", required=true)
-                  option(disable selected value) Account Type
-                  option(value='Bidder') Bidder
-                  option(value='Seller') Seller
+          .error#error
+            |
+          form(action="/login",method="POST")
+            input.next(type='text', placeholder='First Name',name="fname",required=true)
+            input.next(type='text', placeholder="Last Name",name="lname",required=true)
+            label
+              input(type='text',placeholder="Telephone",name="phone",required=true)
+            label
+              input(type="text",placeholder="Address",name="address",required=true)
+            label
+              input(type="text",placeholder="Taxpayer ID",name="taxid",required=true)
+            br
+            .custom-select
+              select#country(name='country')
+                option(disable selected value) Country
+                option(value='Greece') Greece
+                option(value='Cyprus') Cyprus
+                option(value='Other') Other
+            .custom-select
+              select#country(name ="gender", required=true)
+                option(disable selected value) Gender
+                option(value='Male') Male
+                option(value='Female') Female
+                option(value='Other') Other
+            .custom-select
+              select#country(name ="type", required=true)
+                option(disable selected value) Account Type
+                option(value='Bidder') Bidder
+                option(value='Seller') Seller
             .form-group
               label
                 input(type='text', placeholder='E-mail',name="signupemail",required=true)
@@ -95,6 +88,24 @@ block content
     span
       | Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, 
       a.a2(href='mailto:sdi1400041@di.uoa.gr') contact us
+  script.
+    function geterror(){
+      var str=window.location.href
+      var pos = str.search("login");
+      var res = str.substring(pos+5);
+      if(res=="?signup=false/reason=invalidmail"){
+        return "The e-mail you entered is invalid!"
+      }
+      else if(res=="?signup=false/reason=invalidphone"){
+        return "The phone number you entered is invalid !"
+      }
+      else if(res=="?signup=false/reason=userexists"){
+        return "The e-mail you entered is already in use !"
+      }
+      return res;
+    }
+    document.getElementById("error").textContent = geterror();
+    //alert(geterror()); 
   script.
     var x, i, j, selElmnt, a, b, c;
     /*look for any elements with the class "custom-select":*/
