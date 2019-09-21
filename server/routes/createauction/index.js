@@ -81,7 +81,7 @@ module.exports = (param) =>{
       }
     });
     var upload = multer({storage: storage});
-    router.post("/",upload.array('photo',5),async(req,res,next) =>{
+    router.post("/",upload.array('photo',4),async(req,res,next) =>{
         try {
           const db=req.app.locals.db;
           var shortname,name,categories,buy_price,starting_bid,bids_num;
