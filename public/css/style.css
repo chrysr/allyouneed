@@ -597,6 +597,18 @@ body {
 
 }
 /*------------------------------------------LANDING------------------------------------------*/
+.error {
+	background: #ffa800;
+	color: #111;
+	padding-top: 1vh;
+	padding-bottom:1vh;
+	margin-top: 1vh;
+	margin-bottom: 4vh;
+
+}
+.error:empty {
+	display: none;
+ }
 
 .login{
 	color: white;
@@ -651,12 +663,16 @@ body {
 }
 
 .signup{
+	
 	color: white;
 	display: inline-block;
 	background-color: #333333;
 	width: 75%;
 	min-height: 50vh;
 	margin-bottom: 6vh;
+}
+.signup form {
+	font-size: 0;
 }
 .signup h4{
 	margin-top: 5vh;
@@ -697,7 +713,9 @@ body {
 
 .next{
  	width: 37%!important;
- 	margin: 0;
+	margin-right: 0.5%!important;
+	margin-left: 0.5%!important;
+	padding: 0 0.5%!important;
 }
 .nextmini{
  	width: 90%!important;
@@ -1450,11 +1468,13 @@ button:focus {
 
 
 .custom-select {
+  font-size: calc(0.2em + 0.7vw + 0.7vh);
   line-height: 8vh;
   position: relative;
   display: inline-block;
-  width: 10vw;
-  margin: 2vh 17vw;
+  width: 7.5vw;
+  margin: 0 0.74vw;
+  margin-bottom: 4vh;
 }
 
 .custom-select select {
@@ -1462,25 +1482,27 @@ button:focus {
 }
 
 .select-selected {
-  width: 10vw;
-  background-color: #888888;
+  width: 7.5vw;
+  background-color: #111;
 }
 
 /*style the items (options), including the selected item:*/
 .select-items div,.select-selected {
-  width: 10vw;
+  width: 7.5vw;
   height: 8vh;
   color: #ffffff;
   padding: 0;
   border: none;
   cursor: pointer;
   user-select: none;
+  line-height: calc(1em + 2vw + 1vh);
+  height: 7vh;
 }
 
 /*style items (options):*/
 .select-items {
   position: absolute;
-  background-color: #888;
+  background-color: #111;
   top: 100%;
   left: 0;
   right: 0;
@@ -1489,19 +1511,21 @@ button:focus {
 
 /*hide the items when the select box is closed:*/
 .select-hide {
-  width: 10vw;
+  width: 7.5vw;
   display: none;
 }
 
 .select-items div:hover, .same-as-selected {
-  width: 10vw;
+  width: 7.5vw;
   background-color: rgba(0, 0, 0, 0.4);
 }
 
 .topalign {
   width: 75%;
+  padding: 0 1%;
   display: inline-block;
   margin-bottom: 1.2vh;
+  background: #111;
 }
 .topalign input{
 	padding: 0;
