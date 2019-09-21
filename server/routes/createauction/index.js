@@ -84,7 +84,7 @@ module.exports = (param) =>{
     router.post("/",upload.array('photo',5),async(req,res,next) =>{
         try {
           const db=req.app.locals.db;
-          var shortname,name,category,buy_price,starting_bid,bids_num;
+          var shortname,name,categories,buy_price,starting_bid,bids_num;
           var location,country,start_date,end_date,description;
           var seller={};
 
@@ -96,9 +96,9 @@ module.exports = (param) =>{
           //name: Auction name given by the user
           name=((req.body.name?req.body.name:null)?req.body.name.trim():null);
           //category: Category of the item.It could belong to multiple categories
-          category=req.body.category;
-          for(var i=0;i<category.length;i++)
-            category[i]="allcats->"+category[i];
+          categories=req.body.categories;
+          for(var i=0;i<categories.length;i++)
+            categories[i]="allcats->"+categories[i];
           //buy_price: Price that if a buyer give, wins the item.seller may choose not to have such a price, so in this case the item is not included within the auction.
           buy_price=((req.body.buy_price?req.body.buy_price:null)?req.body.buy_price.trim():null);
           //starting_bid: Minimum bid (first bid) when the auction will start
@@ -133,8 +133,8 @@ module.exports = (param) =>{
           console.log("end date: "+end_date);
           //product_DescFull description of the object
           description=((req.body.description?req.body.description:null)?req.body.description.trim():null);
-          console.log(name+" "+category+" "+buy_price+" "+starting_bid);
-          console.log("createauction category "+category);
+          console.log(name+" "+categories+" "+buy_price+" "+starting_bid);
+          console.log("createauction category "+categories);
           now =new Date();
           end_date=new Date(end_date);
           console.log(typeof(end_date)+ " date: " + end_date);
@@ -184,22 +184,24 @@ module.exports = (param) =>{
             });
           }
           //HANDLE FILES
+          await fs.mkdirSync('./public/images/'+shortname,function(){
+          });
           photos=[];
           for(var i=0;i<req.files.length;i++)
           {
-            if(i==0)
+            if((req.files[i].mimetype.endsWith("jpeg")) || (req.files[i].mimetype.endsWith("png")) || (req.files[i].mimetype.endsWith("jpg"))
+            || (req.files[i].mimetype.endsWith("gif")) )
             {
-              await fs.mkdirSync('./public/images/'+shortname,function(){
-              });
+              console.log(req.files[i].mimetype);
+              console.log("it's ok")
+              await fs.rename(req.files[i].path,'./public/images/'+shortname+"/"+shortname+"_"+(i+1)+".jpg",function(){
+              })
+              photos[i]=shortname+'_'+(i+1).toString()+'.jpg';
             }
-            await fs.rename(req.files[i].path,'./public/images/'+shortname+"/"+shortname+"_"+(i+1)+".jpg",function(){
-            })
-            photos[i]=shortname+'_'+(i+1).toString()+'.jpg';
-
           }
           //END HANDLE FILES
 
-          entry={shortname:shortname,name:name,category:category,price:parseFloat(buy_price),starting_bid:parseFloat(starting_bid),
+          entry={shortname:shortname,name:name,categories:categories,price:parseFloat(buy_price),starting_bid:parseFloat(starting_bid),
             bids:[],location:location,country:country,seller:seller,
             description:description,start_date:start_date,end_date:end_date,photo:photos}
           db.collection('products').insertOne(entry).then((docs)=>{
