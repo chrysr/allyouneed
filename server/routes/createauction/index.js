@@ -85,13 +85,9 @@ module.exports = (param) =>{
         try {
           const db=req.app.locals.db;
           var shortname,name,category,buy_price,starting_bid,bids_num;
-          var location,country,started,ends,description;
+          var location,country,start_date,end_date,description;
           var seller={};
-          var smins,shour,emins,ehour;
-          smins=((req.body.smins?req.body.smins:null)?req.body.smins.trim():null);
-          shour=((req.body.shour?req.body.shour:null)?req.body.shour.trim():null);
-          emins=((req.body.emins?req.body.emins:null)?req.body.emins.trim():null);
-          ehour=((req.body.ehour?req.body.ehour:null)?req.body.ehour.trim():null);
+
           var _id=req.cookies._id;
           await db.collection('users').find({"_id":require('mongodb').ObjectID(_id.toString())}).toArray().then((docs)=>{
             seller['email']=docs[0].email;
@@ -100,17 +96,19 @@ module.exports = (param) =>{
           //name: Auction name given by the user
           name=((req.body.name?req.body.name:null)?req.body.name.trim():null);
           //category: Category of the item.It could belong to multiple categories
-          category=((req.body.category?req.body.category:null)?req.body.category.trim():null);
-          if(category!=null)
-            category="allcats->"+category;
+          category=req.body.category;
+          for(var i=0;i<category.length;i++)
+            category[i]="allcats->"+category[i];
           //buy_price: Price that if a buyer give, wins the item.seller may choose not to have such a price, so in this case the item is not included within the auction.
           buy_price=((req.body.buy_price?req.body.buy_price:null)?req.body.buy_price.trim():null);
           //starting_bid: Minimum bid (first bid) when the auction will start
           starting_bid=((req.body.starting_bid?req.body.starting_bid:null)?req.body.starting_bid.trim():null);
-          //bids_num: Number of bids
-          //bids_num=((req.body.bids_num?req.body.bids_num:null)?req.body.bids_num.trim():null);
+          console.log("1starting_bid: "+typeof(starting_bid));
 
           /* AFTA EDW NA MPOUN EKEI POU THA KANEI BID O USER
+
+          //bids_num: Number of bids
+          //bids_num=((req.body.bids_num?req.body.bids_num:null)?req.body.bids_num.trim():null);
           //currently: The current best deal in dollars. It's always equal to higher bid or with First_Bid if no bids have been submitted.
           currently=0;
           //bidder: Information about the bidder: UserID,Rating,Location,Country   tha pigenei ston array of the bidders
@@ -127,25 +125,24 @@ module.exports = (param) =>{
           location=((req.body.location?req.body.location:null)?req.body.location.trim():null);
           //country: Country of the item
           country=((req.body.country?req.body.country:null)?req.body.country.trim():null);
-          //started: Start time of the auction
-          started=((req.body.started?req.body.started:null)?req.body.started.trim():null);
-          //ends: Auction expiry
-          ends=((req.body.ends?req.body.ends:null)?req.body.ends.trim():null);
+          //start_date: Start time of the auction
+          start_date=((req.body.start_date?req.body.start_date:null)?req.body.start_date.trim():null);
+          //end_date: Auction expiry
+          end_date=((req.body.end_date?req.body.end_date:null)?req.body.end_date.trim():null);
+          console.log("start date: "+start_date);
+          console.log("end date: "+end_date);
           //product_DescFull description of the object
           description=((req.body.description?req.body.description:null)?req.body.description.trim():null);
           console.log(name+" "+category+" "+buy_price+" "+starting_bid);
-          console.log("started: "+started);
-          console.log("ended: "+ends);
-          
           console.log("createauction category "+category);
-          console.log("create auction "+shour+" "+smins+" "+ehour+" "+emins);
-          var parts=started.split('-');
-          startfull=new Date(parts[0],parts[1]-1,parts[2],shour.toString(),smins.toString());
-          parts=ends.split('-');
-          endfull=new Date(parts[0],parts[1]-1,parts[2],ehour.toString(),emins.toString());
-          console.log(startfull+" "+endfull);
           now =new Date();
-          if(endfull<=startfull&&startfull>now)
+          end_date=new Date(end_date);
+          console.log(typeof(end_date)+ " date: " + end_date);
+          start_date=new Date(start_date);
+          console.log(typeof(start_date)+ " date: " + start_date);
+
+
+          if(end_date<=start_date&&start_date>now) //check if that works
           {
             console.log("ends before starts or equal");
             res.redirect('/createauction?success=false/reason=endsbeforestarts');
@@ -155,29 +152,27 @@ module.exports = (param) =>{
           if(!re.test(String(name))){
               return res.redirect('/createauction?success=false/reason=invalidname');
           }
-          re=/^\d+$/;
+          re=/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/;
           if(!re.test(String(buy_price))){
               return res.redirect('/createauction?success=false/reason=invalidbuy_price');
           }
+          console.log("2starting_bid: "+typeof(starting_bid));
+          console.log("2buy_price: "+typeof(buy_price));
           if(!re.test(String(starting_bid))){
               return res.redirect('/createauction?success=false/reason=invalidstarting_bid');
           }
-          //category--->  PREPEI NA ELEGXOUME OTI EDOSE ESTW ENA
-          /*re =/^[a-zA-Z0-9]$/;
+          /*re = ;
           if(!re.test(String(location))){ /*CHECK TI THA KANOUME ME AFTO
               return res.redirect('/createauction?success=false/reason=invalidlocation');
           }
           if(!re.test(String(country))){
               return res.redirect('/createauction?success=false/reason=invalidcountry');
           }*/
-          console.log("buy price: "+buy_price);
           console.log("starting bid: "+starting_bid);
-          if(buy_price<=starting_bid)
+          if(parseFloat(buy_price)<parseFloat(starting_bid))
           {
             return res.redirect('/createauction?success=false/reason=buylessthanstarting');
           }
-          
-          
 
           for(var i=2,flag=0;flag==0;i++)
           {
@@ -204,9 +199,9 @@ module.exports = (param) =>{
           }
           //END HANDLE FILES
 
-          entry={shortname:shortname,name:name,category:category,price:parseFloat(buy_price),starting_bid:starting_bid,
-            bids_num:0,location:location,country:country,seller:seller,
-            description:description,startdate:startfull,enddate:endfull,photo:photos}
+          entry={shortname:shortname,name:name,category:category,price:parseFloat(buy_price),starting_bid:parseFloat(starting_bid),
+            bids:[],location:location,country:country,seller:seller,
+            description:description,start_date:start_date,end_date:end_date,photo:photos}
           db.collection('products').insertOne(entry).then((docs)=>{
               console.log("product inserted successfully");
               res.redirect('/createauction?success=true');

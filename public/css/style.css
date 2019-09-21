@@ -1279,8 +1279,9 @@ body {
 	margin: 2vh 0;
 	position: relative;
 }
-
-
+.category a{
+	width: 100%;
+}
 .category::-webkit-scrollbar {
   width: 0.4em;
 }
