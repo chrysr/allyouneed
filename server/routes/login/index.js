@@ -21,6 +21,7 @@ module.exports = (param) =>{
                     page: "Login",
                     success:req.query.success,
                     loggedin:req.cookies.loggedin,
+                    error:"",
                 });
 
             }
@@ -59,6 +60,7 @@ module.exports = (param) =>{
                 var re = /\S+@\S+\.\S+/;
                 if(!re.test(String(email)))
                 {
+                    res.status(500).send({error:"email"});
                     return res.redirect('/login?success=false/reason=invalidmail');
                 }
                 db.collection('users').find({email:email}).toArray().then((docs)=>{
