@@ -18,9 +18,9 @@ block content
               .price
                 .fullcenter
                   if product.bids.length==0
-                    h4=product.starting_bid.toFixed(2)
+                    h4=`$${product.starting_bid.toFixed(2)}`
                   else
-                    h4=product.bids[product.bids.length-1].amount.toFixed(2)
+                    h4=`$${product.bids[product.bids.length-1].amount.toFixed(2)}`
             .auctionpreviewthumb
               img(src=`../images/${product.shortname}/${product.photo[0]}`)
             p

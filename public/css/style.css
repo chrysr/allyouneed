@@ -1,4 +1,5 @@
 body {
+	overflow-x: hidden;
 	font-size: 1em;
 	margin: 0;
 	padding: 0;
@@ -734,6 +735,108 @@ body {
 
 /*------------------------------------------CREATEAUCTION------------------------------------------*/
 
+.crau-left {
+	width: 50%;
+	height: 80vh;
+	overflow: hidden;
+	padding: 0;
+	padding-top: 6vh;
+	margin: 0;
+	display: inline-block;
+	border: none;
+	outline: none;
+	position: relative;
+}
+
+.crau-right {
+	width: 50%;
+	height: 80vh;
+	padding: 0;
+	padding-top: 6vh;
+	margin: 0;
+	display: inline-block;
+	border: none;
+	outline: none;
+	position: relative;
+}
+.crau-right span{
+	padding-left: 0.3vh;
+	font-size: calc(0.2em + 0.7vw + 0.7vh);
+	border-left: 0.1em solid #000 ;
+	height: 4vh;
+	line-height: 4vh;
+	display: inline-block;
+	color: #777;
+}
+.crau-right input{
+	margin-left: 0!important;
+	margin-right: 0!important;
+	margin-bottom: 2vh;
+	padding: 0 0.5%!important;
+	font-size: calc(0.2em + 0.7vw + 0.7vh);
+	height: 4vh;
+	width: calc(50% - 2vw)!important;
+	display: inline-block;
+	color: #fff;
+	border: none;
+	background: #333;
+	border-left: 0.1em solid #000 ;
+}
+.crau-right input[type=datetime-local]{
+	width: 40%!important;
+	border: none;
+	font-family: 'Fira Sans';
+}
+
+.crau-right input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+input[type="datetime-local"].mod::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	background: #333 url(../images/AYN/arrows3.png);
+	background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center center; 
+	width: 1vw;
+    height: 3vh;
+}
+input[type="number"].mod::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	background: #333 url(../images/AYN/arrows3.png);
+	background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center center; 
+	width: 1vw;
+    height: 3vh;
+}
+
+.crau-right input[type=submit]{
+	width: 49%!important;
+	border: none;
+	font-family: 'Fira Sans';
+	height: 7vh;
+	background: #060606;
+	color: #fff;
+}
+
+.databox {
+	background: #333;
+	text-align: left;
+    font-size: calc(0.2em + 0.7vw + 0.7vh);
+	position: relative;
+	display: inline-block;
+    height: 74.7vh;
+    width: calc( 80% - 2vw);
+	padding: 0;
+	padding-top: 2vh;
+	padding-left: 2vw;
+    margin-right: 15%;
+	margin-left: 15%;
+	margin-top: 4vh;
+}
+
+
 .button {
   background-color: #111111;
   border: none;
@@ -773,17 +876,74 @@ body {
 .descbox label{
 	width: 100%;
 }
-.descbox textarea {
+.databox textarea {
 	border:none;
-	border-left: 0.1em solid #333333 ;
- 	width: 70%;
+	border-left: 0.1em solid #000 ;
+ 	width: calc(100% - 2vw);
 	line-height: calc(0.37em + 0.98vw + 0.98vh);
-	background-color: white;
+	background-color: #333;
 	display: inline-block;
 	font-size: calc(0.2em + 0.7vw + 0.7vh);
 	padding: 0 1%;
 	margin: 0;
-	color: #111111;
+	margin-bottom: 2vh;
+	color: #fff;
+	resize: none;
+}
+
+.checkbox {
+	text-align: left;
+	width: calc(95% - 2vw);
+	background: #000;
+	height: 18vh;
+	overflow: scroll;
+	overflow-x:hidden;
+	color: #777;
+	padding-left: 5%;
+}
+.checkbox::-webkit-scrollbar {
+	width: 0.4em;
+}
+  
+  /* Track */
+.checkbox::-webkit-scrollbar-track {
+	background: #111111; 
+}
+   
+  /* Handle */
+.checkbox::-webkit-scrollbar-thumb {
+	background: #2d68df; 
+}
+  
+  /* Handle on hover */
+.checkbox::-webkit-scrollbar-thumb:hover {
+	background: #4d88ff; 
+}
+
+.checkbox label {
+	cursor: pointer;
+	background: #000;
+	font-size: calc(0.2em + 0.7vw + 0.7vh);
+	line-height: calc(0.5em + 1.1vw + 1.1vh);
+}
+
+.checkbox input[type=checkbox]{
+    display: none;
+}
+
+.checkbox input[type=checkbox]:hover + .opt{
+    color: #2d68df
+}
+
+.checkbox input[type=checkbox]:checked + .opt{
+    color: #2d68df
+}
+
+.opt{
+    background-color: #111;
+    display: inline-block;
+    width: 100%;
+    height: 3vh;
 }
 
 @media (min-width: 800px) {
@@ -870,10 +1030,10 @@ body {
 
 .imgprev {
 	text-align: center;
-	display: inline-block;
-	width: 60%;
+	display: block;
+	width: 80%;
 	height: 65vh;
-	margin: 0;
+	margin: 0 10%;
 	padding: 0;
 	margin-top: 4vh;
 	overflow: hidden;
@@ -881,6 +1041,7 @@ body {
 
 .imgprev img {
 	margin-bottom: 4vh;
+	cursor: pointer;
 }
 
 .smallimg {
@@ -893,12 +1054,40 @@ body {
 }
 
  .bot{
+	font-size: 0;
  	display: inline-block;
- 	margin-left: 6%;
- 	height: 55vh;
+	margin: 0;
+	margin-top: 2.7vh; 
+	height: 7vh;
+	width: 100%; 
  	overflow: hidden;
  }
-
+ .bot p {
+	align-items: flex-start;
+	box-sizing: border-box;
+	color: #333;
+	font-size: calc(0.2em + 0.7vw + 0.7vh);
+	background: #fff;
+	width: 78.5%;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	height: 7vh;
+ }
+ .bot input{
+	float: right;
+	width: 58.5%;
+	margin: 0 1%;
+	padding-left: 0;
+	padding-right: 0;
+ }
+ .bot input:hover{
+	background-color: rgba(0, 0, 0, 0.99);
+ }
+ #clr {
+	width: 18.5%;
+	height: 7vh;
+ }
 
 @media (min-width: 800px) {
 	.imgbox2
@@ -1061,9 +1250,25 @@ body {
 	margin: 0;
 	padding: 0;
 }
-.actv li{
-	border-bottom: solid 1px
+.subm {
+	border: none!important;
+	background: #333!important;
+	cursor: pointer!important;
+	margin-bottom: 2vh!important;
 }
+@keyframes dgreytogrey {
+	from {background:#333;}
+	to {background:#555;}
+}
+.subm:hover{
+	animation-name: dgreytogrey;
+	animation-duration: 0.2s;
+	background: #555!important;
+}
+
+
+
+
 
 .actv input 
 {
@@ -1394,10 +1599,10 @@ body {
 		display: inline-block;
 		position: relative;
 		clear: both;
-		margin-left: 6vw;
-		margin-right: 6vw;
+		margin-left: 6%;
+		margin-right: 6%;
 		margin-bottom: 6vh;
-		width: 88vw;
+		width: 88%;
 	}
 }
 @media (max-width: 799px) {
@@ -1406,10 +1611,10 @@ body {
 		display: inline-block;
 		position: relative;
 		clear: both;
-		margin-left: 1.5vw;
-		margin-right: 1.5vw;
+		margin-left: 1.5%;
+		margin-right: 1.5%;
 		margin-bottom: 1.5vh;
-		width: 97vw;
+		width: 97%;
 	}
 }
 

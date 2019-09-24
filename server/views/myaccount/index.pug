@@ -31,7 +31,11 @@ block content
         .tab
           .message
             form(action='/account',method="POST")
-                input(type='text', name='recepient', placeholder='Recepient' required=true)
+                select(name='recepient' required=true)
+                  option(disable selected value)
+                  each c in contacts
+                    option(value=`${c}`) #{c}
+                //input(type='text', name='recepient', placeholder='Recepient' required=true)
                 input(type='submit', value='➤', name='Submit')
                 textarea(type='text', name='message', placeholder='Your message here ...', rows='8' required=true)
               
@@ -58,35 +62,69 @@ block content
             .form-group
               input(type='text' required=true name='lname' placholder="Last Name" value=`${details.lastname}`)
             .form-group
-              input(type='text' required=true name='phone' placholder="Telephone" value=`${details.phone}`)
+              input(type='number' required=true name='phone' placholder="Telephone" value=`${details.phone}`)
             .form-group
               input(type='text' required=true name='address' placholder="Address"  value=`${details.address}`)
             .custom-select
               .form-group
                 select#gender(name="country")
-                  option(disable selected value)=details.country
+                  option(value=`${details.gender}`) #{details.country}
                   option(value='Greece') Greece
                   option(value='Cyprus') Cyprus
                   option(value='Other') Other
             .form-group
-              input(type='text' required=true name='taxid' placholder="Taxpayer ID" value=`${details.taxpayerid}`)
+              input(type='number' required=true name='taxid' placholder="Taxpayer ID" value=`${details.taxpayerid}`)
             .form-group
-              input(type='text' required=true name='email' placholder="E-mail" value=`${details.email}`)
+              input(type='email' required=true name='email' placholder="E-mail" value=`${details.email}`)
             .custom-select
               .form-group
                 select#gender(name ="gender" )
-                  option(disable selected value)=details.gender
+                  option( value=`${details.gender}`) #{details.gender}
                   option(value='Male') Male
                   option(value='Female') Female
                   option(value='Other') Other
             .form-group
-              input(type='text' name='oldpass' placeholder=`Old Password` required=true)
+              input(type='password' name='oldpass' placeholder=`Old Password` required=true)
             .form-group
-              input(type='text' name='pass' placeholder=`New Password (Optional)`)
+              input(type='password' name='pass' placeholder=`New Password (Optional)`)
             br
             .form-group
-              input(type='submit' name='submit') 
+              input.subm(type='submit' name='submit') 
             //button.btn.btn-default.pull-right(type='submit') Submit
+        .tab
+          ul
+            li
+              strong
+                a(href='/createauction') Create New Auction
+            each product in myproducts
+              li
+                if now>product.start_date && now<product.end_date
+                  a(href='/products/'+`${product.shortname}`) #{product.name}  
+                  span active
+                else
+                  if now>product.end_date
+                    a(href='/products/'+`${product.shortname}`) #{product.name}  
+                    span finished
+                  if now<product.start_date
+                    a(href='/products/'+`${product.shortname}`) #{product.name}  inactive - 
+                    form(action='/account' ,method='post')
+                      input(type='hidden',value=`${product.shortname}` name='activateshortname')
+                      input(type='submit',value='Activate Now')
+                      //EDIT THIS AUCTION
+
+        .tab
+          ul
+            each product in boughtbyme
+              li
+                if now>product.end_date
+                  a(href='/products/'+`${product.shortname}`) #{product.name}  
+                  span finished
+                if now>product.start_date && now<product.end_date
+              
+        
+                      
+
+        //items i've bid but not finished?
         if(details.type=='admin')
           .tab
             ul
@@ -127,8 +165,16 @@ block content
             li.men
               br
               | CHANGE INFO
+          a(onclick='tab(6)')
+            li.men
+              br
+              | MY PRODUCTS
+          a(onclick='tab(7)')
+            li.men
+              br
+              | WON BY ME
           if(details.type=='admin')
-            a(href='#' onclick='tab(6)')
+            a(href='#' onclick='tab(8)')
               li.men
                 br
                 | MEMBER REQUESTS

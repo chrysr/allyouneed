@@ -10,7 +10,7 @@ block content
           form.login-form(action="/login",method="POST")
             .form-group
               label
-                input(type='text' placeholder='Email',name="email",required=true)
+                input(type='email' placeholder='Email',name="email",required=true)
             .form-group
               label
                 input(type='password' placeholder='Password',name="pass",required=true)
@@ -29,11 +29,11 @@ block content
             input.next(type='text', placeholder='First Name',name="fname",required=true)
             input.next(type='text', placeholder="Last Name",name="lname",required=true)
             label
-              input(type='text',placeholder="Telephone",name="phone",required=true)
+              input(type='number',placeholder="Telephone",name="phone",required=true)
             label
               input(type="text",placeholder="Address",name="address",required=true)
             label
-              input(type="text",placeholder="Taxpayer ID",name="taxid",required=true)
+              input(type="number",placeholder="Taxpayer ID",name="taxid",required=true)
             br
             .custom-select
               select#country(name='country')
@@ -54,7 +54,7 @@ block content
                 option(value='Seller') Seller
             .form-group
               label
-                input(type='text', placeholder='E-mail',name="signupemail",required=true)
+                input(type='email', placeholder='E-mail',name="signupemail",required=true)
             .form-group
               label
                 input#pass(type='password',placeholder='Password',name="signuppass",required=true)

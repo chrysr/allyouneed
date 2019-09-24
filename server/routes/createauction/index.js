@@ -81,24 +81,40 @@ module.exports = (param) =>{
       }
     });
     var upload = multer({storage: storage});
+    function unique(arr) 
+    { 
+        var obj = {};
+        for(i=0;i<arr.length;i++)
+            obj[arr[i]]=arr[i];
+
+        arr=[];
+        for(key in obj)
+            arr.push(obj[key])
+        
+        return arr;
+    }
     router.post("/",upload.array('photo',4),async(req,res,next) =>{
         try {
           const db=req.app.locals.db;
           var shortname,name,categories,buy_price,starting_bid,bids_num;
           var location,country,start_date,end_date,description;
-          var seller={};
+          var seller;
 
           var _id=req.cookies._id;
           await db.collection('users').find({"_id":require('mongodb').ObjectID(_id.toString())}).toArray().then((docs)=>{
-            seller['email']=docs[0].email;
-            seller['srating']=docs[0].rating.srating;
+            seller=docs[0].email;
           })
           //name: Auction name given by the user
           name=((req.body.name?req.body.name:null)?req.body.name.trim():null);
           //category: Category of the item.It could belong to multiple categories
-          categories=req.body.categories;
-          for(var i=0;i<categories.length;i++)
-            categories[i]="allcats->"+categories[i];
+          //categories=req.body.categories;
+          categories=[];
+          for(var i=0;i<req.body.categories.length;i++)
+          {
+            if(req.body.categories[i]=='')
+              continue;
+            categories.push('allcats->'+req.body.categories[i]);
+          }
           //buy_price: Price that if a buyer give, wins the item.seller may choose not to have such a price, so in this case the item is not included within the auction.
           buy_price=((req.body.buy_price?req.body.buy_price:null)?req.body.buy_price.trim():null);
           //starting_bid: Minimum bid (first bid) when the auction will start
@@ -135,10 +151,16 @@ module.exports = (param) =>{
           description=((req.body.description?req.body.description:null)?req.body.description.trim():null);
           console.log(name+" "+categories+" "+buy_price+" "+starting_bid);
           console.log("createauction category "+categories);
-          now =new Date();
-          end_date=new Date(end_date);
+          date=new Date();
+          now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+          date=new Date(end_date);
+          end_date=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+          date=new Date(start_date);
+          start_date=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+    
+          //end_date=new Date(end_date);
           console.log(typeof(end_date)+ " date: " + end_date);
-          start_date=new Date(start_date);
+          //start_date=new Date(start_date);
           console.log(typeof(start_date)+ " date: " + start_date);
 
 
@@ -200,7 +222,21 @@ module.exports = (param) =>{
             }
           }
           //END HANDLE FILES
-
+          tmp=categories;
+          categories=[];
+          for(i=0;i<tmp.length;i++)
+          {
+            categories.push(tmp[i]);
+            s=tmp[i].split('->');
+            for(j=1;j<s.length;j++)
+            {
+              var f=s[0];
+              for(k=1;k<=j;k++)
+               f=f+'->'+s[k];
+              categories.push(f);                
+            }
+          }
+          categories=unique(categories);
           entry={shortname:shortname,name:name,categories:categories,price:parseFloat(buy_price),starting_bid:parseFloat(starting_bid),
             bids:[],location:location,country:country,seller:seller,
             description:description,start_date:start_date,end_date:end_date,photo:photos}

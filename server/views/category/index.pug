@@ -4,7 +4,11 @@ block content
         .spacer
         if categories == null
             .category
-                .catname No Sub-Categories
+                .anchor
+                    .placer 
+                        form(action='/products/bycategory', method='post')
+                            input(class='catname' value="No Sub-Categories")
+                            //maybe need to change this? Labis?
         else
             each c in categories            
                 .category

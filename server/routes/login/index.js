@@ -134,7 +134,9 @@ module.exports = (param) =>{
                         {
                             rating={
                                 srating:0,
+                                sratingnum:0,
                                 brating:0,
+                                bratingnum:0,
                             };
                         }
                         else if(type=="Bidder")
