@@ -165,7 +165,7 @@ block content
                     span  to place a bid!
           if loggedin
             h3=`| Item sold by ${product.seller}`
-            h3=`| Seller Rating: ${seller.rating.srating}/5`
+            h3=`| Seller Rating: ${seller.rating.srating.toFixed(2)}/5`
           .descbox
             p
               if seller.email==person.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))

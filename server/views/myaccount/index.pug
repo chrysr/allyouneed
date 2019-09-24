@@ -51,10 +51,10 @@ block content
             li Phone: #{details.phone}
             li Gender: #{details.gender}
             if details.type=="Seller"
-              li Rating(as a seller): #{details.rating.srating}
-              li Rating(as a bidder): #{details.rating.brating}
+              li Rating(as a seller): #{details.rating.srating.toFixed(2)}
+              li Rating(as a bidder): #{details.rating.brating.toFixed(2)}
             else if details.type=="Bidder"
-              li Rating: #{details.rating.brating}
+              li Rating: #{details.rating.brating.toFixed(2)}
         .tab#target
           form.change-form(action="/account",method="POST")
             .form-group
