@@ -91,35 +91,37 @@ block content
             .form-group
               input.subm(type='submit' name='submit') 
             //button.btn.btn-default.pull-right(type='submit') Submit
-        .tab
-          ul
-            li
-              strong
-                a(href='/createauction') Create New Auction
-            each product in myproducts
+        if details.type=="Seller"
+          .tab
+            ul
               li
-                if now>product.start_date && now<product.end_date
-                  a(href='/products/'+`${product.shortname}`) #{product.name}  
-                  span active
-                else
+                strong
+                  a(href='/createauction') Create New Auction
+              each product in myproducts
+                li
+                  if now>product.start_date && now<product.end_date
+                    a(href='/products/'+`${product.shortname}`) #{product.name}  
+                    span active
+                  else
+                    if now>product.end_date
+                      a(href='/products/'+`${product.shortname}`) #{product.name}  
+                      span finished
+                    if now<product.start_date
+                      a(href='/products/'+`${product.shortname}`) #{product.name}  inactive - 
+                      form(action='/account' ,method='post')
+                        input(type='hidden',value=`${product.shortname}` name='activateshortname')
+                        input(type='submit',value='Activate Now')
+                        //EDIT THIS AUCTION
+
+        if details.type!='admin'
+          .tab
+            ul
+              each product in boughtbyme
+                li
                   if now>product.end_date
                     a(href='/products/'+`${product.shortname}`) #{product.name}  
                     span finished
-                  if now<product.start_date
-                    a(href='/products/'+`${product.shortname}`) #{product.name}  inactive - 
-                    form(action='/account' ,method='post')
-                      input(type='hidden',value=`${product.shortname}` name='activateshortname')
-                      input(type='submit',value='Activate Now')
-                      //EDIT THIS AUCTION
-
-        .tab
-          ul
-            each product in boughtbyme
-              li
-                if now>product.end_date
-                  a(href='/products/'+`${product.shortname}`) #{product.name}  
-                  span finished
-                if now>product.start_date && now<product.end_date
+                  if now>product.start_date && now<product.end_date
               
         
                       
@@ -165,16 +167,23 @@ block content
             li.men
               br
               | CHANGE INFO
-          a(onclick='tab(6)')
-            li.men
-              br
-              | MY PRODUCTS
-          a(onclick='tab(7)')
-            li.men
-              br
-              | WON BY ME
+          if details.type=='Seller'
+            a(onclick='tab(6)')
+              li.men
+                br
+                | MY PRODUCTS
+          if details.type=='Seller'
+            a(onclick='tab(7)')
+              li.men
+                br
+                | WON BY ME
+          else if details.type=='Bidder'
+            a(onclick='tab(6)')
+              li.men
+                br
+                | WON BY ME
           if(details.type=='admin')
-            a(href='#' onclick='tab(8)')
+            a(href='#' onclick='tab(6)')
               li.men
                 br
                 | MEMBER REQUESTS

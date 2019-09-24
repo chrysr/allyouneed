@@ -28,8 +28,18 @@ module.exports = (param) =>{
             //console.log(process.cwd());
             //console.log("GET LOGIN");
             //console.log(req.cookies.loggedin);
-            categories=[];
             const db=req.app.locals.db;
+
+            _id=req.cookies._id;
+            if(!_id)
+              return res.redirect('/');
+            var person;
+            console.log(_id);
+            await db.collection('users').find({"_id":require('mongodb').ObjectID(_id.toString())}).toArray().then((docs)=>{
+              person=docs[0];
+            })
+            if(person.type!='Seller')
+              return res.redirect('/');
             await db.collection('categories').find().toArray().then((docs)=>{
               categories=docs;
             })
@@ -104,6 +114,7 @@ module.exports = (param) =>{
           await db.collection('users').find({"_id":require('mongodb').ObjectID(_id.toString())}).toArray().then((docs)=>{
             seller=docs[0].email;
           })
+          console.log(req.body.categories);
           //name: Auction name given by the user
           name=((req.body.name?req.body.name:null)?req.body.name.trim():null);
           //category: Category of the item.It could belong to multiple categories

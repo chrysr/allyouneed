@@ -429,7 +429,7 @@ body {
 		overflow: hidden;
 		clear: both;
 		display: inline-block;
-		height: 34vh;
+		height: 45vh;
 		width: 100%;
 	}
 }
@@ -479,7 +479,7 @@ body {
 	}
 }
 
-@media (max-width: 799px) {
+@media (max-width: 1799px) {
 	.bidbox {
 		padding-top: 1vh;
 		padding-bottom: 1vh;

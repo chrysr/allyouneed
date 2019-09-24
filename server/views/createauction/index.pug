@@ -42,8 +42,8 @@ block content
             //    option(value=`${cat.name}`) #{cat.name}
             .checkbox
               each cat,i in categories
-                input(type="checkbox" name="rGroup" value=`r${i}` id=`r${i}`)
-                label(class="opt" for=`r${i}`)
+                input(type="checkbox" name="categories" value=`${cat.name}` id=`${cat.name}`)
+                label(class="opt" for=`${cat.name}`)
                   |#{cat.name}
             
             br
