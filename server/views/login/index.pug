@@ -7,6 +7,8 @@ block content
       .col-left
         .login
           h4 LOG IN
+          .error#error_login
+            |
           form.login-form(action="/login",method="POST")
             .form-group
               label
@@ -102,9 +104,29 @@ block content
       else if(res=="?signup=false/reason=userexists"){
         return "The e-mail you entered is already in use !"
       }
-      return res;
+      return "";
     }
     document.getElementById("error").textContent = geterror();
+  script.
+    function geterror_login(){
+      var str=window.location.href
+      var pos = str.search("login");
+      var res = str.substring(pos+5);
+      if(res=="?success=false/reason=invalidmail"){
+        return "The e-mail you entered is invalid!"
+      }
+      else if(res=="?success=false/reason=userdoesnotexist"){
+        return "The e-mail you entered doesn't correspond to any existing account !"
+      }
+      else if(res=="?success=false?reason=accountnotactivated"){
+        return "Account not activated yet"
+      }
+      else if(res=="?success=false"){
+        return "Password incorrect"
+      }
+      return "";
+    }
+    document.getElementById("error_login").textContent = geterror_login();
     //alert(geterror()); 
   script.
     var x, i, j, selElmnt, a, b, c;
