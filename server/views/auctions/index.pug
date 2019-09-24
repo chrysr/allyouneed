@@ -11,35 +11,35 @@ block content
           if person.email==seller.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
             //TO LABIS: ΓΙΑ ΚΑΠΟΙΟΝ ΛΟΓΟ ΔΕΝ
             h3='Keep your old pictures or upload new ones'
-          .imgbox2
-            .imgprev
+            .imgbox2
+              .imgprev
+                if person.email==seller.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
+                  button(type='button' onclick='document.getElementById("selectedFile").value = "";var image=document.getElementById("fill");image.src="#";var image2=document.getElementById("fill2");image2.src="#";var image3=document.getElementById("fill3");image3.src="#";var image4=document.getElementById("fill4");image4.src="#";document.getElementById("selectedFile").click();') Upload New
+                //img#fill(src='#',onclick="document.getElementById('selectedFile').click();", alt='Please insert at least one image', onerror="this.src='images/AYN/image-missing.png'")
+                //img#fill(src=`../images/${shortname}/${shortname}_1.jpg`,alt='')
+                if product.photo.length>0
+                  img#fill(src=`../images/${shortname}/${shortname}_1.jpg`, alt='')
+                else 
+                  img#fill(src='#', alt='')
+                if product.photo.length>1
+                  img#fill2.smallimg(src=`../images/${shortname}/${shortname}_2.jpg`, alt='')
+                else 
+                  img#fill2.smallimg(src='#', alt='')
+                if product.photo.length>2
+                  img#fill3.smallimg(src=`../images/${shortname}/${shortname}_3.jpg`, alt='')
+                else 
+                  img#fill3.smallimg(src='#', alt='')
+                if product.photo.length>3
+                  img#fill4.smallimg(src=`../images/${shortname}/${shortname}_4.jpg`, alt='')
+                else 
+                  img#fill4.smallimg(src='#', alt='')
               if person.email==seller.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
-                button(type='button' onclick='document.getElementById("selectedFile").value = "";var image=document.getElementById("fill");image.src="#";var image2=document.getElementById("fill2");image2.src="#";var image3=document.getElementById("fill3");image3.src="#";var image4=document.getElementById("fill4");image4.src="#";document.getElementById("selectedFile").click();') Upload New
-              //img#fill(src='#',onclick="document.getElementById('selectedFile').click();", alt='Please insert at least one image', onerror="this.src='images/AYN/image-missing.png'")
-              //img#fill(src=`../images/${shortname}/${shortname}_1.jpg`,alt='')
-              if product.photo.length>0
-                img#fill(src=`../images/${shortname}/${shortname}_1.jpg`, alt='')
-              else 
-                img#fill(src='#', alt='')
-              if product.photo.length>1
-                img#fill2.smallimg(src=`../images/${shortname}/${shortname}_2.jpg`, alt='')
-              else 
-                img#fill2.smallimg(src='#', alt='')
-              if product.photo.length>2
-                img#fill3.smallimg(src=`../images/${shortname}/${shortname}_3.jpg`, alt='')
-              else 
-                img#fill3.smallimg(src='#', alt='')
-              if product.photo.length>3
-                img#fill4.smallimg(src=`../images/${shortname}/${shortname}_4.jpg`, alt='')
-              else 
-                img#fill4.smallimg(src='#', alt='')
-            if person.email==seller.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
-              .bot
-                input#selectedFile(type='file', name='photo',style='display: none;',multiple=true, onchange='loadFile(event)' )
-                p
-                  |Every auction item must have at least one image, but we recommend adding more (the maximum is 4). To do that, click above, and select multiple images in the pop-up. Want to start over? Just press clear !
-                input.button#clr(type='button', value='Clear', onclick='document.getElementById("selectedFile").value = "";var image=document.getElementById("fill");image.src="#";var image2=document.getElementById("fill2");image2.src="#";var image3=document.getElementById("fill3");image3.src="#";var image4=document.getElementById("fill4");image4.src="#";')
-          //else
+                .bot
+                  input#selectedFile(type='file', name='photo',style='display: none;',multiple=true, onchange='loadFile(event)' )
+                  p
+                    |Every auction item must have at least one image, but we recommend adding more (the maximum is 4). To do that, click above, and select multiple images in the pop-up. Want to start over? Just press clear !
+                  input.button#clr(type='button', value='Clear', onclick='document.getElementById("selectedFile").value = "";var image=document.getElementById("fill");image.src="#";var image2=document.getElementById("fill2");image2.src="#";var image3=document.getElementById("fill3");image3.src="#";var image4=document.getElementById("fill4");image4.src="#";')
+          else
             .imgbox
             each img in product.photo
               .mySlides
@@ -237,19 +237,7 @@ block content
       }
     }
     
-  script(type='text/javascript').
-    function clear(){
-      alert("hi");
-      var image=document.getElementById('fill');
-      image.src="#";
-      alert(document.getElementById('fill').src);
-      var image2=document.getElementById('fill2');
-      image2.src="#";
-      var image3=document.getElementById('fill3');
-      image3.src="#";
-      var image4=document.getElementById('fill4');
-      image4.src="#";
-    }
+  
   script.
     function sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
