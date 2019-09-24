@@ -2,110 +2,185 @@ extends ../layout/index
 
 block content
   .innerbody
-    .spacer
-    .auction
-      .col-left
-        .imgbox
-          each img in product.photo
-            .mySlides
-              img(src=`../images/${product.shortname}/${img}`)
-          each img, index in product.photo
-            span.dot(onclick=`currentSlide(${index+1})`)
-              img(src=`../images/${product.shortname}/${img}`)
-        h4='Categories'
-        br
-        each c in product.categories
-          strong | #{c.substr(9)}
-          br
+    .spacer        
+    .auction  
+      form(style=" display: flex;" action=`/products/${product.shortname}`, enctype='multipart/form-data', method='post' id="createauctionform")
 
-      .col-right
-        .textbox
-          h3=product.name
-          .bidbox
-            if now<product.start_date || now>product.end_date
-              if now>product.end_date
-                if loggedin
-                  span.bidspan
-                    | This auction has ended!
-                  if product.bids.length==0
-                    | No bids were made
-                  else
-                    | Won by: #{product.bids[product.bids.length-1].bidder} $#{product.bids[product.bids.length-1].amount}
-                    if product.bids[product.bids.length-1].bidder==person.email &&product.brate==null
-                      br
-                      form(action=`/products/${product.shortname}`, method='post')
-                        select(name='srating' )
-                          option(disable selected option) Rate this seller (#{product.seller})
-                          option(value='1') 1 Star
-                          option(value='2') 2 Star
-                          option(value='3') 3 Star
-                          option(value='4') 4 Star
-                          option(value='5') 5 Star
-                        input(type='submit' value='Rate') 
-                    else if product.seller==person.email && product.srate==null
-                      br
-                      form(action=`/products/${product.shortname}`, method='post')
-                        select(name='brating' )
-                          option(disable selected option) Rate this buyer (#{product.bids[product.bids.length-1].bidder})
-                          option(value='1') 1 Star
-                          option(value='2') 2 Star
-                          option(value='3') 3 Star
-                          option(value='4') 4 Star
-                          option(value='5') 5 Star
-                        input(type='submit' value='Rate') 
-                else
-                  span.bidspan
-                    | This auction has ended!
+        .col-left
+      
+          if person.email==seller.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
+            //TO LABIS: ΓΙΑ ΚΑΠΟΙΟΝ ΛΟΓΟ ΔΕΝ
+            h3='Keep your old pictures or upload new ones'
+          .imgbox2
+            .imgprev
+              if person.email==seller.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
+                button(type='button' onclick='document.getElementById("selectedFile").value = "";var image=document.getElementById("fill");image.src="#";var image2=document.getElementById("fill2");image2.src="#";var image3=document.getElementById("fill3");image3.src="#";var image4=document.getElementById("fill4");image4.src="#";document.getElementById("selectedFile").click();') Upload New
+              //img#fill(src='#',onclick="document.getElementById('selectedFile').click();", alt='Please insert at least one image', onerror="this.src='images/AYN/image-missing.png'")
+              //img#fill(src=`../images/${shortname}/${shortname}_1.jpg`,alt='')
+              if product.photo.length>0
+                img#fill(src=`../images/${shortname}/${shortname}_1.jpg`, alt='')
               else 
-                span.bidspan 
-                  | This auction has not started yet!
-                  br
-                  | Starting: 
-                  br
-                  span #{product.start_date.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ")}
+                img#fill(src='#', alt='')
+              if product.photo.length>1
+                img#fill2.smallimg(src=`../images/${shortname}/${shortname}_2.jpg`, alt='')
+              else 
+                img#fill2.smallimg(src='#', alt='')
+              if product.photo.length>2
+                img#fill3.smallimg(src=`../images/${shortname}/${shortname}_3.jpg`, alt='')
+              else 
+                img#fill3.smallimg(src='#', alt='')
+              if product.photo.length>3
+                img#fill4.smallimg(src=`../images/${shortname}/${shortname}_4.jpg`, alt='')
+              else 
+                img#fill4.smallimg(src='#', alt='')
+            if person.email==seller.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
+              .bot
+                input#selectedFile(type='file', name='photo',style='display: none;',multiple=true, onchange='loadFile(event)' )
+                p
+                  |Every auction item must have at least one image, but we recommend adding more (the maximum is 4). To do that, click above, and select multiple images in the pop-up. Want to start over? Just press clear !
+                input.button#clr(type='button', value='Clear', onclick='document.getElementById("selectedFile").value = "";var image=document.getElementById("fill");image.src="#";var image2=document.getElementById("fill2");image2.src="#";var image3=document.getElementById("fill3");image3.src="#";var image4=document.getElementById("fill4");image4.src="#";')
+          //else
+            .imgbox
+            each img in product.photo
+              .mySlides
+                img(src=`../images/${product.shortname}/${img}`)
+            each img, index in product.photo
+              span.dot(onclick=`currentSlide(${index+1})`)
+                img(src=`../images/${product.shortname}/${img}`)
+          if person.email==seller.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
+            .checkbox
+              each cat,i in categories
+                - var found=0;
+                each c2 in product.categories
+                  if c2.substr(9)==cat.name
+                    -found=1;
+                if found==1
+                  input(type="checkbox" name="categories" value=`${cat.name}` id=`${cat.name}` checked)
+                  label(class="opt" for=`${cat.name}`)
+                    |#{cat.name}
+                else
+                  input(type="checkbox" name="categories" value=`${cat.name}` id=`${cat.name}`)
+                  label(class="opt" for=`${cat.name}`)
+                    |#{cat.name}
+          else
+            h4='Categories'
+            br
+            each c in product.categories
+              strong | #{c.substr(9)}
+              br
+
+        .col-right
+          .textbox
+            if person.email==seller.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
+              input(type='text',name='name' placeholder='Product Name' value=`${product.name}`)
             else
-              -var remaining = new Date(product.end_date-now)
-              -var seconds=remaining.getTime()/1000
-              h4#tim=`Time Remaining: ${Math.floor(seconds/3600)}:${Math.floor((seconds-Math.floor(seconds/3600)*3600)/60)}:${seconds-(Math.floor(seconds/3600)*3600)-(Math.floor((seconds-Math.floor(seconds/3600)*3600)/60)*60)}`
-              span.bidspan
-                | Current winning bid: 
-                if product.bids.length==0
-                    h4=`$${product.starting_bid.toFixed(2)}`
-                else
-                    h4=`$${product.bids[product.bids.length-1].amount.toFixed(2)}`
-                br
-                | Buy Now Price: 
-                h4=`$${product.price.toFixed(2)}`
-              if loggedin
-                if person.email!=product.seller
-                  span.bidspan
-                    | Your bid &nbsp;&nbsp;
-                    label
-                      form(class='bidform' action=`/products/${product.shortname}` method='post' )
-                        input(class='bidplacetxt' type='number' name='amount' placeholder='$' min=0.01 step=0.01)
-                        input(type='hidden' name='shortname' value=`${product.shortname}`)
-                        input(class='bidplace' type='submit' name='submit' value='⏎')
-                  //h3='*tip: if your bid is higher or equal to buynow price, you will immediately win the auction'
-                  //time remaining
-                else
-                  span.bidspan
-                    | You are the seller of this auction!
-                if product.bids.length>0
-                  | Winning Bid by: #{product.bids[product.bids.length-1].bidder}
+              h3=product.name
+            .bidbox
+              if now<product.start_date || now>product.end_date
+                if now>product.end_date
+                  if loggedin
+                    span.bidspan
+                      | This auction has ended!
+                    if product.bids.length==0
+                      | No bids were made
+                    else
+                      | Won by: #{product.bids[product.bids.length-1].bidder} $#{product.bids[product.bids.length-1].amount}
+                      if product.bids[product.bids.length-1].bidder==person.email &&product.brate==null
+                        br
+                        form(action=`/products/${product.shortname}`, method='post')
+                          select(name='srating' )
+                            option(disable selected option) Rate this seller (#{product.seller})
+                            option(value='1') 1 Star
+                            option(value='2') 2 Star
+                            option(value='3') 3 Star
+                            option(value='4') 4 Star
+                            option(value='5') 5 Star
+                          input(type='submit' value='Rate') 
+                      else if product.seller==person.email && product.srate==null
+                        br
+                        form(action=`/products/${product.shortname}`, method='post')
+                          select(name='brating' )
+                            option(disable selected option) Rate this buyer (#{product.bids[product.bids.length-1].bidder})
+                            option(value='1') 1 Star
+                            option(value='2') 2 Star
+                            option(value='3') 3 Star
+                            option(value='4') 4 Star
+                            option(value='5') 5 Star
+                          input(type='submit' value='Rate') 
+                  else
+                    span.bidspan
+                      | This auction has ended!
+                else 
+                  span.bidspan 
+                    | This auction has not started yet!
+                    br
+                    | Starting: 
+                    br
+                    span #{product.start_date.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ")}
               else
+                -var remaining = new Date(product.end_date-now)
+                -var seconds=remaining.getTime()/1000
+                h4#tim=`Time Remaining: ${Math.floor(seconds/3600)}:${Math.floor((seconds-Math.floor(seconds/3600)*3600)/60)}:${seconds-(Math.floor(seconds/3600)*3600)-(Math.floor((seconds-Math.floor(seconds/3600)*3600)/60)*60)}`
+                if seller.email==person.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
+                  input.mod(type='datetime-local',value=`${product.start_date.toISOString().substr(0,16)}` name='start_date',placeholder="Starting Bid" required=true)   
+                  input.mod(type='datetime-local',value=`${product.end_date.toISOString().substr(0,16)}` name='end_date', required=true)
+
                 span.bidspan
-                  | Please 
-                  a(href='/login') Login
-                  span  to place a bid!
-        if loggedin
-          h3=`| Item sold by ${product.seller}`
-          h3=`| Seller Rating: ${seller.rating.srating}/5`
-        .descbox
-          p
-            | #{product.description}
-          br
-          p
-            | Item Location: #{product.location}
+                  | Current winning bid: 
+                  if product.bids.length==0
+                      if seller.email==person.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
+                        input.mod(type="number",value=`${product.starting_bid}`,placeholder="Starting Bid",name="starting_bid",required=true,step='0.01')
+
+                      else
+                        h4=`$${product.starting_bid.toFixed(2)}`
+                  else
+                      h4=`$${product.bids[product.bids.length-1].amount.toFixed(2)}`
+                  br
+                  | Buy Now Price: 
+                  if seller.email==person.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
+                    input.mod(type="number", value=`${product.price}`,placeholder="Buy it now Price ",name="buy_price",required=true,step='0.01')
+
+                  else
+                    h4=`$${product.price.toFixed(2)}`
+                if loggedin
+                  if person.email!=product.seller
+                    span.bidspan
+                      | Your bid &nbsp;&nbsp;
+                      label
+                        form(class='bidform' action=`/products/${product.shortname}` method='post' )
+                          input(class='bidplacetxt' type='number' name='amount' placeholder='$' min=0.01 step=0.01)
+                          input(type='hidden' name='shortname' value=`${product.shortname}`)
+                          input(class='bidplace' type='submit' name='submit' value='⏎')
+                    //h3='*tip: if your bid is higher or equal to buynow price, you will immediately win the auction'
+                    //time remaining
+                  else
+                    span.bidspan
+                      | You are the seller of this auction!
+                  if product.bids.length>0
+                    | Winning Bid by: #{product.bids[product.bids.length-1].bidder}
+                else
+                  span.bidspan
+                    | Please 
+                    a(href='/login') Login
+                    span  to place a bid!
+          if loggedin
+            h3=`| Item sold by ${product.seller}`
+            h3=`| Seller Rating: ${seller.rating.srating}/5`
+          .descbox
+            p
+              if seller.email==person.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
+                label
+                  textarea(type='text', name='description', placeholder='Description', maxlength='250', rows='5') #{product.description}
+              else
+                | #{product.description}
+            br
+            p
+              if seller.email==person.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
+                input.next(type="text",placeholder="Location",name="location",required=true value=`${product.location}`)   
+              else
+                | Item Location: #{product.location}
+        if seller.email==person.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))    
+          input(type='submit' value='Edit') 
   .footer
     span
       a.a1(href='#') SITEMAP
@@ -141,3 +216,67 @@ block content
     slides[slideIndex-1].style.display = "inline-block";
     dots[slideIndex-1].className += " active";
     }
+
+  script(type='text/javascript').
+    var loadFile=function(event){
+      
+        var image=document.getElementById('fill');
+        image.src=URL.createObjectURL(event.target.files[0]);
+      
+      if(event.target.files.length>1){
+        var image2=document.getElementById('fill2');
+        image2.src=URL.createObjectURL(event.target.files[1]);
+      }
+      if(event.target.files.length>2){
+        var image3=document.getElementById('fill3');
+        image3.src=URL.createObjectURL(event.target.files[2]);
+      }
+      if(event.target.files.length>3){
+        var image4=document.getElementById('fill4');
+        image4.src=URL.createObjectURL(event.target.files[3]);
+      }
+    }
+    
+  script(type='text/javascript').
+    function clear(){
+      alert("hi");
+      var image=document.getElementById('fill');
+      image.src="#";
+      alert(document.getElementById('fill').src);
+      var image2=document.getElementById('fill2');
+      image2.src="#";
+      var image3=document.getElementById('fill3');
+      image3.src="#";
+      var image4=document.getElementById('fill4');
+      image4.src="#";
+    }
+  script.
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    };
+    async function autorefresh(end_date){
+      var date=new Date();
+      var now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+      var remaining = new Date(end_date-now);
+      var seconds=remaining.getTime()/1000;
+      while(true)
+      {
+        var hours=Math.floor(seconds/3600);
+        var minutes=Math.floor((seconds-Math.floor(seconds/3600)*3600)/60);
+        var secs=Math.round((seconds-(Math.floor(seconds/3600)*3600)-(Math.floor((seconds-Math.floor(seconds/3600)*3600)/60)*60)));
+        //var str='Time Remaining: '+(Math.floor(seconds/3600)).toString()+':'+(Math.floor((seconds-Math.floor(seconds/3600)*3600)/60)).toString()+':'+Math.round((seconds-(Math.floor(seconds/3600)*3600)-(Math.floor((seconds-Math.floor(seconds/3600)*3600)/60)*60))).toString();
+        var str='Time Remaining: '+hours.toString()+':'+minutes.toString()+':'+secs.toString();
+        document.getElementById('tim').innerHTML=str;
+        await sleep(995);
+        date=new Date();
+        now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+        seconds=new Date(end_date-now).getTime()/1000;
+        if(hours==0&&minutes==0&&secs==0)
+          location.reload();
+      }
+    }
+    var end= "#{product.end_date}";
+    var end_date=new Date(end);
+    if(document.getElementById('tim')!=null)
+      autorefresh(end_date);
+              

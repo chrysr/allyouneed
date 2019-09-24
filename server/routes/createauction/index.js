@@ -178,7 +178,7 @@ module.exports = (param) =>{
           if(end_date<=start_date&&start_date>now) //check if that works
           {
             console.log("ends before starts or equal");
-            res.redirect('/createauction?success=false/reason=endsbeforestarts');
+            return res.redirect('/createauction?success=false/reason=endsbeforestarts');
           }
 
           var re=/^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$/;
@@ -253,7 +253,7 @@ module.exports = (param) =>{
             description:description,start_date:start_date,end_date:end_date,photo:photos}
           db.collection('products').insertOne(entry).then((docs)=>{
               console.log("product inserted successfully");
-              res.redirect('/createauction?success=true');
+              return res.redirect('/createauction?success=true');
           })
         }
         catch (err) {
