@@ -379,13 +379,7 @@ module.exports = (param) =>{
             //console.log("/products/shortname post "+shortname+" "+amount);
             name=((req.body.name?req.body.name:null)?req.body.name.trim():null);
             buy_price=((req.body.buy_price?req.body.buy_price:null)?req.body.buy_price.trim():null);
-            categories=[];
-            for(var i=0;i<req.body.categories.length;i++)
-            {
-                if(req.body.categories[i]=='')
-                continue;
-                categories.push('allcats->'+req.body.categories[i]);
-            }
+            
             starting_bid=((req.body.starting_bid?req.body.starting_bid:null)?req.body.starting_bid.trim():null);
             location=((req.body.location?req.body.location:null)?req.body.location.trim():null);
             start_date=((req.body.start_date?req.body.start_date:null)?req.body.start_date.trim():null);
@@ -394,6 +388,13 @@ module.exports = (param) =>{
             _id=req.cookies._id;
             if(name!=null&&buy_price!=null&&starting_bid!=null&&location!=null&&start_date!=null&&end_date!=null&&description!=null)
             {
+                categories=[];
+                for(var i=0;i<req.body.categories.length;i++)
+                {
+                    if(req.body.categories[i]=='')
+                    continue;
+                    categories.push('allcats->'+req.body.categories[i]);
+                }
                 console.log("the correct one");
                 var product;
                 await db.collection('products').find({shortname:shortname}).toArray().then((docs)=>{
@@ -401,7 +402,7 @@ module.exports = (param) =>{
                 })
                 if(product.bids.length>0)
                 {
-                    return res.redirect('/products/'+shortname+'?change=false/reason=a bid has been made');
+                    return res.redirect('/products/'+shortname+'?change=false/reason=abidhasbeenmade');
                 }
                 date=new Date();
                 now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
