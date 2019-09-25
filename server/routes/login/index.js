@@ -146,7 +146,7 @@ module.exports = (param) =>{
                             }                            
                         }
                         
-                        var entry={rating:rating,email:signupemail,password:bcrypt.hashSync(signuppass,bcrypt.genSaltSync(8),null),firstname:fname,lastname:lname,phone:phone,address:address,taxpayerid:taxid,gender:gender,type:type,country:country,isaccepted:false};
+                        var entry={rating:rating,email:signupemail,password:bcrypt.hashSync(signuppass,bcrypt.genSaltSync(8),null),firstname:fname,lastname:lname,phone:phone,address:address,taxpayerid:taxid,gender:gender,type:type,country:country,isaccepted:false,resetPasswordToken:''};
                         db.collection('users').insertOne(entry).then((docs)=>{
                             console.log("Signup Success");
                             //client.close();

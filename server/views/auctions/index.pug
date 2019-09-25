@@ -9,7 +9,6 @@ block content
         .col-left
       
           if person.email==seller.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
-            //TO LABIS: ΓΙΑ ΚΑΠΟΙΟΝ ΛΟΓΟ ΔΕΝ
             h3='Keep your old pictures or upload new ones'
             .imgbox2
               .imgprev
@@ -252,15 +251,15 @@ block content
         var hours=Math.floor(seconds/3600);
         var minutes=Math.floor((seconds-Math.floor(seconds/3600)*3600)/60);
         var secs=Math.round((seconds-(Math.floor(seconds/3600)*3600)-(Math.floor((seconds-Math.floor(seconds/3600)*3600)/60)*60)));
-        //var str='Time Remaining: '+(Math.floor(seconds/3600)).toString()+':'+(Math.floor((seconds-Math.floor(seconds/3600)*3600)/60)).toString()+':'+Math.round((seconds-(Math.floor(seconds/3600)*3600)-(Math.floor((seconds-Math.floor(seconds/3600)*3600)/60)*60))).toString();
         var str='Time Remaining: '+hours.toString()+':'+minutes.toString()+':'+secs.toString();
         document.getElementById('tim').innerHTML=str;
         await sleep(995);
         date=new Date();
         now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
         seconds=new Date(end_date-now).getTime()/1000;
-        if(hours==0&&minutes==0&&secs==0)
+        if(hours<=0&&minutes<=0&&secs<=0)
           location.reload();
+        
       }
     }
     var end= "#{product.end_date}";

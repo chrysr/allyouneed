@@ -6,6 +6,8 @@ const loginroute = require("./login");
 const myaccountroute=require("./myaccount");
 const createauction=require("./createauction");
 const sw = require('stopword');
+const forgotpassroute = require("./forgotpass");
+const resetpassroute = require("./resetpass");
 
 
 module.exports = (param) =>{
@@ -631,6 +633,11 @@ module.exports = (param) =>{
         }
         
     });
+    
+
+    
+    
+    
 
     
     //router.use("/speakers",speakersroute(param));
@@ -638,5 +645,7 @@ module.exports = (param) =>{
     router.use("/login",loginroute(param));
     router.use("/account",myaccountroute(param));
     router.use('/createauction',createauction(param));
+    router.use("/forgotpass",forgotpassroute(param));
+    router.use("/resetpass",resetpassroute(param));
     return router;
 };

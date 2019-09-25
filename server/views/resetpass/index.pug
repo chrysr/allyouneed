@@ -1,0 +1,43 @@
+extends ../layout/index.pug
+
+block content
+  .innerbody
+    .spacer
+    .auction
+      .col-left
+      .login
+            h4 Recover Password
+            .error#error_login
+                |
+            form.login-form(action=`/resetpass/${token}`, method='POST')
+                .form-group
+                    label(for='password') New Password
+                    input.form-control#pass(type='password', name='password', value='', placeholder='New password', autofocus='autofocus' required=true)
+                .form-group
+                    label(for='confirm') Confirm Password
+                    input.form-control#passconf(type='password', name='confirm', value='', placeholder='Confirm password' required=true)
+                    script.
+                        var password = document.getElementById("pass")
+                        , confirm_password = document.getElementById("passconf");
+                        function validatePassword(){
+                        if(password.value != confirm_password.value) {
+                            confirm_password.setCustomValidity("Passwords Don't Match");
+                        } else {
+                            confirm_password.setCustomValidity('');
+                        }
+                        }
+                        password.onchange = validatePassword;
+                        confirm_password.onkeyup = validatePassword;
+                .form-group
+                    button.btn.btn-primary(type='submit') Update Password
+    #footer.footer
+        span
+        a.a1(href='#') SITEMAP
+        span
+        a.a1(href='#') TERMS OF SERVICE
+        span
+        a.a1(href='#') OUR TEAM
+        br
+        span
+            | Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, 
+        a.a2(href='mailto:sdi1400041@di.uoa.gr') contact us      

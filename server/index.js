@@ -179,9 +179,9 @@ for (var i=0;i<args.length;i++)
     if(args[i]=='-ssl')
         ssl=1;
 }
+const ip = require("ip");
 
-
-MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+MongoClient.connect(url, { useNewUrlParser: true ,useUnifiedTopology: true}, (err, client) => {
     if(err) throw err;
     app.locals.db=client.db('allyouneed');
     app.locals.db.createCollection('users');
@@ -196,14 +196,18 @@ MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
     app.locals.db.collection('users').find({email:"admin@allyouneed.com"}).toArray().then((docs)=>{
         if(docs.length==0)
         {
-            var entry={email:"admin@allyouneed.com",password:bcrypt.hashSync("banhammer69420",bcrypt.genSaltSync(8),null),firstname:"admin",lastname:"admin",phone:"admin",address:"admin",taxpayerid:"admin",gender:"admin",type:"admin",isaccepted:true};
+            var entry={email:"admin@allyouneed.com",password:bcrypt.hashSync("admin",bcrypt.genSaltSync(8),null),firstname:"admin",lastname:"admin",phone:0,address:"admin",taxpayerid:0,gender:"admin",type:"admin",country:'Greece',isaccepted:true,resetPasswordToken:''};
+
             app.locals.db.collection('users').insertOne(entry).then((docs)=>{
                 console.log("Admin Created Successfully");
             })
         }
     })
+    app.locals.ip=ip.address();
+
     if(ssl)
-    {
+    {  
+        app.locals.ssl=1;
         console.log("Application Running at --> https://localhost:3000");
         https.createServer({
             key: fs.readFileSync('./server/config/key.pem'),
@@ -213,6 +217,7 @@ MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
     }
     else
     { 
+        app.locals.ssl=0;
         console.log("Application Running at --> http://localhost:3000");
         app.listen(3000);
     }
