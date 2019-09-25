@@ -229,7 +229,6 @@ module.exports = (param) =>{
               console.log("it's ok")
               await fs.rename(req.files[i].path,'./public/images/'+shortname+"/"+shortname+"_"+(i+1)+".jpg",function(){
                 console.log(i);
-                require('sleep').sleep(10);
               })
               photos[i]=shortname+'_'+(i+1).toString()+'.jpg';
             }
