@@ -177,7 +177,7 @@ block content
               if seller.email==person.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
                 input.next(type="text",placeholder="Location",name="location",required=true value=`${product.location}`)   
               else
-                | Item Location: #{product.location}
+                | Item Location: #{product.location}, #{seller.country}
         if seller.email==person.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))    
           input(type='submit' value='Edit') 
   .footer

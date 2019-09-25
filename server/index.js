@@ -180,7 +180,9 @@ for (var i=0;i<args.length;i++)
         ssl=1;
 }
 const ip = require("ip");
-
+fs.mkdir('uploads',(err)=>{
+    
+});
 MongoClient.connect(url, { useNewUrlParser: true ,useUnifiedTopology: true}, (err, client) => {
     if(err) throw err;
     app.locals.db=client.db('allyouneed');
