@@ -674,6 +674,66 @@ module.exports = (param) =>{
         }
         
     });
+    const convert=require('xml-js');
+    router.get("/database/files",async(req,res,next)=>{
+        const db=req.app.locals.db;
+        if(!req.cookies.loggedin)
+            return res.redirect('/account');
+        _id=req.cookies._id;
+        db.collection('users').find({_id:require('mongodb').ObjectID(req.cookies._id.toString())}).toArray().then((docs)=>{
+            if(docs[0].type!='admin')
+            {
+                return res.redirect('/account');
+            }     
+        });  
+        var item;
+        var products;
+        await db.collection('products').find().toArray().then((docs)=>{
+            products=docs;
+        })
+        modified=[];
+        for(i=0;i<products.length;i++)
+        {
+            var item=products[i];
+            entry={};
+            entry['_attributes']={};
+            entry['_attributes']['ItemID']=item._id.toString();
+            entry['Category']=item.categories;
+            entry['Currently']='$'+((item.bids.length>0?(item.bids[item.bids.length-1].amount):(item.starting_bid))).toString();
+            entry['First_Bid']='$'+(item.starting_bid).toString();
+            entry['Number_of_Bids']=(item.bids.length).toString();
+            entry['Bids']=item.bids;
+            entry['Location']=item.location;
+            var person;
+            await db.collection('users').find({email:item.seller}).toArray().then((bla)=>{
+                person=bla[0];
+            });
+            entry['Country']=person.country;
+            entry['Started']=item.start_date.toString();
+            entry['Ends']=item.end_date.toString();
+            entry['Seller']={};
+            entry['Seller']['_attributes']={};
+            entry['Seller']['_attributes']['Rating']=person.srating;
+            entry['Seller']['_attributes']['UserID']=person._id.toString();
+            entry['Description']=(item.description).toString();
+            modified.push(entry);            
+        }
+        item=modified;
+        var items={};
+        items["Items"]={};
+        items["Items"]["Item"]=item;
+        var options={compact:true,spaces:2};
+        var result=convert.json2xml(items,options);
+        await fs.writeFile('./public/products.xml',result,(err)=>{
+            console.log('db exported successfully to file');
+        })
+        return res.render("files",{
+            page:"Files",
+            loggedin:req.cookies.loggedin,
+            });
+    });
+    
+    
 
     
     router.use("/login",loginroute(param));

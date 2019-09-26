@@ -57,7 +57,6 @@ module.exports = (param) =>{
                     })
                     var boughtbyme=[];
                     await db.collection('products').find({'bids.bidder':details.email,end_date:{$lt:now}},{bids:{$slice: -1}}).toArray().then((docs)=>{
-                        console.log(docs);
                         boughtbyme=docs;
                     })
                     db.collection('users').find().sort({isaccepted:1}).toArray().then((all)=>{
