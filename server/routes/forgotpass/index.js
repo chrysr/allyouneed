@@ -8,8 +8,7 @@ var async = require("async");
 module.exports = (param) =>{
     const {LoginService}=param;
     router.get("/",async(req,res,next) =>{
-        console.log("forgotpassloaded");
-        console.log(req.cookies);
+        console.log('/forgotpass get');
         try {
             if(!req.cookies["loggedin"]) {
                 return res.render("forgotpass",{
@@ -29,6 +28,7 @@ module.exports = (param) =>{
         }
     });
     router.post('/', function(req, res, next) {
+        console.log('/forgotpass post');
         async.waterfall([
         function(done) {
             crypto.randomBytes(20, function(err, buf) {
@@ -42,31 +42,26 @@ module.exports = (param) =>{
             email=(((req.body.email?req.body.email:null)?req.body.email.trim():null)?req.body.email.trim().toLowerCase():null);
             db.collection('users').find({email:email}).toArray().then((docs)=>{
                 if(docs.length<1) {
-                    console.log("No account with that email address exists.");
+                    console.log('forgotpass error usernotfound');
                     return res.redirect('/forgotpass?requestnew=false/reason=usernotfound');
                 }
                 db.collection('users').updateOne({"email":email},{$set:{"resetPasswordToken":token}}).then((docs)=>{
-                    //console.log("Update one Success");
                 }).catch((err)=>{
-                    console.log(err);
                 }).finally(()=>{
                 })     
-                //console.log("token: "+token);
             }).catch((err) => {          
-                console.log(err);
             }).finally(() => {    
             });
             done(null,token);
         },
         function(token, done) {
-            //console.log(token);
             var email;
             email=(((req.body.email?req.body.email:null)?req.body.email.trim():null)?req.body.email.trim().toLowerCase():null);
             var smtpTransport = nodemailer.createTransport({
             service: 'Gmail', 
             auth: {
                 user: 'alallyouneed@gmail.com',
-                pass: "allyouneed1234"  //process.env.GMAILPW 
+                pass: "allyouneed1234"  
             }
             });
             var mailOptions = {
@@ -87,6 +82,7 @@ module.exports = (param) =>{
             if (err){
                 return next(err);
             }
+            console.log('forgotpass procedure successful');
             res.redirect('/forgotpass?requestnew=true');
         });
     });

@@ -78,7 +78,6 @@ function datafordb()
                 ok=1;
             else continue;
         }
-        //console.log(parent+" "+arr[i][arr[i].length-1]);
         allcats.push(parent+"->"+arr[i][arr[i].length-1]);
         cats[parent].push(arr[i][arr[i].length-1]);
         if(arr[i+1].length>arr[i].length)
@@ -98,8 +97,6 @@ function datafordb()
         }
        
     }
-    //console.log(cats);
-    //console.log(allcats);
     allcatsmodified=[];
     for(i=0;i<allcats.length;i++)
         allcatsmodified.push({"name":allcats[i]});
@@ -117,8 +114,6 @@ const app = express();
 const path = require("path");
 const bodyparser = require("body-parser");
 const configs = require("./config");
-//const SpeakerService =require("./services/SpeakerService.js");
-//const FeedbackService =require("./services/FeedbackService.js");
 const ProductsService =require("./services/ProductService.js");
 const routes = require("./routes");
 const bcrypt=require('bcrypt');
@@ -167,7 +162,6 @@ app.use((err,req,res,next)=>{
     return res.render("error");
 });
 
-//app.use(multer({dest:'./uploads/'}).array('multiInputFileName'));
 
 const mongo = require('mongodb');
 const MongoClient = mongo.MongoClient;
@@ -181,8 +175,8 @@ for (var i=0;i<args.length;i++)
 }
 const ip = require("ip");
 fs.mkdir('uploads',(err)=>{
-    
 });
+
 MongoClient.connect(url, { useNewUrlParser: true ,useUnifiedTopology: true}, (err, client) => {
     if(err) throw err;
     app.locals.db=client.db('allyouneed');
@@ -190,7 +184,10 @@ MongoClient.connect(url, { useNewUrlParser: true ,useUnifiedTopology: true}, (er
     app.locals.db.createCollection('categories');
     app.locals.db.collection('categories').find().toArray().then((docs)=>{
         if(docs.length==0)
+        {
             app.locals.db.collection('categories').insertMany(datafordb());
+            console.log("Inserted Categories to db");
+        }
         
     })
     app.locals.db.createCollection('messages');
@@ -201,7 +198,7 @@ MongoClient.connect(url, { useNewUrlParser: true ,useUnifiedTopology: true}, (er
             var entry={email:"admin@allyouneed.com",password:bcrypt.hashSync("admin",bcrypt.genSaltSync(8),null),firstname:"admin",lastname:"admin",phone:0,address:"admin",taxpayerid:0,gender:"admin",type:"admin",country:'Greece',isaccepted:true,resetPasswordToken:''};
 
             app.locals.db.collection('users').insertOne(entry).then((docs)=>{
-                console.log("Admin Created Successfully");
+                console.log("Admin Account Created! email:admin@allyouneed.com | pass:admin");
             })
         }
     })

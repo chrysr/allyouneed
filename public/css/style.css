@@ -398,10 +398,15 @@ body {
 	}
 }
 
+.mySlides {
+	height: 100%;
+}
+
 .imgbox img 
 {
 	display:inline-block;
-	width:100%;
+	max-width:100%;
+	max-height:100%;
 	padding: 0;
 	top: 40%;
 	margin-bottom: 10vh;
@@ -429,7 +434,6 @@ body {
 		overflow: hidden;
 		clear: both;
 		display: inline-block;
-		height: 45vh;
 		width: 100%;
 	}
 }
@@ -466,6 +470,39 @@ body {
 	}
 }
 
+.textbox input {
+	color: #555;
+	width: 70%;
+	margin: 0 15%;
+	padding-left: 1vw;
+	border: none;
+	border-left: 0.1em solid #333333 ;
+	font-size: calc(0.2em + 0.9vw + 0.9vh);
+	font-family: 'Fira Sans';
+}
+#edit:hover {
+	color: #000;
+}
+
+#editp {
+	background: #333;
+	color: #2d68df;
+	width: 6vw;
+	display: inline-block;
+	padding: 0!important;
+	font-size: calc(0.2em + 0.9vw + 0.9vh);
+}
+
+#editp::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	background: #333 url(../images/AYN/arrows3.png);
+	background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center center; 
+	width: 1vw;
+    height: 3vh;
+}
+
 @media (min-width: 800px) {
 	.bidbox {
 		padding-top: 1vh;
@@ -476,6 +513,7 @@ body {
 		width: 70%;
 		background-color: #333333;
 		text-align: center;
+		font-size: 0;
 	}
 }
 
@@ -490,11 +528,12 @@ body {
 		width: 70%;
 		background-color: #333333;
 		text-align: center;
+		font-size: 0;
 	}
 }
 
- .bidbox h4
- {
+.bidbox h4
+{
  	margin: 0;
  	padding: 0;
  	display: inline-block;
@@ -502,7 +541,103 @@ body {
 	text-align: center;
  	font-size: calc(0.2em + 0.9vw + 0.9vh);
  	color: #4d88ff;
- }
+}
+
+.winner
+{
+	padding-left: 2vw;
+	text-align: left;
+	font-size: calc(0.1em + 0.9vw + 0.9vh)!important;
+	color: #fff;
+	line-height: 5vh;
+}
+.winner span {
+	color: #4d88ff;
+}
+.staryellow{
+	color: #ffa800!important;
+	vertical-align: 0.3vh;
+}
+.rate {
+	color: #fff;
+	font-size: calc(0.1em + 0.9vw + 0.9vh)!important;
+}
+.stars
+{
+	background: #333!important;
+	padding:0!important;
+	width: 2vw!important;
+	color: #ffa800!important;
+}
+.ratebtn{
+	cursor: pointer;
+	width: 4vw!important;
+}
+.ratebtn:hover{
+	background:#000!important;
+}
+.stars::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	background: #333 url(../images/AYN/arrows3.png);
+	background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center center; 
+	width: 1vw;
+    height: 3vh;
+}
+ #srating .custom-select {
+	white-space: nowrap;
+	font-size: calc(0.1em + 0.6vw + 0.6vh)!important;
+	line-height: 8vh!important;
+	position: relative!important;
+	display: inline-block!important;
+	width: 6vw!important;
+	margin: 0 !important;
+	margin-bottom: 4vh!important;
+}
+  
+#srating .custom-select select {
+	display: none!important; /*hide original SELECT element:*/
+}
+  
+#srating .select-selected {
+	width: 100%!important;
+	background-color: #111!important;
+}
+  
+  /*style the items (options), including the selected item:*/
+#srating .select-items div,.select-selected {
+	width: 100%!important;
+	height: 8vh!important;
+	color: #ffffff!important;
+	padding: 0!important;
+	border: none!important;
+	cursor: pointer!important;
+	user-select: none!important;
+	line-height: calc(1em + 2vw + 1vh)!important;
+	height: 7vh!important;
+}
+  
+  /*style items (options):*/
+#srating .select-items {
+	position: absolute!important;
+	background-color: #111!important;
+	top: 100%!important;
+	left: 0!important;
+	right: 0!important;
+	z-index: 99!important;
+}
+  
+  /*hide the items when the select box is closed:*/
+#srating .select-hide {
+	width: 100%!important;
+	display: none!important;
+}
+  
+#srating .select-items div:hover, .same-as-selected {
+	width: 100%!important;
+	background-color:#4d88ff!important;
+}
 
  .bidspan
  {
@@ -510,13 +645,41 @@ body {
  	padding-top: 2vh;
  	margin: 0;
  	text-align: center;
- 	font-size: calc(0.3em + 0.7vw + 0.7vh);
- 	width: 49%;
- 	display: inline-block;
+ 	font-size: 0;
+ 	width: 100%;
+ 	display: block;
  	color: #ffffff;
  	overflow: hidden;
  }
-  .bidspan2
+ .inputspan {
+	font-size: 0;
+	text-align: center;
+	width: 50%;
+	height: 3vh;
+	display: inline-block;
+	padding-bottom: 2vh;
+}
+.inputspan span {
+	font-size: calc(0.2em + 0.9vw + 0.9vh);
+	color: #ffffff;
+}
+.inputspan i {
+	color:#4d88ff;
+	font-style: normal;
+}
+.inputspan:hover i {
+	color:#2d68df;
+	font-style: normal;
+}
+#loc {
+	font-size: calc(0.1em + 0.8vw + 0.8vh);
+	background: #333;
+	display: inline-flex;
+	color:#4d88ff;
+	padding: 0!important;
+	margin:0!important;
+}
+.bidspan2
  {
  	text-align: left;
  	font-size: calc(0.2em + 0.5vw + 0.5vh);
@@ -535,18 +698,28 @@ body {
  .bidbox input 
  {
  	border: none;
- 	width: calc(1em + 4vw + 4vh);
-	line-height: calc(0.2em + 0.9vw + 0.9vh);
+ 	width: calc(1em + 3vw + 4vh);
+	height: 4vh!important;
 	background-color: #111111;
 	display: inline-block;
 	font-size: calc(0.2em + 0.9vw + 0.9vh);
-	padding-left: 1%;
-	padding-right: 1%;
+	padding-left: 4%!important;
+	padding-right: 4%!important;
 	margin: 0;
 	padding-bottom: 0;
 	padding-top: 0;
 	color: #ffffff;
  }
+
+  input[type="number"].bidplacetxt::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	background: #111 url(../images/AYN/arrows3.png);
+	background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center center; 
+	width: 1vw;
+    height: 3vh;
+}
 
 .descbox
 {
@@ -556,21 +729,27 @@ body {
 	overflow: hidden;
 	clear: both;
 	display: inline-block;
-	height: 40vh;
 	width: 70%;
 	padding: 0;
 	margin-right: 15%;
 	margin-left: 15%;
 }
 
+.descbox h4 {
+	margin-left: calc(50% - 7.5vw);
+	width: 15vw;
+}
+
 @media (min-width: 800px) {
 	.descbox p {
+		text-align: left;
 		padding-left: 1vw;
 		border-left: 0.1em solid #333333 ;
 	}
 }
 @media (max-width: 799px) {
 	.descbox p {
+		text-align: left;
 		font-size: calc(0.6em + 0.7vw + 0.7vh);
 		padding-left: 1vw;
 		border-left: 0.1em solid #333333 ;
@@ -578,6 +757,7 @@ body {
 }
 .descbox span {
 	color: #4d88ff;
+	text-align: left;
 }
 
 .bidplace {
@@ -596,6 +776,42 @@ body {
 .bidform{
 	height: 3vh!important;
 
+}
+.by{
+	margin:0 15%;
+}
+.by a {
+	text-decoration: none;
+	color: #4d88ff;
+}
+.by a:hover {
+	text-decoration: none;
+	color: #2d68df;
+}
+.by span{
+	color: #ffa800;
+}
+.prices{
+	font-size: calc(0.2em + 0.9vw + 0.9vh);
+	width: 50%;
+	display: inline-block;
+}
+.prices span{
+	color: #4d88ff;
+}
+.cats {
+	text-align: left;
+	margin-right: 15%;
+	margin-left: 15%;
+	padding-left: 1vw;
+	border-left: 0.1em solid #333333;
+}
+.cats a{
+	color: #4d88ff;
+	text-decoration: none;
+}
+.cats a:hover{
+	color: #2d68df;
 }
 /*------------------------------------------LANDING------------------------------------------*/
 .error {
@@ -984,29 +1200,6 @@ input[type="number"].mod::-webkit-inner-spin-button {
  	color: #4d88ff;
  }
 
- .bidspan
- {
- 	padding-bottom: 2vh;
- 	padding-top: 2vh;
- 	margin: 0;
- 	text-align: center;
- 	font-size: calc(0.3em + 0.7vw + 0.7vh);
- 	width: 49%;
- 	display: inline-block;
- 	color: #ffffff;
- 	overflow: hidden;
- }
-  .bidspan2
- {
- 	text-align: left;
- 	font-size: calc(0.2em + 0.5vw + 0.5vh);
- 	width: 100%;
- 	padding-left:5%; 
- 	margin: 0;
- 	display: inline-block;
- 	color: #000000;
- 	overflow: hidden;
- }
  .bidbox2 label
  {
  	padding: 0;
@@ -1161,7 +1354,7 @@ input[type="number"].mod::-webkit-inner-spin-button {
 	background-color: white;
 	width: 66vw;
 	padding-top: 10vh;
-	height: 52vh;
+	height: 56vh;
 	overflow: hidden;
 }
 .tabs
@@ -1170,7 +1363,7 @@ input[type="number"].mod::-webkit-inner-spin-button {
 	display: inline-block;
 	width: 22vw;
 	text-align: center;
-	height: 52vh;
+	height: 56vh;
 }
 .tabs ul {
 	list-style-type: none;
@@ -1199,7 +1392,7 @@ input[type="number"].mod::-webkit-inner-spin-button {
 .cont {
 	display: inline-block;
 	width: 44vw;
-	height: 52vh;
+	height: 56vh;
 }
 
 .tab::-webkit-scrollbar {
@@ -1236,7 +1429,7 @@ input[type="number"].mod::-webkit-inner-spin-button {
 }
 
 .actv {
-	height: 52vh;
+	height: 56vh;
 	background-color: #111;
 	color: white;
 	font-size: calc(0.2em + 0.6vw + 0.6vh);
@@ -1265,9 +1458,6 @@ input[type="number"].mod::-webkit-inner-spin-button {
 	animation-duration: 0.2s;
 	background: #555!important;
 }
-
-
-
 
 
 .actv input 
@@ -1444,13 +1634,15 @@ input[type="number"].mod::-webkit-inner-spin-button {
 }
 
 .message textarea{
+	font-size: calc(0.1em + 0.7vw + 0.7vh)!important;
 	color: white;
 	font-family: 'Fira Sans';
 	background: #111;
 	resize: none;
-	width: 80%;
+	width: 79%;
 	height: 40vh;
 	border: none;
+	padding-left: 1%;
 	border-left: solid 1px #888;
 }
 
@@ -1463,12 +1655,79 @@ input[type="number"].mod::-webkit-inner-spin-button {
 }
 
 .message input[type="submit"]{
+	font-size: calc(0.5em + 1vw + 1vh)!important;
 	cursor: pointer;
 	display: inline-block;
-	margin-left: 2%;
-	width: 8%;
+	margin-left: 1%;
+	width: 9%;
 	border: none;
+}
+
+@keyframes toblue {
+	from {color:#fff;}
+	to {color:#4d88ff;}
+  }
+
+
+
+.message input[type="submit"]:hover{
+	color: #4d88ff;
+	animation-name: toblue;
+	animation-duration: 0.1s;
+}
+
+#recepient .custom-select {
 	border-left: solid 1px #888;
+	font-size: calc(0.2em + 0.7vw + 0.7vh)!important;
+	line-height: 8vh!important;
+	position: relative!important;
+	display: inline-block!important;
+	width: calc(70% - 1px)!important;
+	margin: 0 0.74vw!important;
+	margin-bottom: 4vh!important;
+}
+  
+#recepient .custom-select select {
+	display: none!important; /*hide original SELECT element:*/
+}
+  
+#recepient .select-selected {
+	width: 100%!important;
+	background-color: #111!important;
+}
+  
+  /*style the items (options), including the selected item:*/
+#recepient .select-items div,.select-selected {
+	width: 100%!important;
+	height: 8vh!important;
+	color: #ffffff!important;
+	padding: 0!important;
+	border: none!important;
+	cursor: pointer!important;
+	user-select: none!important;
+	line-height: calc(1em + 2vw + 1vh)!important;
+	height: 7vh!important;
+}
+  
+  /*style items (options):*/
+#recepient .select-items {
+	position: absolute!important;
+	background-color: #111!important;
+	top: 100%!important;
+	left: 0!important;
+	right: 0!important;
+	z-index: 99!important;
+}
+  
+  /*hide the items when the select box is closed:*/
+#recepient .select-hide {
+	width: 100%!important;
+	display: none!important;
+}
+  
+#recepient .select-items div:hover, .same-as-selected {
+	width: 100%!important;
+	background-color:#4d88ff!important;
 }
 
 /*------------------------------------------CATEGORY------------------------------------------*/

@@ -23,8 +23,8 @@ block content
             
             input.next(type='text', placeholder='Product Name',name="name",required=true,onsubmit='return false')
             br
-            input.mod(type="number",placeholder="Starting Bid",name="starting_bid",required=true,step='0.01')
-            input.mod(type="number",placeholder="Buy it now Price ",name="buy_price",required=true,step='0.01')
+            input.mod(type="number",placeholder="Starting Bid",name="starting_bid",required=true,step='0.01',min='0.01')
+            input.mod(type="number",placeholder="Buy it now Price ",name="buy_price",step='0.01',min='0.01')
             br
             span
               |Starting Date 

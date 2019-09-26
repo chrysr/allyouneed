@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-//const speakersroute = require("./speakers");
-//const feedbackroute = require("./feedback");
 const loginroute = require("./login");
 const myaccountroute=require("./myaccount");
 const createauction=require("./createauction");
@@ -13,19 +11,68 @@ const resetpassroute = require("./resetpass");
 module.exports = (param) =>{
 
     const  {productService}  = param;
+    async function recommendation(itemsbought,db,user)
+    {
+        if(itemsbought.length==0)
+            return [];
+        const nn=require('nearest-neighbor');
+        var fields=[
+            {name: "name",measure:nn.comparisonMethods.word},
+            {name: "categories",measure:nn.comparisonMethods.wordArray},
+            {name: "location",measure:nn.comparisonMethods.word},
+            {name: "description",measure:nn.comparisonMethods.word }
+        ];
+        var products;
+        date=new Date();
+        now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+        await db.collection('products').find({start_date:{$lte:now},end_date:{$gte:now}}).toArray().then((docs)=>{
+            products=docs;
+        })
+        for(i=0;i<products.length;i++)
+        {
+            if(products[i].seller==user.email)
+                continue;
+            nn.findMostSimilar(products[i],itemsbought,fields,function(nearestNeighbor,probability){
+                products[i]['prob']=probability;
+            })
+        }
+        
+        products.sort(function(a,b){
+            return parseFloat(b['prob'])-parseFloat(a['prob']);
+        });
+        
+        return products;
+    };
     
     router.get("/products",async (req,res,next) =>{
         try {
+            console.log('/products get');
             const db=req.app.locals.db;
             date=new Date();
             now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
-    
+            _id=req.cookies._id;
+            var user;
+            var recommend=[];
+            if(_id)
+            {
+                await db.collection('users').find({"_id":require('mongodb').ObjectID(_id.toString())}).toArray().then((docs)=>{
+                    user=docs[0];
+                })
+                await db.collection('products').find({'bids.bidder':user.email,end_date:{$lt:now}},{bids:{$slice: -1}}).toArray().then((docs)=>{
+                    boughtbyme=docs;
+                })
+                recommend=await recommendation(boughtbyme,db,user);
+            }
             db.collection('products').find({start_date:{$lte:now},end_date:{$gte:now}}).toArray().then((docs)=>{
-                //console.log(docs);
+                docs.sort(function(a,b){
+                    return b.bids.length-a.bids.length;
+                })
                 return res.render("index",{
                 page:"Home",
                 productslist: docs,
                 loggedin:req.cookies.loggedin,
+                recommend:recommend,
+                initial:1,
                 });
             })
             
@@ -39,13 +86,22 @@ module.exports = (param) =>{
     });
     router.get("/products/byascprice",async (req,res,next) =>{
         try {
+            console.log('/products ascprice');
             const db=req.app.locals.db;
             date=new Date();
             now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
 
-            db.collection('products').find({start_date:{$lte:now},end_date:{$gte:now}}).sort( { price: 1 } ).toArray().then((docs)=>{
-
-                //console.log(docs);
+            db.collection('products').find({start_date:{$lte:now},end_date:{$gte:now}}).toArray().then((docs)=>{
+                for(i=0;i<docs.length;i++)
+                {
+                    if(docs[i].bids.length==0)
+                        docs[i]['min']=docs[i].starting_bid;
+                    else
+                        docs[i]['min']=docs[i].bids[docs[i].bids.length-1].amount;
+                }
+                docs.sort(function(a,b){
+                    return parseFloat(a['min'])-parseFloat(b['min']);
+                });
                 return res.render("index",{
                     page:"Home",
                     productslist: docs,
@@ -60,13 +116,22 @@ module.exports = (param) =>{
     });
     router.get("/products/bydescprice",async (req,res,next) =>{
         try {
+            console.log('/products descprice');
             const db=req.app.locals.db;
             date=new Date();
             now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
 
-            db.collection('products').find({start_date:{$lte:now},end_date:{$gte:now}}).sort( { price: -1 } ).toArray().then((docs)=>{
-
-                //console.log(docs);
+            db.collection('products').find({start_date:{$lte:now},end_date:{$gte:now}}).toArray().then((docs)=>{
+                for(i=0;i<docs.length;i++)
+                {
+                    if(docs[i].bids.length==0)
+                        docs[i]['min']=docs[i].starting_bid;
+                    else
+                        docs[i]['min']=docs[i].bids[docs[i].bids.length-1].amount;
+                }
+                docs.sort(function(a,b){
+                    return parseFloat(b['min'])-parseFloat(a['min']);
+                });
                 return res.render("index",{
                     page:"Home",
                     productslist: docs,
@@ -80,15 +145,15 @@ module.exports = (param) =>{
 
     });
 
-    router.get("/products/endingsoonest",async (req,res,next) =>{ ////////////////////////////
+    router.get("/products/endingsoonest",async (req,res,next) =>{ 
         try {
+            console.log('/products endingsoonest');
             const db=req.app.locals.db;
             date=new Date();
             now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
 
             db.collection('products').find({start_date:{$lte:now},end_date:{$gte:now}}).sort( { end_date: 1 } ).toArray().then((docs)=>{
 
-                //console.log(docs);
                 return res.render("index",{
                     page:"Home",
                     productslist: docs,
@@ -102,15 +167,15 @@ module.exports = (param) =>{
 
     });
 
-    router.get("/products/endinglatest",async (req,res,next) =>{ ////////////////////////////
+    router.get("/products/endinglatest",async (req,res,next) =>{ 
         try {
+            console.log('/products endinglatest');
             const db=req.app.locals.db;
             date=new Date();
             now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
 
             db.collection('products').find({start_date:{$lte:now},end_date:{$gte:now}}).sort( { end_date: -1 } ).toArray().then((docs)=>{
 
-                //console.log(docs);
                 return res.render("index",{
                     page:"Home",
                     productslist: docs,
@@ -127,7 +192,7 @@ module.exports = (param) =>{
 
     router.get("/products/bycategory",async (req,res,next) =>{
         try {
-            //console.log("bycatget");
+            console.log('/products bycategory get');
             const db=req.app.locals.db;
             date=new Date();
             now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
@@ -135,7 +200,6 @@ module.exports = (param) =>{
             var subcategories=[];
             await db.collection('categories').find({name:'allcats'}).toArray().then((docs)=>{
                 subcategories=docs[0].subcategories;
-                //console.log(subcategories);
             })
             products={};
             if(subcategories!=null)
@@ -148,10 +212,7 @@ module.exports = (param) =>{
                     })
                 }
             }
-            //console.log("subcat");
-            //console.log(subcategories);
-            //console.log("products");
-            //console.log(products);
+            
         
             return res.render("category",{
                 page:"Category",
@@ -168,19 +229,18 @@ module.exports = (param) =>{
     });
     router.post("/products/bycategory",async (req,res,next) =>{
         try {
-            //console.log("bycatpost");
+            console.log('/products bycategory post');
             const db=req.app.locals.db;
             date=new Date();
             now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
-
             choice=((req.body.choice?req.body.choice:null)?req.body.choice.trim():null);
             history=((req.body.history?req.body.history:null)?req.body.history.trim():null);
             choice=history+choice;
-            //console.log(choice);
             var subcategories=[];
+            console.log(choice);
+            console.log(history);
             await db.collection('categories').find({name:choice}).toArray().then((docs)=>{
                 subcategories=docs[0].subcategories;
-                //console.log(subcategories);
 
             })
             var products={};
@@ -189,19 +249,11 @@ module.exports = (param) =>{
                 for(i=0;i<subcategories.length;i++)
                 {
                     s=choice+"->"+subcategories[i];
-                    //console.log(s);
-                    //console.log(subcategories[i]);
                     await db.collection('products').find({categories:s,start_date:{$lte:now},end_date:{$gte:now}}).toArray().then((p)=>{
                         products[subcategories[i]]=p;
                     })
                 }
             }
-            //console.log("WILL NOT PRINT");
-            //console.log(products);
-            //console.log("subcat");
-            //console.log(subcategories);
-            //console.log("products");
-            //console.log(products);
             return res.render("category",{
                 page:"Category",
                 categories:subcategories,
@@ -228,12 +280,11 @@ module.exports = (param) =>{
         return arr;
     }
     router.get("/products/search",async (req,res,next) =>{
-        console.log("searchget");
     });
     router.post("/products/search",async (req,res,next) =>{
         try {
+            console.log('/products search post');
             search=((req.body.search?req.body.search:null)?req.body.search.trim():null);
-            //console.log("searchpost|"+search+"|");
             const db=req.app.locals.db;
             date=new Date();
             now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
@@ -244,28 +295,21 @@ module.exports = (param) =>{
             products=[];
             for(i=0;i<search.length;i++)
             {
-                //console.log("|"+search[i]+"|");
                 await db.collection('products').find({name:{$regex: search[i],$options: 'i'},start_date:{$lte:now},end_date:{$gte:now}}).toArray().then((docs)=>{
-                    //console.log(docs);
                     products.push.apply(products,docs)
                 })   
                 await db.collection('products').find({description:{$regex: search[i],$options: 'i'},start_date:{$lte:now},end_date:{$gte:now}}).toArray().then((docs)=>{
-                    //console.log(docs);
                     products.push.apply(products,docs)
                 })   
                 var subcategories=[];
                 await db.collection('categories').find({name:{$regex: search[i],$options: 'i'}}).toArray().then((docs)=>{
-                    //console.log(docs);
                     subcategories=docs;        
                 })   
                 if(subcategories!=null)
                 {
                     for(j=0;j<subcategories.length;j++)
                     {
-                        //console.log(j);
-                        //console.log(subcategories[j].name);
                         await db.collection('products').find({categories:subcategories[j].name,start_date:{$lte:now},end_date:{$gte:now}}).toArray().then((docs)=>{
-                            //console.log(docs);
                             products.push.apply(products,docs);
                         })
                     }
@@ -273,7 +317,6 @@ module.exports = (param) =>{
             }
             products=unique(products);
             
-            console.log(products);
             return res.render("index",{
                 page:"Home",
                 productslist: products,
@@ -289,6 +332,7 @@ module.exports = (param) =>{
 
     router.get("/products/:shortname",async(req,res,next) =>{
         try {
+            console.log('/products shortname get');
             const db=req.app.locals.db;
             var person={};
             person.email='';
@@ -301,11 +345,8 @@ module.exports = (param) =>{
             }
             var product;
             await db.collection('products').find({shortname:req.params.shortname}).toArray().then((docs)=>{
-                //console.log(docs[0].photo.length);
                 product=docs;
-                //if(docs.length==0)
-                    //return res.redirect('/products');
-                //    return next();
+            
                 
             })   
             if(product.length==0)
@@ -317,7 +358,6 @@ module.exports = (param) =>{
             })
             date=new Date();
             now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
-            //console.log(now);  
             var categories;
             await db.collection('categories').find().toArray().then((docs)=>{
                 categories=docs;
@@ -370,15 +410,14 @@ module.exports = (param) =>{
     const path=require('path');
     router.post("/products/:shortname",upload.array('photo',4),async(req,res,next) =>{
         try {
+            console.log('/products shortname post');
             if(!req.cookies.loggedin)
                 return res.redirect('/products/'+req.params.shortname+'?postnotloggedin');
-            //DISABLE IN PUG FOR USER TO BE ABLE TO BID AFTER AUCTION HAS FINISHED
             const db=req.app.locals.db;
             shortname=((req.params.shortname?req.params.shortname:null)?req.params.shortname.trim():null);
             amount=((req.body.amount?req.body.amount:null)?req.body.amount.trim():null);
             srating=((req.body.srating?req.body.srating:null)?req.body.srating.trim():null);
             brating=((req.body.brating?req.body.brating:null)?req.body.brating.trim():null);
-            //console.log("/products/shortname post "+shortname+" "+amount);
             name=((req.body.name?req.body.name:null)?req.body.name.trim():null);
             buy_price=((req.body.buy_price?req.body.buy_price:null)?req.body.buy_price.trim():null);
             
@@ -388,22 +427,35 @@ module.exports = (param) =>{
             end_date=((req.body.end_date?req.body.end_date:null)?req.body.end_date.trim():null);
             description=((req.body.description?req.body.description:null)?req.body.description.trim():null);
             _id=req.cookies._id;
-            if(name!=null&&buy_price!=null&&starting_bid!=null&&location!=null&&start_date!=null&&end_date!=null&&description!=null)
+            if(name!=null&&starting_bid!=null&&location!=null&&start_date!=null&&end_date!=null&&description!=null)
             {
+                if(buy_price==null)
+                    buy_price=0;
+                console.log('edit auction');
                 categories=[];
-                for(var i=0;i<req.body.categories.length;i++)
+                if(Array.isArray(req.body.categories))
                 {
+                    //console.log('array');
+                    for(var i=0;i<req.body.categories.length;i++)
+                    {
                     if(req.body.categories[i]=='')
-                    continue;
+                        continue;
                     categories.push('allcats->'+req.body.categories[i]);
+                    }
                 }
-                console.log("the correct one");
+                else 
+                {
+                    //console.log('not array');
+                    categories.push('allcats->'+req.body.categories);
+                }
+                console.log(categories);
                 var product;
                 await db.collection('products').find({shortname:shortname}).toArray().then((docs)=>{
                     product=docs[0];
                 })
                 if(product.bids.length>0)
                 {
+                    console.log('edit auction error bidhasbeenmade');
                     return res.redirect('/products/'+shortname+'?change=false/reason=abidhasbeenmade');
                 }
                 date=new Date();
@@ -412,36 +464,25 @@ module.exports = (param) =>{
                 end_date=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
                 date=new Date(start_date);
                 start_date=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
-                if(end_date<=start_date&&start_date>now) //check if that works
+                if(end_date<=start_date&&start_date>now) 
                 {
-                    console.log("ends before starts or equal");
-                    return res.redirect('/createauction?success=false/reason=endsbeforestarts');
+                    console.log('edit auction error endsbeforestarts');
+                    return res.redirect('/products'+shortname+'?success=false/reason=endsbeforestarts');
                 }
 
                 var re=/^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$/;
                 if(!re.test(String(name))){
-                    return res.redirect('/createauction?success=false/reason=invalidname');
+                    console.log('edit auction error invalidname');
+                    return res.redirect('/products'+shortname+'?success=false/reason=invalidname');
                 }
-                re=/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/;
-                if(!re.test(String(buy_price))){
-                    return res.redirect('/createauction?success=false/reason=invalidbuy_price');
-                }
-                console.log("2starting_bid: "+typeof(starting_bid));
-                console.log("2buy_price: "+typeof(buy_price));
-                if(!re.test(String(starting_bid))){
-                    return res.redirect('/createauction?success=false/reason=invalidstarting_bid');
-                }
-                console.log("starting bid: "+starting_bid);
-                if(parseFloat(buy_price)<parseFloat(starting_bid))
+                if(parseFloat(buy_price)<parseFloat(starting_bid)&&parseFloat(buy_price)>0)
                 {
-                    return res.redirect('/createauction?success=false/reason=buylessthanstarting');
+                    console.log('edit auction error buylessthanstarting');
+                    return res.redirect('/products'+shortname+'?success=false/reason=buylessthanstarting');
                 }
                 photos=[];
-                const sleep=require('sleep');
                 if(req.files.length>0)
                 {
-                    console.log('handle pics');
-                    //sleep.sleep(5);
                     files=[];
                     await fs.readdir('./public/images/'+shortname, (err, fil) => {
                         if (err) throw err;
@@ -450,20 +491,15 @@ module.exports = (param) =>{
                         
                     });
                     for (const file of files) {
-                        console.log(file);
                         await fs.unlink(path.join('./public/images/'+shortname, file), err => {
                         if (err) throw err;
                         });
                     }
-                    console.log('removed all');
-                    //sleep.sleep(5);
                     for(var i=0;i<req.files.length;i++)
                     {
                         if((req.files[i].mimetype.endsWith("jpeg")) || (req.files[i].mimetype.endsWith("png")) || (req.files[i].mimetype.endsWith("jpg"))
                         || (req.files[i].mimetype.endsWith("gif")) )
                         {
-                        console.log(req.files[i].mimetype);
-                        console.log("it's ok")
                         await fs.rename(req.files[i].path,'./public/images/'+shortname+"/"+shortname+"_"+(i+1)+".jpg",function(){
                         })
                             photos[i]=shortname+'_'+(i+1).toString()+'.jpg';
@@ -471,7 +507,6 @@ module.exports = (param) =>{
                     }
                 }
                 
-                console.log('doneee');
                 tmp=categories;
                 categories=[];
                 for(i=0;i<tmp.length;i++)
@@ -500,9 +535,9 @@ module.exports = (param) =>{
                         location:location,
                         description:description,start_date:start_date,end_date:end_date}
                 }
-                console.log(entry);
                 await db.collection('products').updateOne({shortname:shortname},{$set:entry}).then((docs)=>{
                 })
+                console.log('edit auction successful');
                 return res.redirect('/products/'+shortname);
 
 
@@ -510,6 +545,7 @@ module.exports = (param) =>{
             
             else
             {
+                console.log('rating');
                 var person;
                 var item;
                 if (srating!=null||brating!=null)
@@ -520,7 +556,6 @@ module.exports = (param) =>{
                     })
                     if(srating!=null)
                     {
-                        //console.log("srating");
                         await db.collection('products').updateOne({shortname:req.params.shortname},{$set:{brate:true}})
                         var rating;
                         var newrate;
@@ -530,13 +565,11 @@ module.exports = (param) =>{
                         newrate=rating.srating*rating.sratingnum;
                         rating.sratingnum++;
                         rating.srating=(newrate+parseInt(srating))/rating.sratingnum;
-                        //console.log(rating);
                         db.collection('users').updateOne({email:product.seller},{$set:{rating:rating}});
                         
                     }
                     if(brating!=null)
                     {
-                        //console.log("brating");
                         await db.collection('products').updateOne({shortname:req.params.shortname},{$set:{srate:true}})
                         var newrate;
                         var rating;
@@ -546,14 +579,15 @@ module.exports = (param) =>{
                         newrate=rating.brating*rating.bratingnum;
                         rating.bratingnum++;
                         rating.brating=(newrate+parseInt(brating))/rating.bratingnum;
-                        //console.log(rating);
                         db.collection('users').updateOne({email:product.bids[product.bids.length-1].bidder},{$set:{rating:rating}});
                         
                     }
+                    console.log('rating successful');
                     res.redirect('/products/'+req.params.shortname);
                 }
                 else
                 {
+                    console.log('bid');
                     await db.collection('users').find({"_id":require('mongodb').ObjectID(_id.toString())}).toArray().then((docs)=>{
                         person=docs[0];
                     });
@@ -561,35 +595,38 @@ module.exports = (param) =>{
                         item=docs[0];
                     });
                     bids=item.bids;
-                    //console.log(item);
                     if(bids.length==0&&parseFloat(amount)<item.starting_bid)
+                    {
+                        console.log('bid error bidnothigherthanfirst');
                         return res.redirect('/products/'+shortname+'?bidplace=false/reason=bidnothigherthanfirst');
+                    }
                     if(bids.length>0&&(bids[bids.length-1].amount>=parseFloat(amount)))
+                    {
+                        console.log('bid error bidnothighenough');
                         return res.redirect('/products/'+shortname+'?bidplace=false/reason=bidnothighenough');
+                    }
                     date=new Date();
                     now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
-                    //console.log(now);
                     if(now<item.start_date||now>item.end_date)
+                    {
+                        console.log('bid error postbutauctionhasfinished');
                         return res.redirect('/products/'+shortname+'?postbutauctionhasended');
+                    }
                     bid={};
                     bid['amount']=parseFloat(amount);
                     bid['bidder']=person.email;
                     date=new Date();
                     bid['time']=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
-                    //console.log(bid);    
                     bids.push(bid);
                     end=item.end_date;
-                    if(parseFloat(amount)>=item.price)
+                    if(parseFloat(amount)>=item.price&&item.price>0)
                     {
                         end=bid['time'];
-            
-                        //buynow
-                        //finalize auction etc
                     }
 
                     await db.collection('products').updateOne({shortname:shortname},{$set: {bids:bids,end_date:end}}).then((docs)=>{
-                        //console.log("okay to db");
                     });      
+                    console.log('bid successful');
                     res.redirect('/products/'+shortname+'?bidplace=success');
                 }
             }
@@ -601,11 +638,13 @@ module.exports = (param) =>{
     });
     router.get("/account/accept/:who",async(req,res,next) =>{
         try {
+            console.log('account accept user');
             const db=req.app.locals.db;
             db.collection('users').find({_id:require('mongodb').ObjectID(req.cookies._id.toString())}).toArray().then((docs)=>{
                 if(docs[0].type=='admin')
                 {
                     db.collection('users').updateOne({email:req.params.who},{$set: {isaccepted:true}}).then((docs)=>{
+                        console.log('account accepted success');
                         return res.redirect('/account');                
                     });
                 }
@@ -618,11 +657,13 @@ module.exports = (param) =>{
     });
     router.get("/account/reject/:who",async(req,res,next) =>{
         try {
+            console.log('account reject user');
             const db=req.app.locals.db;
             db.collection('users').find({_id:require('mongodb').ObjectID(req.cookies._id.toString())}).toArray().then((docs)=>{
                 if(docs[0].type=='admin')
                 {
                     db.collection('users').deleteOne({email:req.params.who}).then((docs)=>{
+                        console.log('account rejected/deleted successfully');
                         return res.redirect('/account');                
                     });
                 }     
@@ -633,15 +674,8 @@ module.exports = (param) =>{
         }
         
     });
-    
 
     
-    
-    
-
-    
-    //router.use("/speakers",speakersroute(param));
-    //router.use("/feedback",feedbackroute(param));
     router.use("/login",loginroute(param));
     router.use("/account",myaccountroute(param));
     router.use('/createauction',createauction(param));

@@ -22,16 +22,18 @@ module.exports = (param) =>{
     }
     router.get("/",async(req,res,next) =>{
         try {
+            console.log('/account get');
             if(req.cookies.loggedin)
             {
                 const db=req.app.locals.db;
                 var _id=req.cookies._id;
                 var details,sent,received,myproducts
-                console.log(_id);
                 await db.collection('users').find({"_id":require('mongodb').ObjectID(_id.toString())}).toArray().then((docs)=>{
-                    //console.log(docs);
                     if(docs.length==0)
+                    {
+                        console.log('/account get error invalidcookie');
                         return res.redirect('/account?getfailed/reason=invalidcookie');
+                    }
                     details=docs[0];
                 })
                 await db.collection('messages').find({sender:details.email.toString()}).sort({date:-1}).toArray().then((docs)=>{
@@ -44,7 +46,6 @@ module.exports = (param) =>{
                     myproducts=docs;
                 })
                 db.collection('messages').updateMany({receiver:details.email.toString()},{$set:{seen:true}});
-                //console.log(myproducts);
                 date=new Date();
                 now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
                 var contacts=[]
@@ -55,12 +56,11 @@ module.exports = (param) =>{
                             contacts.push(docs[i].email);
                     })
                     var boughtbyme=[];
-                    await db.collection('products').find({'bids.bidder':details.email},{bids:{$slice: -1}}).toArray().then((docs)=>{
+                    await db.collection('products').find({'bids.bidder':details.email,end_date:{$lt:now}},{bids:{$slice: -1}}).toArray().then((docs)=>{
                         console.log(docs);
                         boughtbyme=docs;
                     })
                     db.collection('users').find().sort({isaccepted:1}).toArray().then((all)=>{
-                        //console.log(all);
                         return res.render("myaccount",{
                             page: "My Account",
                             loggedin:req.cookies.loggedin,
@@ -77,22 +77,16 @@ module.exports = (param) =>{
                 }
                 else
                 {
-                    //console.log(sent);
-                    //console.log(received);
-                    console.log("before q1");
                     contacts.push('admin@allyouneed.com');
                     await db.collection('products').find({seller:details.email}).toArray().then((docs)=>{
-                        console.log(docs);
                         for(i=0;i<docs.length;i++)
                         {
                             if(docs[i].bids.length>0)
                                 contacts.push(docs[i].bids[docs[i].bids.length-1].bidder)
                         }
                     })
-                    console.log("before q2");
                     var boughtbyme=[];
                     await db.collection('products').find({'bids.bidder':details.email},{bids:{$slice: -1}}).toArray().then((docs)=>{
-                        console.log(docs);
                         boughtbyme=docs;
                         for(i=0;i<docs.length;i++)
                             contacts.push(docs[i].seller);
@@ -109,13 +103,8 @@ module.exports = (param) =>{
                         now:now,          
                         boughtbyme:boughtbyme,                        
                     });
-                }
-                            
-
-            
-                
+                }                            
             }
-            //else console.log("NOT LOGGED IN AND TRIED TO GO TO ACCOUNT");
         } 
         catch (err) {
             return err;
@@ -123,9 +112,7 @@ module.exports = (param) =>{
         
     });
     router.post("/",async(req,res,next) =>{
-        //console.log("loginloaded");
-        //console.log(req.cookies);
-        console.log("POST @ MYACCOUNT");
+        console.log("/account post ");
         const d=req.app.locals.db;
 
         try {
@@ -144,24 +131,16 @@ module.exports = (param) =>{
             country=((req.body.country?req.body.country:null)?req.body.country.trim():null);
 
             activateshortname=((req.body.activateshortname?req.body.activateshortname:null)?req.body.activateshortname.trim():null);
-            console.log(activateshortname);
-            //console.log("LOGOUT");
-            //console.log(res.cookie.loggedin);
             const db=req.app.locals.db;
-            console.log("mail: "+email+" pass: "+pass+" old pass: "+oldpass+" fname: "+fname+" lname: "+lname+" telephone: "+phone+" address: "+address+" gender:"+gender+" taxid: "+taxid);
 
             if(activateshortname==null&&country!=null&&recepient==null&&message==null&&oldpass!=null&&email!=null&&fname!=null&&lname!=null&&phone!=null&&address!=null&&taxid!=null)
             {
-                console.log("changeinfo");
+                console.log("account changeinfo");
                 var re = /\S+@\S+\.\S+/;
                 if(!re.test(String(email)))
                 {
+                    console.log('account error invalidmail')
                     return res.redirect('/account?changedetails=false/reason=invalidmail');
-                }
-                re=/^\d+$/;
-                if(!re.test(String(phone)))
-                {
-                    return res.redirect('/account?changedetails=false/reason=invalidphone');
                 }
                 var _id=req.cookies._id;
                 var oldemail;
@@ -171,7 +150,7 @@ module.exports = (param) =>{
 
                     if(docs.length==0)
                     {
-                        console.log("Change Details Fail wrong id");
+                        console.log("account error Change Details Fail wrong id");
                         return res.redirect('/account?changedetails=false/reason=iddoesnotexist');
                     }
                     oldemail=docs.map(a=>a.email).toString();
@@ -181,7 +160,7 @@ module.exports = (param) =>{
                 });
                 if(!bcrypt.compareSync(oldpass,hash))
                 {
-                    console.log("Change Details Fail");
+                    console.log("account error oldpassword incorrect");
                     return res.redirect('/account?changedetails=false/reason=oldpasswordincorrect');
                 }
                 if(oldemail!=email)
@@ -189,7 +168,7 @@ module.exports = (param) =>{
                     await db.collection('users').find({email:email}).toArray().then((docs)=>{ //an yparxei apo allon                       
                         if(docs.length==1)
                         {
-                            console.log("Change Details Fail mailexists");
+                            console.log("/account error mailexists");
                             return res.redirect('/account?changedetails=false/reason=mailexists');
                         }
                     }).catch((err) => {          
@@ -201,7 +180,7 @@ module.exports = (param) =>{
                 {
                     var entry={email:email,password:hash,firstname:fname,lastname:lname,phone:phone,address:address,taxpayerid:taxid,gender:gender,country:country};
                     db.collection('users').updateOne({"_id":require('mongodb').ObjectID(_id.toString())},{$set: entry}).then((docs)=>{
-                        console.log("Update one Success wnull");
+                        console.log("account Update one Success wnull");
                         return res.redirect('/account?changedetailsnopass=success');
 
                     }).catch((err)=>{
@@ -213,7 +192,7 @@ module.exports = (param) =>{
                 {
                     var entry={email:email,password:bcrypt.hashSync(pass,bcrypt.genSaltSync(8),null),firstname:fname,lastname:lname,phone:phone,address:address,taxpayerid:taxid,gender:gender};
                     db.collection('users').updateOne({"_id":require('mongodb').ObjectID(_id.toString())},{$set: entry}).then((docs)=>{
-                        console.log("Update one Success notnull");
+                        console.log("account Update one Success notnull");
                         return res.redirect('/account?changedetailswpass=success');
 
                     }).catch((err)=>{
@@ -228,14 +207,18 @@ module.exports = (param) =>{
                 var re = /\S+@\S+\.\S+/;
                 if(!re.test(String(recepient)))
                 {
+                    console.log('account error invalidmail');
                     return res.redirect('/account?message=false/reason=invalidmail');
                 }
                 db.collection('users').find({email:recepient}).toArray().then((docs)=>{
                     if(docs.length==0)
+                    {
+                        console.log('account error userdoesnotexist');
                         return res.redirect('/account?message=false/reason=userdoesnotexist');
+                    }
                     else if(docs.length>1)
                     {
-                        console.log("DUPLICATE USER ERROR");
+                        console.log("account error DUPLICATE USER ERROR");
                         return res.redirect('/account?message=false/reason=duplicateuser');
                     }
                     db.collection('users').find({"_id":require('mongodb').ObjectID(req.cookies._id.toString())}).toArray().then((send)=>{
@@ -245,7 +228,7 @@ module.exports = (param) =>{
                             return res.redirect('/account?message=false/reason=multiplecookies');
                         entry={sender:send[0].email,receiver:recepient,content:message,date:new Date().toLocaleString(),seen:false};
                         db.collection('messages').insertOne(entry).then((docs)=>{
-                            console.log("message sent");
+                            console.log("account message sent");
                             return res.redirect('/account?message=success');
                         })
                     });
@@ -256,11 +239,12 @@ module.exports = (param) =>{
             {
                 res.clearCookie("loggedin");
                 res.clearCookie("_id");
+                console.log('account logout');
                 return res.redirect("/");
             }
             else if(activateshortname!=null)
             {
-                console.log("The right one");
+                console.log('account activaet product');
                 date=new Date();
                 now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
                 await db.collection('products').updateOne({shortname:activateshortname},{$set:{start_date:now}});
