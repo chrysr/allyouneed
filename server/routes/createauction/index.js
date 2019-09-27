@@ -134,7 +134,7 @@ module.exports = (param) =>{
           date=new Date(start_date);
           start_date=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
 
-          if(end_date<=start_date&&start_date>now) 
+          if(end_date<=start_date) 
           {
             console.log('insert item error endsbeforestarts');
             return res.redirect('/createauction?success=false/reason=endsbeforestarts');

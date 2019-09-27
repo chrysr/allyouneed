@@ -184,8 +184,9 @@ async function createusersanditems(db){
     })
     categories=[];
     end=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
-    end.setDate(end.getDate()+Math.random()*6+1);    categories.push('allcats->Jewelery & Watches->Watches');
-    categories.push('allcats->Jewelery & Watches');
+    end.setDate(end.getDate()+Math.random()*6+1);
+    categories.push('allcats->Jewelry & Watches->Watches');
+    categories.push('allcats->Jewelry & Watches');
     categories.push('allcats->Consumer Electronics');
     entry={shortname:'apple-watch',name:"Apple Watch",categories:categories,price:349.99,
     starting_bid:20.0,bids:[],location:'Thessaloniki',country:'',
