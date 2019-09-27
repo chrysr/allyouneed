@@ -7,6 +7,9 @@ var nodemailer = require("nodemailer");
 var async = require("async");
 module.exports = (param) =>{
     //const {LoginService}=param;
+    router.get('/',async(req,res,next)=>{
+        return res.redirect('/');
+    })
     router.get('/:token', function(req, res) {
         console.log('/resetpass get');
         const db=req.app.locals.db;

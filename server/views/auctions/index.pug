@@ -32,7 +32,7 @@ block content
                 else 
                   img#fill4.smallimg(src='#', alt='')
             if person.email==seller.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
-              button(type='button' onclick='document.getElementById("selectedFile").value = "";var image=document.getElementById("fill");image.src="#";var image2=document.getElementById("fill2");image2.src="#";var image3=document.getElementById("fill3");image3.src="#";var image4=document.getElementById("fill4");image4.src="#";document.getElementById("selectedFile").click();') Upload New Images
+              button#bluify(style="width:16vw;" type='button' onclick='document.getElementById("selectedFile").value = "";var image=document.getElementById("fill");image.src="#";var image2=document.getElementById("fill2");image2.src="#";var image3=document.getElementById("fill3");image3.src="#";var image4=document.getElementById("fill4");image4.src="#";document.getElementById("selectedFile").click();') Upload New Images
               br
           else
             .imgbox
@@ -167,10 +167,10 @@ block content
                   if product.bids.length>0
                     | Winning Bid by: #{product.bids[product.bids.length-1].bidder}
                 else
-                  span.bidspan
-                    | Please 
+                  span.inputspan(style='font-size:calc(0.2em + 0.9vw + 0.9vh); ')
+                    |  
                     a(href='/login') Login
-                    span  to place a bid!
+                    span(style='font-size:calc(0.2em + 0.7vw + 0.7vh); ')  to place a bid!
 
               if seller.email==person.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
                 span.inputspan
@@ -192,8 +192,14 @@ block content
               -var seconds=remaining.getTime()/1000
               h4#tim=`Ends In: ${Math.floor(seconds/3600)}:${Math.floor((seconds-Math.floor(seconds/3600)*3600)/60)}:${seconds-(Math.floor(seconds/3600)*3600)-(Math.floor((seconds-Math.floor(seconds/3600)*3600)/60)*60)}`
             if seller.email==person.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
-              input.mod(type='datetime-local',value=`${product.start_date.toISOString().substr(0,16)}` name='start_date',placeholder="Starting Bid" required=true)   
-              input.mod(type='datetime-local',value=`${product.end_date.toISOString().substr(0,16)}` name='end_date', required=true)
+              span.frto
+                |From:
+              input.editdate(type='datetime-local',value=`${product.start_date.toISOString().substr(0,16)}` name='start_date',placeholder="Starting Bid" required=true)   
+              br
+              br
+              span.frto
+                |To
+              input.editdate(type='datetime-local',value=`${product.end_date.toISOString().substr(0,16)}` name='end_date', required=true)
             p
               if seller.email==person.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
                 label
@@ -202,7 +208,7 @@ block content
                 | #{product.description}
             br
           if person.email==seller.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))
-            .checkbox
+            .checkbox(style="background : #333 ; width: 65%; margin-left: 15%; margin-right: 15%;")
               each cat,i in categories
                 - var found=0;
                 each c2 in product.categories
@@ -210,11 +216,11 @@ block content
                     -found=1;
                 if found==1
                   input(type="checkbox" name="categories" value=`${cat.name}` id=`${cat.name}` checked)
-                  label(class="opt" for=`${cat.name}`)
+                  label#editlabel(style="background : #333;" class="opt" for=`${cat.name}`)
                     |#{cat.name}
                 else
                   input(type="checkbox" name="categories" value=`${cat.name}` id=`${cat.name}`)
-                  label(class="opt" for=`${cat.name}`)
+                  label#editlabel(style="background : #333;" class="opt" for=`${cat.name}`)
                     |#{cat.name}
           else
             .cats
@@ -232,16 +238,16 @@ block content
             
           if seller.email==person.email && (now<product.start_date || ((now>product.start_date && now<product.end_date)&&product.bids.length==0))    
             br
-            input(type='submit' value='Edit' style='display: block;') 
+            input#bluify(type='submit' value='Submit' ) 
   .footer
     span
-      a.a1(href='/TOS') TERMS OF SERVICE
+    a.a1(href='/TOS') TERMS OF SERVICE
     span
-      a.a1(href='/aboutus') OUR TEAM
+    a.a1(href='/aboutus') OUR TEAM
     br
     span
-      | Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, 
-      a.a2(href='mailto:alallyouneed@gmail.com') contact us
+    | Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, 
+    a.a2(href='mailto:alallyouneed@gmail.com') contact us
   script.
     var slideIndex = 1;
     showSlides(slideIndex);

@@ -230,6 +230,7 @@ body {
 		display: inline-block;
 		overflow: hidden;
 		position: static;
+		height:38vh;
 	}
 }
 
@@ -356,6 +357,51 @@ body {
  }
 
 /*------------------------------------------AUCTION------------------------------------------*/
+
+input[type="datetime-local"].editdate::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	background: #fff url(../images/AYN/arrows3.png);
+	background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center center; 
+	width: 1vw;
+    height: 3vh;
+}
+
+input[type="datetime-local"].editdate::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+input[type="datetime-local"].editdate {
+	border: none;
+	font-size: calc(0.2em + 0.9vw + 0.01vh);
+	font-family: 'Fira Sans';
+	color: #2d68df;
+}
+
+input[type="datetime-local"].editdate:hover {
+	color: #4d88ff;
+}
+
+.frto {
+	border-left: 0.1em solid #333333 ;
+	color: #000!important;
+	padding-left: 1vw;
+}
+#bluify:hover {
+	color: #4d88ff;
+}
+#bluify {
+	width: 8vw;
+	height: 6vh; 
+	border:none; 
+	background: #111; 
+	color: white ;
+	cursor:pointer;
+	font-size:calc(0.2em + 0.7vw + 0.7vh);
+}
+
 @media (min-width: 800px) {
 	.auction
 	{
@@ -492,6 +538,10 @@ body {
 	padding: 0!important;
 	font-size: calc(0.2em + 0.9vw + 0.9vh);
 }
+#editp:hover {
+	color: #4d88ff;
+}
+
 
 #editp::-webkit-inner-spin-button {
 	-webkit-appearance: none;
@@ -501,6 +551,18 @@ body {
     background-position: center center; 
 	width: 1vw;
     height: 3vh;
+}
+
+.descbox textarea{
+	color: #333;
+	border: none;
+	resize: none;
+	width: calc(100% - 1vw);
+	font-size: calc(0.1em + 0.9vw + 0.9vh);
+}
+
+.descbox textarea:hover{
+	color: #000;
 }
 
 @media (min-width: 800px) {
@@ -666,6 +728,13 @@ body {
 .inputspan i {
 	color:#4d88ff;
 	font-style: normal;
+}
+.inputspan a{
+	color: #2d68df;
+	text-decoration: none;
+}
+.inputspan a:hover{
+	color: #4d88ff;
 }
 .inputspan:hover i {
 	color:#2d68df;
@@ -1142,6 +1211,8 @@ input[type="number"].mod::-webkit-inner-spin-button {
 	font-size: calc(0.2em + 0.7vw + 0.7vh);
 	line-height: calc(0.5em + 1.1vw + 1.1vh);
 }
+
+
 
 .checkbox input[type=checkbox]{
     display: none;

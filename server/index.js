@@ -108,6 +108,117 @@ function datafordb()
     }
     return catsmodified;
 }
+async function createusersanditems(db){
+    users=[];
+    products=[];
+    entry={};
+    srating={
+        srating:0,
+        sratingnum:0,
+        brating:0,
+        bratingnum:0,
+    };
+    brating={
+        brating:0,
+        bratingnum:0,
+    }
+    
+    var entry={rating:srating,email:'johndoe@gmail.com',password:bcrypt.hashSync('pass',bcrypt.genSaltSync(8),null),firstname:'John',lastname:'Doe',phone:'123456',address:'12345th Steet ',taxpayerid:'1234',gender:'Male',type:'Seller',country:'Greece',isaccepted:true,resetPasswordToken:''};
+    await db.collection('users').find({email:'johndoe@gmail.com'}).toArray().then((docs)=>{
+        if(docs.length==0)
+            users.push(entry);
+    })
+    entry={rating:brating,email:'marysmith@gmail.com',password:bcrypt.hashSync('pass',bcrypt.genSaltSync(8),null),firstname:'Mary',lastname:'Smith',phone:'123456',address:'12345th Drive ',taxpayerid:'1234',gender:'Female',type:'Bidder',country:'Greece',isaccepted:true,resetPasswordToken:''};
+    await db.collection('users').find({email:'marysmith@gmail.com'}).toArray().then((docs)=>{
+        if(docs.length==0)
+            users.push(entry);
+    })
+    entry={rating:brating,email:'adamjones@gmail.com',password:bcrypt.hashSync('pass',bcrypt.genSaltSync(8),null),firstname:'Adam',lastname:'Jones',phone:'123456',address:'12345th Avenue ',taxpayerid:'1234',gender:'Male',type:'Bidder',country:'Greece',isaccepted:true,resetPasswordToken:''};
+    await db.collection('users').find({email:'adamjones@gmail.com'}).toArray().then((docs)=>{
+        if(docs.length==0)
+            users.push(entry);
+    })
+    if(users.length>0)
+        db.collection('users').insertMany(users);
+    for(i=0;i<users.length;i++)
+    {
+        if(i==0)
+            console.log('Users Created:');
+        console.log('-'+users[i].email+':pass');
+    }
+    if(users.length>0)
+        console.log('\n');
+
+
+    var entry;
+    var categories=[];
+    date=new Date();
+    now=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+    end=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+    end.setDate(end.getDate()+Math.random()*6+1);
+    categories.push('allcats->Clothing');
+    categories.push('allcats->Sporting Goods');
+    categories.push('allcats->Sporting Goods->Fitness');
+    categories.push('allcats->Sporting Goods->Outdoor Sports');
+    entry={shortname:'yeezy350',name:'Yeezy Boost 350',categories:categories,price:960.70,
+    starting_bid:10.0,bids:[],location:'Athens',country:'',
+    seller:'johndoe@gmail.com',description:"Adidas primeknit microfiber and TPU sole sneakers . The most popular colorway of the most preferred silhouette from Kanye West's collection.",
+    start_date:now,end_date:end,photo:["yeezy350_1.jpg","yeezy350_2.jpg"]}
+    await db.collection('products').find({shortname:'yeezy350'}).toArray().then((docs)=>{
+        if(docs.length==0)
+            products.push(entry);
+    })
+    categories=[];
+    end=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+    end.setDate(end.getDate()+Math.random()*6+1);    categories.push('allcats->Clothing');
+    categories.push('allcats->Clothing->Men');
+    categories.push("allcats->Clothing->Men->Men's Accessories");
+    categories.push("allcats->Clothing->Men->Men's Accessories->Sunglasses & Sunglasses Accessories");
+    entry={shortname:'flight006',name:'Dita Flight 006',categories:categories,price:475.00,
+    starting_bid:20.0,bids:[],location:'Athens',country:'',
+    seller:'johndoe@gmail.com',description:"Titanium Frame UVA UVB polarized aviator sunglasses. Classic fighter pilot swagger - modern and muscular materials.",
+    start_date:now,end_date:end,photo:["flight006_1.jpg","flight006_2.jpg","flight006_3.jpg"]}
+    await db.collection('products').find({shortname:'flight006'}).toArray().then((docs)=>{
+        if(docs.length==0)
+            products.push(entry);
+    })
+    categories=[];
+    end=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+    end.setDate(end.getDate()+Math.random()*6+1);    categories.push('allcats->Jewelery & Watches->Watches');
+    categories.push('allcats->Jewelery & Watches');
+    categories.push('allcats->Consumer Electronics');
+    entry={shortname:'apple-watch',name:"Apple Watch",categories:categories,price:349.99,
+    starting_bid:20.0,bids:[],location:'Thessaloniki',country:'',
+    seller:'johndoe@gmail.com',description:"Space Black Stainless Steel Case with Space Black Milanese Loop. Fundamentally redesigned and re-engineered to help you be even more active, healthy and connected. Some more text goes here for tests",
+    start_date:now,end_date:end,photo:["apple-watch_1.jpg","apple-watch_2.jpg","apple-watch_3.jpg"]}
+    await db.collection('products').find({shortname:'apple-watch'}).toArray().then((docs)=>{
+        if(docs.length==0)
+            products.push(entry);
+    })
+    categories=[];
+    end=new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+    end.setDate(end.getDate()+Math.random()*6+1);    categories.push('allcats->Clothing');
+    categories.push('allcats->Clothing->Men');
+    categories.push("allcats->Clothing->Men->Men's Clothing");
+    categories.push("allcats->Clothing->Men->Men's Clothing->Coats & Jackets");
+    entry={shortname:'nasa-bomber',name:'NASA Bomber Jacket',categories:categories,price:57.30,
+    starting_bid:5.0,bids:[],location:'Patras',country:'',
+    seller:'johndoe@gmail.com',description:"Embroided acetate-polyester zip-up bomber. Honor the anniversary of the moon landing with this classic yet modern Asstseries limited jacket.",
+    start_date:now,end_date:end,photo:["nasa-bomber_1.jpg","nasa-bomber_2.jpg"]}
+    await db.collection('products').find({shortname:'nasa-bomber'}).toArray().then((docs)=>{
+        if(docs.length==0)
+            products.push(entry);
+    })
+
+    if(products.length>0)
+        db.collection('products').insertMany(products);
+    for(i=0;i<products.length;i++)
+    {
+        if(i==0)
+            console.log("Products Inserted");
+        console.log('-'+products[i].name);
+    }
+}
 const express = require("express");
 const createerror = require("http-errors");
 const app = express();
@@ -166,10 +277,13 @@ const MongoClient = mongo.MongoClient;
 const url = 'mongodb://localhost:27017/allyouneed';
 var args=process.argv;
 var ssl=0;
+var fill=0;
 for (var i=0;i<args.length;i++)
 {
     if(args[i]=='-ssl')
         ssl=1;
+    if(args[i]=='-fill')
+        fill=1;
 }
 const ip = require("ip");
 fs.mkdir('uploads',(err)=>{
@@ -200,12 +314,18 @@ MongoClient.connect(url, { useNewUrlParser: true ,useUnifiedTopology: true}, (er
             })
         }
     })
+    if(fill)
+    {
+        const db=app.locals.db;
+        createusersanditems(db);
+        
+    }
     app.locals.ip=ip.address();
 
     if(ssl)
     {  
         app.locals.ssl=1;
-        console.log("Application Running at --> https://localhost:3000");
+        console.log("Application Running at --> https://localhost:3000\n");
         https.createServer({
             key: fs.readFileSync('./server/config/key.pem'),
             cert: fs.readFileSync('./server/config/cert.pem'),
@@ -215,7 +335,7 @@ MongoClient.connect(url, { useNewUrlParser: true ,useUnifiedTopology: true}, (er
     else
     { 
         app.locals.ssl=0;
-        console.log("Application Running at --> http://localhost:3000");
+        console.log("Application Running at --> http://localhost:3000\n");
         app.listen(3000);
     }
 
