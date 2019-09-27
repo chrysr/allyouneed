@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 
 module.exports = (param) =>{
 
-    const {LoginService}=param;
+    //const {LoginService}=param;
 
     router.get("/",async(req,res,next) =>{
         console.log("/login get");

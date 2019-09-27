@@ -114,12 +114,10 @@ const app = express();
 const path = require("path");
 const bodyparser = require("body-parser");
 const configs = require("./config");
-const ProductsService =require("./services/ProductService.js");
 const routes = require("./routes");
 const bcrypt=require('bcrypt');
 const https = require('https');
 const config=configs[app.get("env")];
-const productService = new ProductsService(config.data.products);
 const cookieParser = require('cookie-parser');
 
 app.set("view engine","pug");
@@ -147,7 +145,7 @@ app.get("/favicon.ico",(req,res,next)=>{
 app.use(cookieParser());
 
 
-app.use("/",routes({productService,}));
+app.use("/",routes());
 
 app.use((req,res,next)=>{
     return next(createerror(404,"File not found"));

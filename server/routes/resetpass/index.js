@@ -6,7 +6,7 @@ var crypto = require("crypto");
 var nodemailer = require("nodemailer");
 var async = require("async");
 module.exports = (param) =>{
-    const {LoginService}=param;
+    //const {LoginService}=param;
     router.get('/:token', function(req, res) {
         console.log('/resetpass get');
         const db=req.app.locals.db;

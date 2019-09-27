@@ -6,7 +6,7 @@ const bcrypt=require('bcrypt');
 
 module.exports = (param) =>{
 
-    const {MyaccountService}=param;
+    //const {MyaccountService}=param;
     
     function unique(arr) 
     { 

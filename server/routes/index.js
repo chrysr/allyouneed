@@ -10,7 +10,7 @@ const resetpassroute = require("./resetpass");
 
 module.exports = (param) =>{
 
-    const  {productService}  = param;
+    //const  {productService}  = param;
     async function recommendation(itemsbought,db,user)
     {
         if(itemsbought.length==0)
@@ -735,6 +735,12 @@ module.exports = (param) =>{
     router.get('/TOS',async(req,res,next)=>{
         return res.render("tos",{
             page:"Terms of Service",
+            loggedin:req.cookies.loggedin,
+            });
+    })
+    router.get('/aboutus',async(req,res,next)=>{
+        return res.render("aboutus",{
+            page:"About Us",
             loggedin:req.cookies.loggedin,
             });
     })
