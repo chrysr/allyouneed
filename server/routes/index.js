@@ -732,6 +732,12 @@ module.exports = (param) =>{
             loggedin:req.cookies.loggedin,
             });
     });
+    router.get('/TOS',async(req,res,next)=>{
+        return res.render("tos",{
+            page:"Terms of Service",
+            loggedin:req.cookies.loggedin,
+            });
+    })
     
     
 
