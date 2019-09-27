@@ -90,21 +90,27 @@ block content
       a.a2(href='mailto:alallyouneed@gmail.com') contact us
   script.
     function geterror(){
-      var str=window.location.href
+      var str=window.location.href;
       var pos = str.search("login");
       var res = str.substring(pos+5);
       if(res=="?signup=false/reason=invalidmail"){
-        return "The e-mail you entered is invalid!"
+        return "The e-mail you entered is invalid!";
       }
       else if(res=="?signup=false/reason=invalidphone"){
-        return "The phone number you entered is invalid !"
+        return "The phone number you entered is invalid !";
       }
       else if(res=="?signup=false/reason=userexists"){
-        return "The e-mail you entered is already in use !"
+        return "The e-mail you entered is already in use !";
+      }
+      else if(res=="?signup=success"){
+        return "Sign up success";
       }
       return "";
     }
     document.getElementById("error").textContent = geterror();
+    if(document.getElementById("error").textContent=="Sign up success"){
+      document.getElementById("error").style.backgroundColor = "#00e65c";
+    }
   script.
     function geterror_login(){
       var str=window.location.href

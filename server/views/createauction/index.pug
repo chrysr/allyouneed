@@ -18,7 +18,8 @@ block content
                 |Every auction item must have at least one image, but we recommend adding more (the maximum is 4). To do that, click above, and select multiple images in the pop-up. Want to start over? Just press clear !
               input.button#clr(type='button', value='Clear', onclick='document.getElementById("selectedFile").value = "";var image=document.getElementById("fill");image.src="#";var image2=document.getElementById("fill2");image2.src="#";var image3=document.getElementById("fill3");image3.src="#";var image4=document.getElementById("fill4");image4.src="#";')
         .crau-right
-          
+          .crauerror#error_crau
+            |
           .databox
             
             input.next(type='text', placeholder='Product Name',name="name",required=true,onsubmit='return false')
@@ -63,7 +64,29 @@ block content
     span
       | Created by Charalampos Papa, Chrysostomos Rampidis and Charalampos Evagelatos, 2019. All rights reserved. For questions or additional information, 
       a.a2(href='mailto:alallyouneed@gmail.com') contact us
-  
+  script.
+    function geterror(){
+      var str=window.location.href;
+      var pos = str.search("createauction");
+      var res = str.substring(pos+13);
+      if(res=="?success=false/reason=endsbeforestarts"){
+        return "You set an end start date later than the end date !";
+      }
+      else if(res=="?success=false/reason=invalidname"){
+        return "The name you entered is invalid!";
+      }
+      else if(res=="?success=true=false/reason=buylessthanstarting"){
+        return "You set a buy now price lower that the sarting bid !";
+      }
+      else if(res=="?success=true"){
+        return "Auction created!";
+      }
+      return "";
+    }
+    document.getElementById("error_crau").textContent = geterror();
+    if(document.getElementById("error_crau").textContent=="Auction created!"){
+      document.getElementById("error_crau").style.backgroundColor = "#00e65c";
+    }
   script(type='text/javascript').
     var loadFile=function(event){
       

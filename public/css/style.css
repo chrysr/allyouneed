@@ -894,6 +894,20 @@ input[type="datetime-local"].editdate:hover {
 }
 .error:empty {
 	display: none;
+}
+
+.crauerror {
+	margin: 0 15%;
+	margin-bottom: -4vh;
+	width: 80%;
+	background: #ffa800;
+	color: #111;
+	padding-top: 1vh;
+	padding-bottom:1vh;
+	font-size: calc(0.2em + 0.9vw + 0.9vh);
+}
+.crauerror:empty {
+	display: none;
  }
 
 .login{
